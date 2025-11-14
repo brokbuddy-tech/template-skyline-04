@@ -45,7 +45,6 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
             ))}
           </nav>
           <div className="flex flex-col items-center gap-8">
-            <CurrencySwitcher />
             <Button
               variant="default"
               size="lg"

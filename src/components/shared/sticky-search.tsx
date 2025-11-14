@@ -8,18 +8,20 @@ import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function StickySearch() {
+  const [isMounted, setIsMounted] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
   const footerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    // We target the footer by its ID. Make sure the footer has id="main-footer"
+    setIsMounted(true);
+
     footerRef.current = document.getElementById('main-footer');
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsFooterVisible(entry.isIntersecting);
       },
-      { threshold: 0.1 } // Adjust threshold as needed
+      { threshold: 0.1 } 
     );
 
     if (footerRef.current) {
@@ -32,6 +34,10 @@ export function StickySearch() {
       }
     };
   }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Dialog>

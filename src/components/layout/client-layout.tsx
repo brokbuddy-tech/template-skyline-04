@@ -38,7 +38,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return (
       <>
         <CustomCursor />
-        <SplashScreen />
+        <SplashScreen isLoading={true} />
       </>
     );
   }
@@ -47,7 +47,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <>
       <CustomCursor />
       {isLoading ? (
-        <SplashScreen />
+        <SplashScreen isLoading={isLoading} />
       ) : (
         <PageTransition>
           {children}

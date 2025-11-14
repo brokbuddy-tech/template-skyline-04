@@ -15,7 +15,7 @@ import { Separator } from '../ui/separator';
 import { useState, useMemo } from 'react';
 import { properties } from '@/lib/data';
 
-const amenities = [
+const allAmenities = [
   'Pool',
   'Private Gym',
   'Ocean View',
@@ -38,6 +38,24 @@ export function AdvancedSearchModal() {
   }, []);
   
   const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
+  const [beds, setBeds] = useState('');
+  const [baths, setBaths] = useState('');
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+
+  const handleAmenityChange = (amenity: string) => {
+    setSelectedAmenities(prev => 
+      prev.includes(amenity) 
+        ? prev.filter(a => a !== amenity)
+        : [...prev, amenity]
+    );
+  };
+  
+  const handleClearAll = () => {
+    setPriceRange([minPrice, maxPrice]);
+    setBeds('');
+    setBaths('');
+    setSelectedAmenities([]);
+  };
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -73,11 +91,11 @@ export function AdvancedSearchModal() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="beds">Bedrooms</Label>
-            <Input id="beds" type="number" placeholder="Any" className="border-accent focus-visible:ring-accent"/>
+            <Input id="beds" type="number" placeholder="Any" value={beds} onChange={(e) => setBeds(e.target.value)} className="border-accent focus-visible:ring-accent"/>
           </div>
           <div className="space-y-2">
             <Label htmlFor="baths">Bathrooms</Label>
-            <Input id="baths" type="number" placeholder="Any" className="border-accent focus-visible:ring-accent"/>
+            <Input id="baths" type="number" placeholder="Any" value={baths} onChange={(e) => setBaths(e.target.value)} className="border-accent focus-visible:ring-accent"/>
           </div>
         </div>
         
@@ -99,9 +117,14 @@ export function AdvancedSearchModal() {
         <div className="space-y-4">
           <Label>Amenities</Label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {amenities.map((amenity) => (
+            {allAmenities.map((amenity) => (
               <div key={amenity} className="flex items-center space-x-2">
-                <Checkbox id={amenity} className="border-accent data-[state=checked]:bg-accent"/>
+                <Checkbox 
+                  id={amenity}
+                  checked={selectedAmenities.includes(amenity)}
+                  onCheckedChange={() => handleAmenityChange(amenity)}
+                  className="border-accent data-[state=checked]:bg-accent"
+                />
                 <Label htmlFor={amenity} className="font-normal">
                   {amenity}
                 </Label>
@@ -111,7 +134,7 @@ export function AdvancedSearchModal() {
         </div>
       </div>
       <DialogFooter className='sm:justify-between'>
-          <Button type="button" variant="link" className="text-accent">Clear All</Button>
+          <Button type="button" variant="link" className="text-accent" onClick={handleClearAll}>Clear All</Button>
           <Button type="submit" size="lg">Apply Filters</Button>
       </DialogFooter>
     </DialogContent>

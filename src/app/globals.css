@@ -55,7 +55,11 @@
   }
   body {
     @apply bg-background text-foreground;
-    cursor: none;
+  }
+  @media (pointer: fine) {
+    body {
+      cursor: none;
+    }
   }
   section {
     @apply w-full px-8 py-24 sm:py-32;

@@ -7,13 +7,15 @@ export function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted || isTouchDevice) return;
 
     const updateMousePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
@@ -34,9 +36,9 @@ export function CustomCursor() {
       window.removeEventListener('mousemove', updateMousePosition);
       document.removeEventListener('mouseover', handleMouseOver);
     };
-  }, [isMounted]);
+  }, [isMounted, isTouchDevice]);
 
-  if (!isMounted) {
+  if (!isMounted || isTouchDevice) {
     return null;
   }
 

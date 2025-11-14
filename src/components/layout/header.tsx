@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { ThemeToggle } from '../theme-toggle';
 
 export function Header() {
   const pathname = usePathname();
@@ -54,7 +55,8 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button asChild>
             <Link href="/properties">View Properties</Link>
           </Button>

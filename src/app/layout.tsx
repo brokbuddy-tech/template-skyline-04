@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { ClientLayout } from '@/components/layout/client-layout';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,16 +28,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${playfairDisplay.variable} font-body antialiased`}
       >
-        <ClientLayout>
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-        </ClientLayout>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ClientLayout>
+            <Header />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </ClientLayout>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

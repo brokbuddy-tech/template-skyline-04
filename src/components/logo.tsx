@@ -12,7 +12,7 @@ export function Logo({ className }: { className?: string }) {
             >
                 <path
                     d="M12 2L2 7V17L12 22L22 17V7L12 2Z"
-                    stroke="hsl(var(--primary))"
+                    stroke="hsl(var(--accent))"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"

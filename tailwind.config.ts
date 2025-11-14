@@ -93,6 +93,10 @@ const config = {
           "from": { transform: "translateX(0)" },
           "to": { transform: "translateX(-100%)" },
         },
+        "fade-in": {
+          "from": { opacity: "0" },
+          "to": { opacity: "1" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -103,6 +107,7 @@ const config = {
         "page-wipe-in": "page-wipe-in 400ms ease-in-out forwards",
         "page-wipe-out": "page-wipe-out 400ms ease-in-out forwards",
         "infinite-scroll": "infinite-scroll 25s linear infinite",
+        "fade-in": "fade-in 300ms ease-in-out forwards",
       },
     },
   },

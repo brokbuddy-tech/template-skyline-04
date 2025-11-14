@@ -17,7 +17,7 @@ export function Footer() {
   ];
 
   return (
-    <footer id="main-footer" className="relative min-h-screen w-full bg-primary text-primary-foreground flex flex-col justify-between p-8 sm:p-16">
+    <footer id="main-footer" className="relative min-h-screen w-full bg-primary text-primary-foreground dark:bg-accent dark:text-accent-foreground flex flex-col justify-between p-8 sm:p-16">
       <div className="flex-grow flex items-center">
         <div className="w-full">
           <AnimateOnScroll className="w-full">
@@ -31,7 +31,7 @@ export function Footer() {
               <div className="md:col-span-3"></div>
 
               <div className="md:col-span-2">
-                <h3 className="font-body text-sm uppercase tracking-widest text-black mb-4">
+                <h3 className="font-body text-sm uppercase tracking-widest text-black dark:text-accent-foreground mb-4">
                   Navigation
                 </h3>
                 <ul className="space-y-2">
@@ -46,7 +46,7 @@ export function Footer() {
               </div>
 
               <div className="md:col-span-2">
-                <h3 className="font-body text-sm uppercase tracking-widest text-black mb-4">
+                <h3 className="font-body text-sm uppercase tracking-widest text-black dark:text-accent-foreground mb-4">
                   Social
                 </h3>
                 <ul className="space-y-2">
@@ -65,7 +65,7 @@ export function Footer() {
       </div>
       <AnimateOnScroll className="space-y-8">
         <div className="text-center text-sm font-body">
-          <p className="text-black">&copy; 2025 Monks Estate Pro. All Rights Reserved.</p>
+          <p className="text-black dark:text-accent-foreground">&copy; 2025 Monks Estate Pro. All Rights Reserved.</p>
         </div>
       </AnimateOnScroll>
     </footer>

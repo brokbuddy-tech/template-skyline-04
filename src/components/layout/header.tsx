@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { Logo } from '../logo';
 
 export function Header() {
   const pathname = usePathname();
@@ -30,13 +31,13 @@ export function Header() {
     <header
       className={cn(
         'sticky top-0 z-40 w-full bg-background transition-shadow duration-300',
-        isScrolled ? 'shadow-sm border-b' : 'border-b border-transparent'
+        isScrolled ? 'shadow-sm border-b' : 'border-b border-background'
       )}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-8">
         <div className="flex items-center">
-          <Link href="/" className="text-2xl font-bold">
-            Monks Estate
+          <Link href="/">
+            <Logo />
           </Link>
         </div>
         <nav className="hidden md:flex items-center space-x-8">
@@ -46,7 +47,7 @@ export function Header() {
               href={link.href}
               className={cn(
                 'text-sm font-medium transition-colors hover:text-primary',
-                pathname === link.href ? 'text-primary' : 'text-muted-foreground'
+                pathname === link.href ? 'text-primary' : 'text-foreground'
               )}
             >
               {link.label}
@@ -54,8 +55,8 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" className="text-primary border-primary hover:text-primary" asChild>
-            <Link href="#">Buy This Template</Link>
+          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground group" asChild>
+            <Link href="#">Buy This Template <span className="transform transition-transform duration-300 group-hover:rotate-[-45deg]">↗</span></Link>
           </Button>
         </div>
       </div>

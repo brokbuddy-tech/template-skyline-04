@@ -82,10 +82,10 @@ export default function AboutPage() {
             className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white p-8"
             style={{ opacity: Math.max(0, opacity) }}
           >
-            <h1 className="text-6xl md:text-8xl font-bold font-sans">
+            <h1 className="text-5xl md:text-8xl font-bold font-sans">
               We are Monks Estate.
             </h1>
-            <p className="mt-4 text-xl md:text-2xl text-balance">
+            <p className="mt-4 text-lg md:text-2xl text-balance">
               Building dreams into <span className="text-accent">stunning real estate</span>.
             </p>
           </div>
@@ -94,7 +94,7 @@ export default function AboutPage() {
 
       {/* 2. Our Philosophy */}
       <section>
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 items-center">
             <div className="md:col-span-2">
                 <AnimateOnScroll>
                     <h2 className="text-5xl md:text-6xl font-headline">Our Mission</h2>
@@ -102,7 +102,7 @@ export default function AboutPage() {
             </div>
             <div className="md:col-span-3">
                 <AnimateOnScroll delay={100}>
-                    <div className="space-y-6 text-lg text-muted-foreground">
+                    <div className="space-y-6 text-base md:text-lg text-muted-foreground">
                         <p>
                             At Monks Estate, our mission is to redefine the real estate experience through a commitment to minimalist design, unparalleled service, and a deep understanding of our clients' desires. We believe a home is more than just a property; it's a sanctuary, a canvas for life's moments, and a reflection of one's aspirations.
                         </p>
@@ -136,7 +136,7 @@ export default function AboutPage() {
 
       {/* 4. Founder's Feature */}
       <section>
-        <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <AnimateOnScroll className="overflow-hidden rounded-lg">
                 {founderImage && (
                     <Image 
@@ -149,26 +149,26 @@ export default function AboutPage() {
                     />
                 )}
             </AnimateOnScroll>
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
                 <AnimateOnScroll delay={100}>
-                    <blockquote className="text-3xl md:text-4xl font-headline italic text-balance">
+                    <blockquote className="text-2xl md:text-4xl font-headline italic text-balance">
                         &ldquo;We don&apos;t just sell properties; we curate lifestyles. Every detail is considered, every space is designed to evoke emotion and create a lasting sense of home.&rdquo;
                     </blockquote>
                 </AnimateOnScroll>
                 <AnimateOnScroll delay={200}>
-                    <p className="text-lg text-muted-foreground">
+                    <p className="text-base md:text-lg text-muted-foreground">
                         From the very beginning, my goal was to build a real estate firm that values artistry and integrity as much as it values commerce. We are dedicated to creating spaces that are both beautiful and meaningful, helping our clients find not just a house, but a place where they can truly belong.
                     </p>
                 </AnimateOnScroll>
                 <AnimateOnScroll delay={300}>
-                    <p className="text-lg font-semibold">Alex Monks, Founder</p>
+                    <p className="text-base md:text-lg font-semibold">Alex Monks, Founder</p>
                 </AnimateOnScroll>
             </div>
         </div>
       </section>
 
       {/* 5. Final Call to Action */}
-      <section className="relative py-32">
+      <section className="relative py-24 md:py-32">
           {ctaImage && (
             <Image 
                 src={ctaImage.imageUrl}
@@ -181,11 +181,11 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="container mx-auto relative z-10 text-center text-white">
             <AnimateOnScroll>
-                <h2 className="text-5xl md:text-6xl font-headline mb-8 text-balance">Ready to start your journey?</h2>
+                <h2 className="text-4xl md:text-6xl font-headline mb-8 text-balance">Ready to start your journey?</h2>
                 <Button size="lg" asChild>
                     <Link href="/properties">
                         Explore Properties
-                        <span className="group-hover:translate-x-1 transition-transform duration-300 ml-2">↗</span>
+                        <span className="group-hover:translate-x-1 transition-transform duration-300 ml-2 hidden sm:inline">↗</span>
                     </Link>
                 </Button>
             </AnimateOnScroll>

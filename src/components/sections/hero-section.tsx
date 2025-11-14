@@ -77,7 +77,7 @@ export function HeroSection() {
           {/* Main Column - Center on mobile */}
           <div className="md:col-span-8 flex justify-center items-center text-center order-1 md:order-2 mt-24 md:mt-0">
              <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
-               Transforming Spaces, <br /> Realizing <span className="text-primary">Dreams.</span>
+               Transforming Spaces, <br /> Realizing <span className="text-accent">Dreams.</span>
              </h1>
           </div>
           
@@ -89,7 +89,7 @@ export function HeroSection() {
                   key={i}
                   className={cn(
                     'w-4 h-4',
-                    i < 4 ? 'text-accent fill-accent' : 'text-accent'
+                    i < 5 ? 'text-accent fill-accent' : 'text-accent'
                   )}
                 />
               ))}

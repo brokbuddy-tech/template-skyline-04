@@ -20,7 +20,7 @@ export function Footer() {
   ];
 
   return (
-    <footer id="main-footer" className="relative min-h-screen w-full bg-primary text-primary-foreground flex flex-col justify-between p-8 sm:p-16">
+    <footer id="main-footer" className="relative min-h-screen w-full bg-primary dark:bg-accent text-primary-foreground flex flex-col justify-between p-8 sm:p-16">
       <div className="flex-grow flex items-center">
         <div className="w-full">
           <AnimateOnScroll className="w-full">

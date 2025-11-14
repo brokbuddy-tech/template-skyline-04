@@ -30,12 +30,30 @@ export function CustomCursor() {
   }, []);
 
   return (
-    <div
-      style={{ left: `${position.x}px`, top: `${position.y}px` }}
-      className={cn(
-        'fixed w-3 h-3 rounded-full bg-foreground pointer-events-none z-50 transition-transform duration-200 ease-out -translate-x-1/2 -translate-y-1/2',
-        isHovering ? 'scale-[3.5] bg-transparent border-2 border-foreground' : 'scale-100'
-      )}
-    />
+    <>
+      <div 
+        className={cn(
+          "cursor-ball cursor-ball-big",
+          isHovering ? 'scale-[4]' : 'scale-100'
+        )}
+        style={{
+          transform: `translate(${position.x - 15}px, ${position.y - 15}px) ${isHovering ? 'scale(4)' : 'scale(1)'}`,
+        }}
+      >
+        <svg height="30" width="30">
+          <circle cx="15" cy="15" r="12" strokeWidth="0"></circle>
+        </svg>
+      </div>
+      <div 
+        className="cursor-ball cursor-ball-small"
+        style={{
+            transform: `translate(${position.x - 5}px, ${position.y - 7}px)`,
+        }}
+      >
+        <svg height="10" width="10">
+          <circle cx="5" cy="5" r="4" strokeWidth="0"></circle>
+        </svg>
+      </div>
+    </>
   );
 }

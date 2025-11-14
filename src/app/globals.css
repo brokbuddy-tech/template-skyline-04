@@ -55,6 +55,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    cursor: none;
   }
   section {
     @apply w-full px-8 py-24 sm:py-32;
@@ -1147,4 +1148,26 @@
 
 .bb8:hover .bb8__head::after {
   background-position: 0 0 !important;
+}
+
+/* Custom Cursor */
+.cursor-ball {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1000;
+  mix-blend-mode: difference;
+}
+
+.cursor-ball circle {
+  fill: #f7f8fa;
+}
+
+.cursor-ball-big {
+  transition: transform 0.4s ease-out;
+}
+
+.cursor-ball-small {
+  transition: transform 0.1s ease-out;
 }

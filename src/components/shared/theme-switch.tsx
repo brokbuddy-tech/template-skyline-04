@@ -22,43 +22,21 @@ export function ThemeSwitch() {
   };
 
   return (
-    <label className="bb8-toggle">
-      <input
-        className="bb8-toggle__checkbox"
-        type="checkbox"
-        checked={isDark}
-        onChange={toggleTheme}
-      />
-      <div className="bb8-toggle__container">
-        <div className="bb8-toggle__scenery">
-          <div className="bb8-toggle__star"></div>
-          <div className="bb8-toggle__star"></div>
-          <div className="bb8-toggle__star"></div>
-          <div className="bb8-toggle__star"></div>
-          <div className="bb8-toggle__star"></div>
-          <div className="bb8-toggle__star"></div>
-          <div className="bb8-toggle__star"></div>
-          <div className="tatto-1"></div>
-          <div className="tatto-2"></div>
-          <div className="gomrassen"></div>
-          <div className="hermes"></div>
-          <div className="chenini"></div>
-          <div className="bb8-toggle__cloud"></div>
-          <div className="bb8-toggle__cloud"></div>
-          <div className="bb8-toggle__cloud"></div>
-        </div>
-        <div className="bb8">
-          <div className="bb8__head-container">
-            <div className="bb8__antenna"></div>
-            <div className="bb8__antenna"></div>
-            <div className="bb8__head"></div>
+    <div className="w-24 aspect-video rounded-lg has-[:checked]:bg-black bg-white border-2 border-black">
+      <div className="flex h-full w-full px-1 items-center gap-x-1">
+        <div className="w-3 h-3 flex-shrink-0 rounded-full border-2 border-black" />
+        <label htmlFor="switch" className="has-[:checked]:scale-x-[-1] w-full h-5 border-2 border-black rounded cursor-pointer">
+          <input type="checkbox" id="switch" className="hidden" checked={isDark} onChange={toggleTheme} />
+          <div className="w-full h-full bg-[#FF4D00] relative">
+            <div className="w-0 h-0 z-20 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[10px] border-t-black relative">
+              <div className="w-0 h-0 absolute border-l-[9px] border-l-transparent border-r-[9px] border-r-transparent border-t-[7.5px] border-t-[#FF4D00] -top-[10px] -left-[9px]" />
+            </div>
+            <div className="w-[12px] h-5 z-10 absolute top-[4.5px] left-0 bg-[#FF4D00] border-r-2 border-b-2 border-black transform skew-y-[39deg]" />
+            <div className="w-[12.5px] h-5 z-10 absolute top-[4.5px] left-[12px] bg-[#FF4D00] border-r-2 border-l-2 border-b-2 border-black transform skew-y-[-39deg]" />
           </div>
-          <div className="bb8__body"></div>
-        </div>
-        <div className="artificial__hidden">
-          <div className="bb8__shadow"></div>
-        </div>
+        </label>
+        <div className="w-3 h-0.5 flex-shrink-0 bg-black rounded-full" />
       </div>
-    </label>
+    </div>
   );
 }

@@ -21,18 +21,19 @@ export function Header() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    { href: '/blog', label: 'Blog' },
     { href: '/properties', label: 'Properties' },
-    { href: '/contact', label: 'Contact Us' },
+    { href: '/map', label: 'Map' },
+    { href: '/about', label: 'About Us' },
+    { href: '/contact', label: 'Contact' },
   ];
 
   return (
     <header
       className={cn(
         'sticky top-0 z-40 w-full bg-background transition-shadow duration-300',
-        isScrolled ? 'shadow-sm border-b' : 'border-b border-background'
+        isScrolled ? 'shadow-sm border-b' : 'border-b border-transparent'
       )}
+      style={{ borderColor: isScrolled ? '#EAEAEA' : 'transparent' }}
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-8">
         <div className="flex items-center">
@@ -55,8 +56,8 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground group" asChild>
-            <Link href="#">Buy This Template <span className="transform transition-transform duration-300 group-hover:rotate-[-45deg]">↗</span></Link>
+          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground" asChild>
+            <Link href="/properties">Book Now</Link>
           </Button>
         </div>
       </div>

@@ -18,8 +18,8 @@ const config = {
     },
     extend: {
       fontFamily: {
-        headline: ['var(--font-inter)', 'sans-serif'],
-        body: ['var(--font-inter)', 'sans-serif'],
+        headline: ['Manrope', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

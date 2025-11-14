@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Manrope } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
@@ -10,6 +10,11 @@ import { ThemeProvider } from '@/components/theme-provider';
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+});
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
 });
 
 export const metadata: Metadata = {
@@ -25,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-body antialiased`}
+        className={`${inter.variable} ${manrope.variable} font-body antialiased`}
       >
         <ThemeProvider
           attribute="class"

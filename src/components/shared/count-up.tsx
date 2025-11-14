@@ -9,6 +9,6 @@ interface CountUpProps {
 }
 
 export function CountUp({ end, duration = 2, decimals = 0 }: CountUpProps) {
-  const count = useCountUp(end, duration, decimals);
-  return <>{count}</>;
+  const { count, ref } = useCountUp(end, duration, decimals);
+  return <span ref={ref}>{count}</span>;
 }

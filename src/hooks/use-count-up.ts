@@ -25,35 +25,27 @@ export function useCountUp(end: number, duration: number, decimals: number) {
           };
           animationFrameId.current = requestAnimationFrame(animate);
           
-          // Use a dummy element to disconnect the observer once triggered
-          const dummyEl = document.createElement('span');
-          dummyEl.style.display = 'none';
-          document.body.appendChild(dummyEl);
-          observer.unobserve(dummyEl);
-          document.body.removeChild(dummyEl);
-
+          if (ref.current) {
+            observer.unobserve(ref.current);
+          }
         }
       },
       { threshold: 0.1 }
     );
     
-    // Create a dummy element to observe, to be able to disconnect after firing once
-    const dummyEl = document.createElement('span');
-    dummyEl.style.display = 'none';
-    document.body.appendChild(dummyEl);
-
-    observer.observe(dummyEl);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
 
     return () => {
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
-      observer.disconnect();
-      if(document.body.contains(dummyEl)) {
-          document.body.removeChild(dummyEl);
+      if (ref.current) {
+        observer.unobserve(ref.current);
       }
     };
-  }, [end, duration, decimals]);
+  }, [end, duration, decimals, ref]);
 
-  return count.toLocaleString();
+  return { count: count.toLocaleString(), ref };
 }

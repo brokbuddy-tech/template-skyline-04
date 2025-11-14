@@ -98,6 +98,32 @@ export const properties: Property[] = [
     images: ['prop-6-1'],
     description: 'Inspired by traditional Japanese aesthetics, this minimalist villa is a masterpiece of design and tranquility. A private zen garden provides a serene backdrop to the clean, uncluttered interiors. The home features a dedicated tea room for quiet contemplation and a luxurious Hinoki wood bath for ultimate relaxation. Natural light floods the space, highlighting the beauty of the carefully selected materials. This is a home designed for mindfulness and a deep connection to its surroundings.',
   },
+    {
+    id: '7',
+    title: 'The Parisian Apartment',
+    location: 'Paris, France',
+    price: 1800000,
+    bedrooms: 2,
+    bathrooms: 1,
+    sqft: 1200,
+    type: 'Apartment',
+    amenities: ['Rooftop Terrace', 'Concierge', 'Exposed Brick', 'Chef\'s Kitchen'],
+    images: ['prop-7-1'],
+    description: 'This charming Parisian apartment is located in the heart of Le Marais. It features a beautiful rooftop terrace with stunning views of the city. The interior has been recently renovated with a modern kitchen and bathroom, but still retains its classic Parisian charm with exposed brick walls and hardwood floors.',
+  },
+  {
+    id: '8',
+    title: 'The Countryside Estate',
+    location: 'Tuscany, Italy',
+    price: 5500000,
+    bedrooms: 7,
+    bathrooms: 8,
+    sqft: 10000,
+    type: 'House',
+    amenities: ['Pool', 'Mountain View', 'Wine Cellar', 'Game Room'],
+    images: ['prop-8-1'],
+    description: 'This magnificent estate is located in the rolling hills of Tuscany. It features a large swimming pool, a private vineyard, and breathtaking views of the surrounding countryside. The interior is spacious and luxurious, with 7 bedrooms, 8 bathrooms, a game room, and a wine cellar. This is the perfect place to relax and enjoy the Italian lifestyle.',
+  },
 ];
 
 export const testimonials: Testimonial[] = [

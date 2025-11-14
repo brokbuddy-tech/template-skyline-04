@@ -30,7 +30,6 @@ const amenities = [
 export function AdvancedSearchModal() {
   const { minPrice, maxPrice } = useMemo(() => {
     const prices = properties.map(p => p.price);
-    const min = Math.min(...prices);
     const max = Math.max(...prices);
     // Round to nearest 50k
     const roundToNearest50k = (num: number, direction: 'down' | 'up') => {
@@ -40,7 +39,7 @@ export function AdvancedSearchModal() {
         return Math.ceil(num / 50000) * 50000;
     }
     return { 
-        minPrice: roundToNearest50k(min, 'down'), 
+        minPrice: 0, 
         maxPrice: roundToNearest50k(max, 'up') 
     };
   }, []);

@@ -1,12 +1,9 @@
 import Link from 'next/link';
-import { CurrencySwitcher } from '../shared/currency-switcher';
 import { AnimateOnScroll } from '../animate-on-scroll';
 
 export function Footer() {
   const navLinks = [
-    { href: '/properties?type=rent', label: 'Rent' },
     { href: '/properties?type=buy', label: 'Buy' },
-    { href: '/properties?type=sell', label: 'Sell' },
     { href: '/about', label: 'About Us' },
     { href: '/contact', label: 'Contact Us' },
     { href: '/map', label: 'Map' },
@@ -20,7 +17,7 @@ export function Footer() {
   ];
 
   return (
-    <footer id="main-footer" className="relative min-h-screen w-full bg-primary dark:bg-accent text-primary-foreground flex flex-col justify-between p-8 sm:p-16">
+    <footer id="main-footer" className="relative min-h-screen w-full bg-primary text-primary-foreground flex flex-col justify-between p-8 sm:p-16">
       <div className="flex-grow flex items-center">
         <div className="w-full">
           <AnimateOnScroll className="w-full">
@@ -31,10 +28,10 @@ export function Footer() {
                 </h2>
               </div>
 
-              <div className="md:col-span-1"></div>
+              <div className="md:col-span-3"></div>
 
               <div className="md:col-span-2">
-                <h3 className="font-body text-sm uppercase tracking-widest text-muted-foreground mb-4">
+                <h3 className="font-body text-sm uppercase tracking-widest text-black mb-4">
                   Navigation
                 </h3>
                 <ul className="space-y-2">
@@ -49,7 +46,7 @@ export function Footer() {
               </div>
 
               <div className="md:col-span-2">
-                <h3 className="font-body text-sm uppercase tracking-widest text-muted-foreground mb-4">
+                <h3 className="font-body text-sm uppercase tracking-widest text-black mb-4">
                   Social
                 </h3>
                 <ul className="space-y-2">
@@ -62,19 +59,13 @@ export function Footer() {
                   ))}
                 </ul>
               </div>
-              <div className="md:col-span-2">
-                <h3 className="font-body text-sm uppercase tracking-widest text-muted-foreground mb-4">
-                  Settings
-                </h3>
-                <CurrencySwitcher />
-              </div>
             </div>
           </AnimateOnScroll>
         </div>
       </div>
       <AnimateOnScroll className="space-y-8">
-        <div className="text-center text-muted-foreground text-sm font-body">
-          <p>&copy; {new Date().getFullYear()} Monks Estate Pro. All Rights Reserved.</p>
+        <div className="text-center text-sm font-body">
+          <p className="text-black">&copy; 2025 Monks Estate Pro. All Rights Reserved.</p>
         </div>
       </AnimateOnScroll>
     </footer>

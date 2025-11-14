@@ -2,6 +2,7 @@ import { properties } from "@/lib/data";
 import { PropertyCard } from "../shared/property-card";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { AnimateOnScroll } from "../animate-on-scroll";
 
 export function FeaturedProperties() {
   const featuredProperties = properties.slice(0, 3);
@@ -9,19 +10,26 @@ export function FeaturedProperties() {
   return (
     <section className="bg-background">
       <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-medium">Featured Properties</h2>
-        </div>
+        <AnimateOnScroll className="text-center mb-16">
+          <h2 className="text-5xl md:text-6xl font-medium text-balance">
+            Find your home with <span className="text-primary">unique preferences</span>
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto text-balance">
+            Explore a curated selection of homes designed to match your unique preferences, making it effortless to find the ideal property that perfectly fits your lifestyle and needs.
+          </p>
+        </AnimateOnScroll>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-          {featuredProperties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+          {featuredProperties.map((property, index) => (
+            <AnimateOnScroll key={property.id} delay={index * 150}>
+              <PropertyCard property={property} />
+            </AnimateOnScroll>
           ))}
         </div>
-        <div className="text-center mt-16">
+        <AnimateOnScroll className="text-center mt-16">
             <Button asChild size="lg">
                 <Link href="/properties">View All Properties</Link>
             </Button>
-        </div>
+        </AnimateOnScroll>
       </div>
     </section>
   );

@@ -19,9 +19,7 @@ export default function Home() {
       <AnimateOnScroll>
         <ServicesSection />
       </AnimateOnScroll>
-      <AnimateOnScroll>
-        <FeaturedProperties />
-      </AnimateOnScroll>
+      <FeaturedProperties />
       <AnimateOnScroll>
         <TestimonialsSection />
       </AnimateOnScroll>

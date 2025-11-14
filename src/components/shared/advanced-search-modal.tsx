@@ -66,6 +66,24 @@ export function AdvancedSearchModal() {
     }).format(value);
   };
 
+  const handleNumericChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === '') {
+      setter('');
+      return;
+    }
+    const num = parseInt(value, 10);
+    if (!isNaN(num)) {
+      if (num < 0) {
+        setter('0');
+      } else if (num > 999) {
+        setter('999');
+      } else {
+        setter(num.toString());
+      }
+    }
+  };
+
   return (
     <DialogContent className="sm:max-w-2xl bg-background text-foreground border-foreground/20">
       <DialogHeader>
@@ -91,11 +109,11 @@ export function AdvancedSearchModal() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="beds">Bedrooms</Label>
-            <Input id="beds" type="number" placeholder="Any" value={beds} onChange={(e) => setBeds(e.target.value)} className="border-accent focus-visible:ring-accent"/>
+            <Input id="beds" type="number" placeholder="Any" value={beds} onChange={handleNumericChange(setBeds)} className="border-accent focus-visible:ring-accent"/>
           </div>
           <div className="space-y-2">
             <Label htmlFor="baths">Bathrooms</Label>
-            <Input id="baths" type="number" placeholder="Any" value={baths} onChange={(e) => setBaths(e.target.value)} className="border-accent focus-visible:ring-accent"/>
+            <Input id="baths" type="number" placeholder="Any" value={baths} onChange={handleNumericChange(setBaths)} className="border-accent focus-visible:ring-accent"/>
           </div>
         </div>
         

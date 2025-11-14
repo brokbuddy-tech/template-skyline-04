@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { ThemeSwitch } from '../shared/theme-switch';
 
 type NavLink = {
   href: string;
@@ -29,8 +30,8 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
           isOpen ? 'translate-y-0' : '-translate-y-full'
         )}
       >
-        <div className="container mx-auto flex flex-col items-center justify-center h-full pt-20">
-          <nav className="flex flex-col items-center gap-8 text-center">
+        <div className="container mx-auto flex flex-col items-center justify-between h-full py-20">
+          <nav className="flex flex-col items-center gap-8 text-center mt-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -42,15 +43,18 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
               </Link>
             ))}
           </nav>
-          <Button
-            variant="default"
-            size="lg"
-            className="mt-12"
-            asChild
-            onClick={() => setIsOpen(false)}
-          >
-            <Link href="/properties">Book Now</Link>
-          </Button>
+          <div className="flex flex-col items-center gap-8">
+            <Button
+              variant="default"
+              size="lg"
+              className="mt-12"
+              asChild
+              onClick={() => setIsOpen(false)}
+            >
+              <Link href="/properties">Book Now</Link>
+            </Button>
+            <ThemeSwitch />
+          </div>
         </div>
       </div>
     </div>

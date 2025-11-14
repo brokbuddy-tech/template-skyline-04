@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { SplashScreen } from "@/components/splash-screen";
 import { PageTransition } from "@/components/page-transition";
@@ -35,7 +35,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           {children}
         </PageTransition>
       )}
-      <div className="fixed bottom-8 right-8 z-50">
+      <div className="fixed bottom-8 right-8 z-50 hidden md:block">
         <ThemeSwitch />
       </div>
     </>

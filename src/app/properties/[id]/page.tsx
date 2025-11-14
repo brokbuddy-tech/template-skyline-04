@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, React } from 'react';
 import { properties } from "@/lib/data";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -47,7 +47,8 @@ const amenityIcons: { [key: string]: LucideIcon } = {
   'Heated Floors': Thermometer,
 };
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+export default function PropertyDetailPage() {
+  const params = useParams();
   const property = properties.find((p) => p.id === params.id);
   const [date, setDate] = useState<Date | undefined>(new Date());
 

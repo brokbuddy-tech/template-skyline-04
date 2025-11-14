@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { SplashScreen } from "@/components/splash-screen";
 import { PageTransition } from "@/components/page-transition";
 import { CustomCursor } from "@/components/custom-cursor";
+import { StickySearch } from "../shared/sticky-search";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +35,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           {children}
         </PageTransition>
       )}
+      <StickySearch />
     </>
   );
 }

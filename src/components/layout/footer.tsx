@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CurrencySwitcher } from '../shared/currency-switcher';
 import { AnimateOnScroll } from '../animate-on-scroll';
+import { FooterSearch } from '../shared/footer-search';
 
 export function Footer() {
   const navLinks = [
@@ -20,7 +21,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="relative min-h-screen w-full bg-primary text-primary-foreground flex flex-col justify-between p-8 sm:p-16">
+    <footer id="main-footer" className="relative min-h-screen w-full bg-primary text-primary-foreground flex flex-col justify-between p-8 sm:p-16">
       <div className="flex-grow flex items-center">
         <div className="w-full">
           <AnimateOnScroll className="w-full">
@@ -72,7 +73,8 @@ export function Footer() {
           </AnimateOnScroll>
         </div>
       </div>
-      <AnimateOnScroll>
+      <AnimateOnScroll className="space-y-8">
+        <FooterSearch />
         <div className="text-center text-muted-foreground text-sm font-body">
           <p>&copy; {new Date().getFullYear()} Monks Estate Pro. All Rights Reserved.</p>
         </div>

@@ -27,7 +27,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     const timer = setTimeout(() => {
       setIsLoading(false);
       sessionStorage.setItem("splashShown", "true");
-    }, 3000); // Splash screen duration
+    }, 2000); // Splash screen duration
 
     return () => clearTimeout(timer);
   }, [isMounted]);
@@ -38,7 +38,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return (
       <>
         <CustomCursor />
-        <SplashScreen />
+        <SplashScreen isLoading={true} />
       </>
     );
   }
@@ -47,7 +47,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <>
       <CustomCursor />
       {isLoading ? (
-        <SplashScreen />
+        <SplashScreen isLoading={isLoading} />
       ) : (
         <PageTransition>
           {children}

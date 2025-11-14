@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { ClientLayout } from '@/components/layout/client-layout';
 import { ThemeProvider } from '@/components/theme-provider';
+import { CurrencyProvider } from '@/context/currency-context';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,11 +38,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ClientLayout>
-            <Header />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
-          </ClientLayout>
+          <CurrencyProvider>
+            <ClientLayout>
+              <Header />
+              <main className="min-h-screen">{children}</main>
+              <Footer />
+            </ClientLayout>
+          </CurrencyProvider>
         </ThemeProvider>
       </body>
     </html>

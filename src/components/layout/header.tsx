@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { Logo } from '../logo';
 import { MobileNav } from './mobile-nav';
+import { CurrencySwitcher } from '../shared/currency-switcher';
 
 export function Header() {
   const pathname = usePathname();
@@ -56,7 +57,8 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-4">
+          <CurrencySwitcher />
           <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground" asChild>
             <Link href="/properties">Book Now</Link>
           </Button>

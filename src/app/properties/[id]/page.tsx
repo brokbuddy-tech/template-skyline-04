@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, React } from 'react';
+import { useState, useEffect, React, useContext } from 'react';
 import { properties } from "@/lib/data";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
@@ -21,6 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { CurrencyContext } from '@/context/currency-context';
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   'Pool': Waves,
@@ -55,6 +56,7 @@ export default function PropertyDetailPage() {
   const params = useParams();
   const property = properties.find((p) => p.id === params.id);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const { formatPrice } = useContext(CurrencyContext);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -69,16 +71,6 @@ export default function PropertyDetailPage() {
 
   const propertyImages = property.images.map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean);
   const recommendedProperties = properties.filter(p => p.id !== property.id).slice(0, 2);
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
 
   return (
     <div className="bg-background">
@@ -156,7 +148,7 @@ export default function PropertyDetailPage() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-4xl font-bold text-accent">{formatPrice(property.price)}</span>
+                    <span className="text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
                   </div>
               </div>
             </AnimateOnScroll>

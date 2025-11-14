@@ -1,62 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext } from 'react';
 import { Button } from '@/components/ui/button';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Check, ChevronsUpDown } from 'lucide-react';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ChevronsUpDown } from 'lucide-react';
+import { CurrencyContext, currencies } from '@/context/currency-context';
 import { cn } from '@/lib/utils';
 
-const currencies = [
-  { value: 'usd', label: 'USD' },
-  { value: 'aed', label: 'AED' },
-  { value: 'eur', label: 'EUR' },
-  { value: 'gbp', label: 'GBP' },
-];
-
 export function CurrencySwitcher() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('usd');
+  const { currency, setCurrency } = useContext(CurrencyContext);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          role="combobox"
-          aria-expanded={open}
-          className="w-auto justify-between text-lg p-0 h-auto hover:bg-transparent hover:underline text-primary-foreground hover:text-primary-foreground"
+          className="text-sm font-medium transition-colors hover:bg-transparent hover:text-accent focus-visible:ring-0 focus-visible:ring-offset-0 p-0 h-auto"
         >
-          {currencies.find((currency) => currency.value === value)?.label}
+          {currency.toUpperCase()}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[100px] p-1 bg-primary text-primary-foreground border-muted-foreground/50">
-        {currencies.map((currency) => (
-          <div
-            key={currency.value}
-            onClick={() => {
-              setValue(currency.value);
-              setOpen(false);
-            }}
-            className={cn(
-              'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent/20',
-              value === currency.value && 'bg-accent/10'
-            )}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-auto min-w-[120px] bg-background border-[#EAEAEA] shadow-sm">
+        {currencies.map((c) => (
+          <DropdownMenuItem
+            key={c.value}
+            onSelect={() => setCurrency(c.value)}
+            className="cursor-pointer hover:bg-accent/10"
           >
-            {currency.label}
-            <Check
-              className={cn(
-                'absolute right-2 h-4 w-4',
-                value === currency.value ? 'opacity-100' : 'opacity-0'
-              )}
-            />
-          </div>
+            {c.label}
+          </DropdownMenuItem>
         ))}
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

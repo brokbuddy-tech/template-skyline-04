@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { useContext } from 'react';
 import type { Property } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { BedDouble, Bath, Square, ArrowUpRight } from 'lucide-react';
+import { CurrencyContext } from '@/context/currency-context';
+
 
 interface PropertyCardProps {
   property: Property;
@@ -10,15 +13,8 @@ interface PropertyCardProps {
 
 export function PropertyCard({ property }: PropertyCardProps) {
   const image = PlaceHolderImages.find((img) => img.id === property.images[0]);
+  const { formatPrice } = useContext(CurrencyContext);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
 
   return (
     <div className="group" data-hoverable="true">
@@ -55,7 +51,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
       <div className="pt-4">
         <div className="flex justify-between items-start mb-1">
             <h3 className="text-xl font-headline font-bold">{property.title}</h3>
-            <p className="text-xl font-headline font-bold">{formatPrice(property.price)}</p>
+            <p className="text-xl font-headline font-bold convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</p>
         </div>
         <p className="text-sm text-muted-foreground">{property.location}</p>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { getAISuggestedMortgageRate, AISuggestedMortgageRateOutput } from "@/ai/flows/ai-suggested-mortgage-rate";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { CurrencyContext } from "@/context/currency-context";
 
 interface MortgageCalculatorProps {
     propertyPrice: number;
@@ -19,8 +20,12 @@ interface ChartData {
 }
 
 export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
-    const [loanAmount, setLoanAmount] = useState(propertyPrice * 0.8);
-    const [downPayment, setDownPayment] = useState(propertyPrice * 0.2);
+    const { currency, formatPrice, convertFromUSD } = useContext(CurrencyContext);
+
+    const convertedPropertyPrice = convertFromUSD(propertyPrice);
+
+    const [loanAmount, setLoanAmount] = useState(convertedPropertyPrice * 0.8);
+    const [downPayment, setDownPayment] = useState(convertedPropertyPrice * 0.2);
     const [interestRate, setInterestRate] = useState(5.5);
     const [loanTerm, setLoanTerm] = useState(30);
     const [monthlyPayment, setMonthlyPayment] = useState<string | null>(null);
@@ -30,7 +35,12 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
 
     const handleDownPaymentChange = (value: number) => {
         setDownPayment(value);
-        setLoanAmount(propertyPrice - value);
+        setLoanAmount(convertedPropertyPrice - value);
+    };
+    
+    const handleLoanAmountChange = (value: number) => {
+        setLoanAmount(value);
+        setDownPayment(convertedPropertyPrice - value);
     };
 
     const calculateMonthlyPayment = () => {
@@ -66,7 +76,7 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                 creditScore: 740, // Example value
                 propertyType: 'House', // Example value
                 location: 'California', // Example value
-                downPaymentPercentage: (downPayment / propertyPrice) * 100
+                downPaymentPercentage: (downPayment / convertedPropertyPrice) * 100
             });
             setAiSuggestion(suggestion);
             if (suggestion.suggestedRate) {
@@ -78,9 +88,6 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
             setIsSuggesting(false);
         }
     };
-
-
-    const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
     const COLORS = ['hsl(var(--primary))', 'hsl(var(--accent))'];
 
@@ -96,17 +103,21 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="property-price">Property Price</Label>
-                                <Input id="property-price" value={formatCurrency(propertyPrice)} readOnly className="bg-muted"/>
+                                <Input id="property-price" value={formatPrice(propertyPrice)} readOnly className="bg-muted"/>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="down-payment">Down Payment</Label>
-                                <Input id="down-payment" value={formatCurrency(downPayment)} onChange={e => handleDownPaymentChange(Number(e.target.value.replace(/[^0-9.]/g, '')))} />
+                                <Input id="down-payment" value={formatPrice(downPayment, false)} onChange={e => handleDownPaymentChange(Number(e.target.value.replace(/[^0-9.]/g, '')))} />
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <Label>Down Payment ({((downPayment / propertyPrice) * 100).toFixed(0)}%)</Label>
-                            <Slider value={[downPayment]} onValueChange={([val]) => handleDownPaymentChange(val)} max={propertyPrice} step={1000} className="[&>span:first-child>span]:bg-accent [&>span:last-child>span]:bg-accent [&>[role=slider]]:bg-accent" />
+                            <Label>Down Payment ({((downPayment / convertedPropertyPrice) * 100).toFixed(0)}%)</Label>
+                            <Slider value={[downPayment]} onValueChange={([val]) => handleDownPaymentChange(val)} max={convertedPropertyPrice} step={1000} className="[&>span:first-child>span]:bg-accent [&>span:last-child>span]:bg-accent [&>[role=slider]]:bg-accent" />
                         </div>
+                         <div className="space-y-2">
+                                <Label htmlFor="loan-amount">Loan Amount</Label>
+                                <Input id="loan-amount" value={formatPrice(loanAmount, false)} onChange={e => handleLoanAmountChange(Number(e.target.value.replace(/[^0-9.]/g, '')))} />
+                            </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="interest-rate">Interest Rate (%)</Label>
@@ -134,7 +145,7 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                         <div className="w-full text-center space-y-4">
                             <div>
                                 <p className="text-muted-foreground">Estimated Monthly Payment</p>
-                                <p className="text-4xl font-bold font-headline text-accent">{formatCurrency(parseFloat(monthlyPayment))}</p>
+                                <p className="text-4xl font-bold font-headline text-accent">{formatPrice(parseFloat(monthlyPayment))}</p>
                             </div>
                              <div className="w-full h-64">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -153,7 +164,7 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                                             ))}
                                         </Pie>
                                         <Tooltip
-                                            formatter={(value: number) => formatCurrency(value)}
+                                            formatter={(value: number) => formatPrice(value)}
                                             contentStyle={{
                                                 background: 'hsl(var(--background))',
                                                 borderColor: 'hsl(var(--border))',

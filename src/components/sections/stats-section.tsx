@@ -3,9 +3,10 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { CountUp } from '../shared/count-up';
 import { AnimateOnScroll } from '../animate-on-scroll';
+import { properties } from '@/lib/data';
 
 const stats = [
-  { value: 250, suffix: '+', label: 'Modern Properties' },
+  { value: properties.length, suffix: '+', label: 'Modern Properties' },
   { value: 98, suffix: '%', label: 'Client Satisfaction' },
   { value: 12, suffix: '+', label: 'Years of Experience' },
   { value: 5, suffix: '+', label: 'Awards Won' },

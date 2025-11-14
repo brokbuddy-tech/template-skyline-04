@@ -15,6 +15,8 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '../ui/separator';
+import { SlidersHorizontal } from 'lucide-react';
+import { useState } from 'react';
 
 const amenities = [
   'Pool',
@@ -26,46 +28,65 @@ const amenities = [
 ];
 
 export function AdvancedSearchModal() {
+  const [priceRange, setPriceRange] = useState([2500000, 7500000]);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full md:w-auto bg-background">Advanced</Button>
+        <Button variant="ghost" className="w-full md:w-auto rounded-none hover:bg-accent hover:text-accent-foreground border-y border-transparent hover:border-y-input">
+            <SlidersHorizontal className="mr-2 h-4 w-4" />
+            Advanced
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[625px]">
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="font-headline text-3xl font-medium">Advanced Search</DialogTitle>
-          <DialogDescription>
-            Use our AI search or refine with detailed filters.
-          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-4">
           
           <div>
-            <Label htmlFor="ai-search" className="text-base">Intelligent AI Search</Label>
-            <Input id="ai-search" placeholder="e.g., 'a 3-bedroom house in Malibu with an ocean view'" className="mt-2" />
+            <Label htmlFor="ai-search" className="text-base font-bold">AI-Powered Search</Label>
+            <p className='text-sm text-muted-foreground mb-2'>Describe your perfect stay...</p>
+            <div className='flex gap-2'>
+              <Input id="ai-search" placeholder="e.g., 'a 3-bedroom house in Malibu with an ocean view'" className="mt-0 rounded-full" />
+              <Button type="submit" className='rounded-full'>Let's Go AI</Button>
+            </div>
           </div>
 
-          <Separator />
+          <div className="flex items-center">
+            <Separator className="flex-1" />
+            <span className="mx-4 text-sm text-muted-foreground">OR</span>
+            <Separator className="flex-1" />
+          </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="beds">Beds</Label>
+              <Label htmlFor="beds">Bedrooms</Label>
               <Input id="beds" type="number" placeholder="Any" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="baths">Baths</Label>
+              <Label htmlFor="baths">Bathrooms</Label>
               <Input id="baths" type="number" placeholder="Any" />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label>Price Range</Label>
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <span>$500,000</span>
-              <span>$10,000,000+</span>
+            <div className="flex justify-between items-end">
+              <Label>Price Range</Label>
+              <span className='text-sm font-medium'>{formatCurrency(priceRange[0])} - {formatCurrency(priceRange[1])}{priceRange[1] === 10000000 ? '+' : ''}</span>
             </div>
             <Slider
-              defaultValue={[2500000, 7500000]}
+              value={priceRange}
+              onValueChange={(value) => setPriceRange(value)}
               min={500000}
               max={10000000}
               step={100000}
@@ -87,8 +108,9 @@ export function AdvancedSearchModal() {
             </div>
           </div>
         </div>
-        <DialogFooter>
-          <Button type="submit" size="lg" className="w-full">Apply Filters</Button>
+        <DialogFooter className='sm:justify-between'>
+            <Button type="button" variant="link">Clear All</Button>
+            <Button type="submit" size="lg">Apply Filters</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

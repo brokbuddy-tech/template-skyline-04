@@ -10,14 +10,14 @@
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 24.6 95% 53.1%; /* #FF4D00 */
-    --primary-foreground: 0 0% 98%;
+    --primary: 0 0% 3.9%; /* Black */
+    --primary-foreground: 0 0% 98%; /* White */
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 24.6 95% 53.1%; /* Orange */
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%; /* #E5E5E5 which is close to #EAEAEA */
@@ -33,13 +33,13 @@
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 24.6 95% 53.1%; /* #FF4D00 */
-    --primary-foreground: 0 0% 98%;
+    --primary: 0 0% 98%; /* White */
+    --primary-foreground: 0 0% 3.9%; /* Black */
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
+    --accent: 24.6 95% 53.1%; /* Orange */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -137,7 +137,7 @@
 
 .honeycomb div {
   animation: honeycomb 2.1s infinite backwards;
-  background: hsl(var(--primary));
+  background: hsl(var(--accent));
   height: 12px;
   margin-top: 6px;
   position: absolute;
@@ -155,12 +155,12 @@
 
 .honeycomb div:after {
   top: -6px;
-  border-bottom: 6px solid hsl(var(--primary));
+  border-bottom: 6px solid hsl(var(--accent));
 }
 
 .honeycomb div:before {
   bottom: -6px;
-  border-top: 6px solid hsl(var(--primary));
+  border-top: 6px solid hsl(var(--accent));
 }
 
 .honeycomb div:nth-child(1) {
@@ -356,7 +356,7 @@
   position: absolute;
   left: 24px;
   width: 3px;
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--accent));
   animation: sandStream1 2s ease-in 0s infinite;
 }
 
@@ -368,7 +368,7 @@
   left: 19px;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid hsl(var(--primary));
+  border-bottom: 6px solid hsl(var(--accent));
   animation: sandStream2 2s ease-in 0s infinite;
 }
 
@@ -395,7 +395,7 @@
   display: block;
   position: absolute;
   left: 6px;
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--accent));
   perspective: 500px;
 }
 

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { properties } from "@/lib/data";
+import { SlidersHorizontal } from "lucide-react";
 
 export default function PropertiesPage() {
   return (
@@ -16,10 +17,14 @@ export default function PropertiesPage() {
 
       <section className="py-8 sticky top-20 z-30 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row gap-4 p-4 border rounded-lg">
-            <Input placeholder="Location (e.g., 'Malibu, California')" className="bg-background"/>
+          <div className="flex flex-col md:flex-row gap-0 p-2 border rounded-lg">
+            <Input 
+              placeholder="Search by Location..." 
+              className="bg-transparent border-0 rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
+            <div className="w-px bg-border h-auto" />
             <Select>
-              <SelectTrigger className="bg-background">
+              <SelectTrigger className="bg-transparent border-0 rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 [&>svg]:hidden w-48">
                 <SelectValue placeholder="Property Type" />
               </SelectTrigger>
               <SelectContent>
@@ -28,8 +33,9 @@ export default function PropertiesPage() {
                 <SelectItem value="penthouse">Penthouse</SelectItem>
               </SelectContent>
             </Select>
+            <div className="w-px bg-border h-auto" />
             <AdvancedSearchModal />
-            <Button size="default" className="w-full md:w-auto">Search</Button>
+            <Button size="default" className="w-full md:w-auto rounded-l-none">Search</Button>
           </div>
         </div>
       </section>

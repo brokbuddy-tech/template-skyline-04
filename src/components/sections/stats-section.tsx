@@ -5,10 +5,10 @@ import { CountUp } from '../shared/count-up';
 import { AnimateOnScroll } from '../animate-on-scroll';
 
 const stats = [
-  { value: 200, suffix: '+', label: 'Modern Properties' },
+  { value: 250, suffix: '+', label: 'Modern Properties' },
   { value: 98, suffix: '%', label: 'Client Satisfaction' },
   { value: 12, suffix: '+', label: 'Years of Experience' },
-  { value: 20, suffix: '+', label: 'Award Winning' },
+  { value: 5, suffix: '+', label: 'Awards Won' },
 ];
 
 export function StatsSection() {

@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { properties } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -46,6 +49,7 @@ const amenityIcons: { [key: string]: LucideIcon } = {
 
 export default function PropertyDetailPage({ params }: { params: { id: string } }) {
   const property = properties.find((p) => p.id === params.id);
+  const [date, setDate] = useState<Date | undefined>(new Date());
 
   if (!property) {
     notFound();
@@ -164,7 +168,12 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <Calendar mode="single" className="rounded-md border" />
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                onSelect={setDate}
+                                className="rounded-md border"
+                             />
                              <Select>
                                 <SelectTrigger><SelectValue placeholder="Guests" /></SelectTrigger>
                                 <SelectContent>

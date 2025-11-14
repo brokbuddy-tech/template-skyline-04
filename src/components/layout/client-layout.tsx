@@ -38,7 +38,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return (
       <>
         <CustomCursor />
-        <SplashScreen isLoading={true} />
+        <SplashScreen />
       </>
     );
   }
@@ -47,13 +47,13 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <>
       <CustomCursor />
       {isLoading ? (
-        <SplashScreen isLoading={isLoading} />
+        <SplashScreen />
       ) : (
         <PageTransition>
           {children}
         </PageTransition>
       )}
-      <div className="fixed bottom-[150px] right-8 z-50">
+      <div className="fixed bottom-8 right-8 md:bottom-[150px] z-50">
         <AIChatbot />
       </div>
       <div className="fixed bottom-8 right-8 z-50 hidden md:block">

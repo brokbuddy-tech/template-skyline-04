@@ -22,7 +22,7 @@ export function ThemeSwitch() {
   };
 
   return (
-    <div className="w-24 aspect-video rounded-lg has-[:checked]:bg-black bg-white border-2 border-black has-[:checked]:border-white">
+    <div className="w-24 aspect-video rounded-lg has-[:checked]:bg-black bg-white border-2 border-black has-[:checked]:border-white group">
       <div className="flex h-full w-full px-1 items-center gap-x-1">
         <div className="w-3 h-3 flex-shrink-0 rounded-full border-2 border-black group-has-[:checked]:border-white" />
         <label htmlFor="switch" className="has-[:checked]:scale-x-[-1] w-full h-5 border-2 border-black rounded cursor-pointer group-has-[:checked]:border-white">

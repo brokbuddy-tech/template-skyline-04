@@ -33,7 +33,14 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   }, [isMounted]);
 
   if (!isMounted) {
-    return null;
+    // Return a static version of what the client will render on first pass
+    // to avoid hydration errors.
+    return (
+      <>
+        <CustomCursor />
+        <SplashScreen />
+      </>
+    );
   }
   
   return (
@@ -46,7 +53,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           {children}
         </PageTransition>
       )}
-      <div className="fixed bottom-24 right-8 z-50 hidden md:block">
+      <div className="fixed bottom-24 right-8 z-50">
         <AIChatbot />
       </div>
       <div className="fixed bottom-8 right-8 z-50 hidden md:block">

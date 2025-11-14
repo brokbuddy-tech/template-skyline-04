@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, React } from 'react';
+import { useState, useEffect, React } from 'react';
 import { properties } from "@/lib/data";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
@@ -14,6 +14,13 @@ import { Button } from "@/components/ui/button";
 import { MortgageCalculator } from "@/components/shared/mortgage-calculator";
 import { PropertyCard } from "@/components/shared/property-card";
 import { AnimateOnScroll } from "@/components/animate-on-scroll";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const amenityIcons: { [key: string]: LucideIcon } = {
   'Pool': Waves,
@@ -47,6 +54,14 @@ const amenityIcons: { [key: string]: LucideIcon } = {
 export default function PropertyDetailPage() {
   const params = useParams();
   const property = properties.find((p) => p.id === params.id);
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentUrl = window.location.href;
+      setQrCodeUrl(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`);
+    }
+  }, []);
 
   if (!property) {
     notFound();
@@ -104,9 +119,25 @@ export default function PropertyDetailPage() {
                 <a href="#" className="flex items-center gap-2 hover:text-accent">
                     <FileDown className="w-4 h-4" /> Download Brochure
                 </a>
-                <a href="#" className="flex items-center gap-2 hover:text-accent">
-                    <QrCode className="w-4 h-4" /> Get QR Code
-                </a>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <a href="#" className="flex items-center gap-2 hover:text-accent">
+                        <QrCode className="w-4 h-4" /> Get QR Code
+                    </a>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-xs bg-background text-foreground border-foreground/20">
+                    <DialogHeader>
+                      <DialogTitle className="font-headline text-2xl font-medium text-center">Scan QR Code</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex items-center justify-center p-4">
+                      {qrCodeUrl ? (
+                        <Image src={qrCodeUrl} alt="QR Code for property" width={200} height={200} />
+                      ) : (
+                        <p>Generating QR Code...</p>
+                      )}
+                    </div>
+                  </DialogContent>
+                </Dialog>
             </div>
         </div>
       </AnimateOnScroll>

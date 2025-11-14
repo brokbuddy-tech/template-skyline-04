@@ -18,7 +18,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        headline: ['var(--font-playfair-display)', 'serif'],
+        headline: ['var(--font-inter)', 'sans-serif'],
         body: ['var(--font-inter)', 'sans-serif'],
       },
       colors: {

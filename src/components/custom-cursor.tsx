@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { useTheme } from 'next-themes';
 
 export function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
-  const { theme } = useTheme();
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {

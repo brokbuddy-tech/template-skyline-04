@@ -26,6 +26,7 @@ export function AIChatbot() {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const chatPopupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -47,6 +48,22 @@ export function AIChatbot() {
       });
     }
   }, [messages]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (chatPopupRef.current && !chatPopupRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
@@ -91,7 +108,10 @@ export function AIChatbot() {
   return (
     <>
       <Button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
         className="w-16 h-16 rounded-full bg-accent text-accent-foreground shadow-lg hover:bg-accent/90"
         aria-label="Toggle AI Chat"
       >
@@ -101,6 +121,7 @@ export function AIChatbot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={chatPopupRef}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -110,8 +131,11 @@ export function AIChatbot() {
               borderColor: '#EAEAEA',
             }}
           >
-            <div className="p-4 border-b border-gray-200" style={{ borderColor: '#EAEAEA' }}>
+            <div className="flex justify-between items-center p-4 border-b border-gray-200" style={{ borderColor: '#EAEAEA' }}>
               <h2 className="font-headline text-xl font-semibold text-black">Monks AI</h2>
+              <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
+                <X className="h-5 w-5 text-gray-500"/>
+              </Button>
             </div>
 
             <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>

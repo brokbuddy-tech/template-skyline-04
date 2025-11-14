@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
 
 export function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
@@ -33,8 +35,8 @@ export function CustomCursor() {
     <div
       style={{ left: `${position.x}px`, top: `${position.y}px` }}
       className={cn(
-        'fixed w-3 h-3 rounded-full bg-primary pointer-events-none z-50 transition-transform duration-200 ease-out -translate-x-1/2 -translate-y-1/2 mix-blend-difference',
-        isHovering ? 'scale-[3.5] bg-transparent border-2 border-primary' : 'scale-100'
+        'fixed w-3 h-3 rounded-full bg-foreground pointer-events-none z-50 transition-transform duration-200 ease-out -translate-x-1/2 -translate-y-1/2 mix-blend-difference',
+        isHovering ? 'scale-[3.5] bg-transparent border-2 border-foreground' : 'scale-100'
       )}
     />
   );

@@ -89,7 +89,7 @@ export function HeroSection() {
                   key={i}
                   className={cn(
                     'w-4 h-4',
-                    i < 4 ? 'text-primary fill-primary' : 'text-primary'
+                    i < 4 ? 'text-accent fill-accent' : 'text-accent'
                   )}
                 />
               ))}

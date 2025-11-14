@@ -1,6 +1,7 @@
 import { properties } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
 import { BedDouble, Bath, Square, MapPin, Eye, FileDown, QrCode } from "lucide-react";
@@ -168,6 +169,11 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 {recommendedProperties.map((prop) => (
                     <PropertyCard key={prop.id} property={prop} />
                 ))}
+                </div>
+                <div className="text-center mt-16">
+                    <Button asChild size="lg">
+                        <Link href="/properties">View All Properties</Link>
+                    </Button>
                 </div>
             </div>
         </section>

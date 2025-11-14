@@ -12,6 +12,7 @@ import { Property } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { MetaballLoader } from './metaball-loader';
 
 interface Message {
   id: string;
@@ -107,16 +108,15 @@ export function AIChatbot() {
 
   return (
     <>
-      <Button
-        onClick={(e) => {
+      <div onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="w-16 h-16 rounded-full bg-accent text-accent-foreground shadow-lg hover:bg-accent/90"
+        className="cursor-pointer"
         aria-label="Toggle AI Chat"
       >
-        {isOpen ? <X /> : <MessageCircle />}
-      </Button>
+        <MetaballLoader />
+      </div>
 
       <AnimatePresence>
         {isOpen && (

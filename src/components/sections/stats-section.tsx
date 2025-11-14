@@ -36,7 +36,7 @@ export function StatsSection() {
              <AnimateOnScroll delay={200}>
               <div className="grid grid-cols-2 gap-4 md:gap-8">
                 {stats.map((stat, index) => (
-                  <Card key={index} className="bg-accent/50 p-6 md:p-8 rounded-lg text-center">
+                  <Card key={index} className="bg-orange-50/50 p-6 md:p-8 rounded-lg text-center" style={{backgroundColor: '#FFF5F2'}}>
                     <h3 className="text-5xl md:text-7xl font-bold font-headline text-foreground">
                       <CountUp end={stat.value} duration={2} />
                       {stat.suffix}

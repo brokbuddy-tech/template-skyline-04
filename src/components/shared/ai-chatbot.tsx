@@ -126,7 +126,7 @@ export function AIChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed bottom-24 right-8 w-[380px] h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col font-body"
+            className="fixed bottom-24 right-4 md:right-8 w-[calc(100vw-2rem)] md:w-[380px] h-[70vh] md:h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col font-body"
             style={{
               borderColor: '#EAEAEA',
             }}

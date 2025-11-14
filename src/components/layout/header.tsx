@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { Logo } from '../logo';
+import { MobileNav } from './mobile-nav';
 
 export function Header() {
   const pathname = usePathname();
@@ -55,10 +56,13 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
           <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground" asChild>
             <Link href="/properties">Book Now</Link>
           </Button>
+        </div>
+        <div className="md:hidden">
+          <MobileNav navLinks={navLinks} />
         </div>
       </div>
     </header>

@@ -71,11 +71,18 @@ export function HeroSection() {
 
         <div
           ref={contentRef}
-          className="absolute inset-0 z-10 grid grid-cols-12 items-center gap-8 px-8 container mx-auto text-white"
+          className="absolute inset-0 z-10 flex flex-col md:grid md:grid-cols-12 items-center gap-8 px-8 container mx-auto text-white"
           style={{ opacity: Math.max(0, opacity) }}
         >
+          {/* Main Column - Center on mobile */}
+          <div className="md:col-span-8 flex justify-center items-center text-center order-1 md:order-2 mt-24 md:mt-0">
+             <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
+               Transforming Spaces, <br /> Realizing <span className="text-primary">Dreams.</span>
+             </h1>
+          </div>
+          
           {/* Left Column */}
-          <div className="col-span-2 flex flex-col items-start gap-4">
+          <div className="md:col-span-2 flex flex-col items-center md:items-start gap-4 order-2 md:order-1">
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
                 <Star
@@ -108,16 +115,8 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Center Column */}
-          <div className="col-span-8 flex justify-center items-center">
-             <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
-               Transforming Spaces, <br /> Realizing <span className="text-primary">Dreams.</span>
-             </h1>
-          </div>
-          
-
           {/* Right Column */}
-          <div className="col-span-2 flex flex-col items-end text-right gap-4">
+          <div className="md:col-span-2 flex flex-col items-center md:items-end text-center md:text-right gap-4 order-3 md:order-3">
             <p className="text-base">
               Turning your vision into reality, we specialize in creating exceptional living spaces.
             </p>

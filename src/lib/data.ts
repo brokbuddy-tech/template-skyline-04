@@ -1,0 +1,116 @@
+import type { Property, Service, Testimonial } from './types';
+import { Award, Handshake, KeyRound, Search } from 'lucide-react';
+
+export const services: Service[] = [
+  {
+    icon: Search,
+    title: 'Buy a Home',
+    description: 'Find your place with an immersive photo experience and the most listings, including things you won’t find anywhere else.',
+  },
+  {
+    icon: Handshake,
+    title: 'Sell a Home',
+    description: 'No matter what path you take to sell your home, we can help you navigate a successful sale.',
+  },
+  {
+    icon: KeyRound,
+    title: 'Rent a Home',
+    description: 'We’re creating a seamless online experience – from shopping on the largest rental network, to applying, to paying rent.',
+  },
+];
+
+export const properties: Property[] = [
+  {
+    id: '1',
+    title: 'The Glass House',
+    location: 'Malibu, California',
+    price: 3500000,
+    bedrooms: 4,
+    bathrooms: 5,
+    sqft: 4200,
+    type: 'House',
+    amenities: ['Pool', 'Ocean View', 'Private Gym', 'Home Theater', 'Wine Cellar'],
+    images: ['prop-1-1', 'prop-1-2', 'prop-1-3'],
+    description: "Perched atop a Malibu cliffside, The Glass House offers breathtaking panoramic ocean views through its floor-to-ceiling windows. This architectural marvel blends minimalist design with luxurious comfort. Featuring an infinity pool that merges with the horizon, a state-of-the-art home theater, and a curated wine cellar, it's an entertainer's dream. The master suite provides a serene escape with its private balcony and spa-like bathroom. Experience coastal living at its absolute finest.",
+  },
+  {
+    id: '2',
+    title: 'Urban Oasis Loft',
+    location: 'SoHo, New York',
+    price: 2750000,
+    bedrooms: 2,
+    bathrooms: 2,
+    sqft: 2100,
+    type: 'Apartment',
+    amenities: ['Rooftop Terrace', 'Concierge', 'Exposed Brick', 'Chef\'s Kitchen'],
+    images: ['prop-2-1'],
+    description: 'Located in the heart of SoHo, this exquisite loft is a testament to timeless design. Exposed brick walls and original hardwood floors meet modern luxury in a spacious, open-concept layout. The chef\'s kitchen is equipped with top-of-the-line appliances, perfect for culinary explorations. A private rooftop terrace offers a rare, tranquil escape amidst the city buzz. With a 24/7 concierge service, every need is catered to in this urban sanctuary.',
+  },
+  {
+    id: '3',
+    title: 'The Evergreen Manor',
+    location: 'Aspen, Colorado',
+    price: 6200000,
+    bedrooms: 6,
+    bathrooms: 7,
+    sqft: 8500,
+    type: 'House',
+    amenities: ['Ski-in/Ski-out', 'Hot Tub', 'Mountain View', 'Sauna', 'Game Room'],
+    images: ['prop-3-1'],
+    description: 'The Evergreen Manor is the epitome of mountain luxury. With direct ski-in/ski-out access to Aspen\'s world-renowned slopes, this estate is a winter sports enthusiast\'s paradise. After a day on the mountain, unwind in the outdoor hot tub or indoor sauna, all while enjoying stunning, unobstructed mountain views. The interior boasts a grand fireplace, a professional-grade kitchen, and a cozy game room for endless entertainment. This is more than a home; it\'s a legacy.',
+  },
+  {
+    id: '4',
+    title: 'Penthouse Panorama',
+    location: 'Downtown, Dubai',
+    price: 4100000,
+    bedrooms: 3,
+    bathrooms: 4,
+    sqft: 3500,
+    type: 'Penthouse',
+    amenities: ['360° City View', 'Private Pool', 'Smart Home', '24/7 Security'],
+    images: ['prop-4-1'],
+    description: 'Commanding the entire top floor, Penthouse Panorama offers an unparalleled 360-degree view of the iconic Dubai skyline. This residence is the pinnacle of modern technology, with a fully integrated smart home system controlling everything from lighting to climate. The expansive terrace features a private infinity pool, creating a spectacular illusion of swimming in the sky. Every detail has been meticulously crafted for a life of effortless elegance and security.',
+  },
+  {
+    id: '5',
+    title: 'The Coastal Retreat',
+    location: 'Byron Bay, Australia',
+    price: 2900000,
+    bedrooms: 5,
+    bathrooms: 4,
+    sqft: 3800,
+    type: 'House',
+    amenities: ['Beach Access', 'Yoga Deck', 'Outdoor Kitchen', 'Surfboard Storage'],
+    images: ['prop-5-1'],
+    description: 'Embrace the laid-back luxury of Byron Bay in this stunning coastal retreat. With private access to a secluded beach, this home is a sanctuary of peace and natural beauty. The open-plan living area flows seamlessly to an expansive yoga deck and outdoor kitchen, perfect for alfresco living. Designed with natural materials and a neutral palette, the home creates a tranquil atmosphere that calms the soul. It\'s the perfect base to explore the vibrant culture and pristine nature of the region.',
+  },
+  {
+    id: '6',
+    title: 'The Minimalist Villa',
+    location: 'Kyoto, Japan',
+    price: 3800000,
+    bedrooms: 3,
+    bathrooms: 3,
+    sqft: 3100,
+    type: 'House',
+    amenities: ['Zen Garden', 'Tea Room', 'Hinoki Bath', 'Heated Floors'],
+    images: ['prop-6-1'],
+    description: 'Inspired by traditional Japanese aesthetics, this minimalist villa is a masterpiece of design and tranquility. A private zen garden provides a serene backdrop to the clean, uncluttered interiors. The home features a dedicated tea room for quiet contemplation and a luxurious Hinoki wood bath for ultimate relaxation. Natural light floods the space, highlighting the beauty of the carefully selected materials. This is a home designed for mindfulness and a deep connection to its surroundings.',
+  },
+];
+
+export const testimonials: Testimonial[] = [
+  {
+    quote: "Working with Monks was a revelation. Their attention to detail and commitment to our vision was unparalleled. They didn't just find us a house; they found us a home that reflects our soul.",
+    author: 'Eleanor Vance',
+    location: 'Purchased in Malibu, CA',
+    image: 'testimonial-1',
+  },
+  {
+    quote: "The level of professionalism and market insight provided by the Monks team is in a league of its own. They handled every aspect of our sale with grace and efficiency, exceeding all expectations.",
+    author: 'Julian Thorne',
+    location: 'Sold in SoHo, NYC',
+    image: 'testimonial-2',
+  },
+];

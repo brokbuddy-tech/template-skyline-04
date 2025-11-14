@@ -1,3 +1,82 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-1",
+      "description": "A beautiful modern house hero shot.",
+      "imageUrl": "https://images.unsplash.com/photo-1615406020658-6c4b805f1f30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzYzMDE5Nzg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern architecture"
+    },
+    {
+      "id": "prop-1-1",
+      "description": "Living room of property 1",
+      "imageUrl": "https://images.unsplash.com/photo-1593696140826-c58b021acf8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtaW5pbWFsaXN0JTIwbGl2aW5nJTIwcm9vbXxlbnwwfHx8fDE3NjMwODUwMjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "minimalist living room"
+    },
+    {
+      "id": "prop-1-2",
+      "description": "Kitchen of property 1",
+      "imageUrl": "https://images.unsplash.com/photo-1632583824020-937ae9564495?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb2Rlcm4lMjBraXRjaGVufGVufDB8fHx8MTc2MzAwMzk1MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern kitchen"
+    },
+    {
+      "id": "prop-1-3",
+      "description": "Bedroom of property 1",
+      "imageUrl": "https://images.unsplash.com/photo-1547561993-9fe9f2af3fd4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWluaW1hbGlzdCUyMGJlZHJvb218ZW58MHx8fHwxNzYzMDE2ODIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "minimalist bedroom"
+    },
+    {
+      "id": "prop-2-1",
+      "description": "Exterior of property 2",
+      "imageUrl": "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bHV4dXJ5JTIwdmlsbGF8ZW58MHx8fHwxNzYzMDAzOTUwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury villa"
+    },
+    {
+      "id": "prop-3-1",
+      "description": "Exterior of property 3",
+      "imageUrl": "https://images.unsplash.com/photo-1641289426957-1748d0b5de04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaXR5JTIwYXBhcnRtZW50fGVufDB8fHx8MTc2MzAwNzU1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city apartment"
+    },
+    {
+      "id": "prop-4-1",
+      "description": "Living area of property 4",
+      "imageUrl": "https://images.unsplash.com/photo-1723748972084-4124765e0a55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzY2FuZGluYXZpYW4lMjBpbnRlcmlvcnxlbnwwfHx8fDE3NjMwMjU2NTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "scandinavian interior"
+    },
+    {
+      "id": "prop-5-1",
+      "description": "Exterior of property 5",
+      "imageUrl": "https://images.unsplash.com/photo-1511840831832-3efd661c1d0f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxiZWFjaCUyMGhvdXNlfGVufDB8fHx8MTc2MzAyOTEzNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "beach house"
+    },
+    {
+      "id": "prop-6-1",
+      "description": "View from property 6",
+      "imageUrl": "https://images.unsplash.com/photo-1570641963303-92ce4845ed4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtb3VudGFpbiUyMHZpZXd8ZW58MHx8fHwxNzYzMDczNjE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mountain view"
+    },
+    {
+      "id": "prop-7-1",
+      "description": "Detail shot of property 7",
+      "imageUrl": "https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxpbnRlcmlvciUyMGRlc2lnbnxlbnwwfHx8fDE3NjMwNzE2Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "interior design"
+    },
+    {
+      "id": "prop-8-1",
+      "description": "Garden of property 8",
+      "imageUrl": "https://images.unsplash.com/photo-1707323747791-407f6fc030a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx6ZW4lMjBnYXJkZW58ZW58MHx8fHwxNzYzMDM5NTU2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "zen garden"
+    },
+    {
+      "id": "testimonial-1",
+      "description": "Person for testimonial",
+      "imageUrl": "https://images.unsplash.com/photo-1525599428495-0441bd5c67de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb3J0cmFpdCUyMHBlcnNvbnxlbnwwfHx8fDE3NjI5ODgzMzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "portrait person"
+    },
+    {
+      "id": "testimonial-2",
+      "description": "Person for testimonial",
+      "imageUrl": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9mZXNzaW9uYWwlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjMwODE1Mzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional portrait"
+    }
+  ]
 }

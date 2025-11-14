@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ThemeSwitch } from '../shared/theme-switch';
+import { CurrencySwitcher } from '../shared/currency-switcher';
 
 type NavLink = {
   href: string;
@@ -44,10 +45,10 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
             ))}
           </nav>
           <div className="flex flex-col items-center gap-8">
+            <CurrencySwitcher />
             <Button
               variant="default"
               size="lg"
-              className="mt-12"
               asChild
               onClick={() => setIsOpen(false)}
             >

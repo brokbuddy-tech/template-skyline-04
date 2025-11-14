@@ -19,28 +19,28 @@ export function Logo({ className }: { className?: string }) {
                 />
                 <path
                     d="M2 7L12 12"
-                    stroke="hsl(var(--primary))"
+                    stroke="hsl(var(--accent))"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                 />
                 <path
                     d="M12 22V12"
-                    stroke="hsl(var(--primary))"
+                    stroke="hsl(var(--accent))"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                 />
                 <path
                     d="M22 7L12 12"
-                    stroke="hsl(var(--primary))"
+                    stroke="hsl(var(--accent))"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                 />
                 <path
                     d="M17 4.5L7 9.5"
-                    stroke="hsl(var(--primary))"
+                    stroke="hsl(var(--accent))"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"

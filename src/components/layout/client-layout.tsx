@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { SplashScreen } from "@/components/splash-screen";
 import { PageTransition } from "@/components/page-transition";
 import { CustomCursor } from "@/components/custom-cursor";
@@ -10,9 +9,15 @@ import { AIChatbot } from "../shared/ai-chatbot";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Prevent splash screen on subsequent visits in the same session
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     if (sessionStorage.getItem("splashShown")) {
       setIsLoading(false);
       return;
@@ -24,8 +29,12 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     }, 3000); // Splash screen duration
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMounted]);
 
+  if (!isMounted) {
+    return null;
+  }
+  
   return (
     <>
       <CustomCursor />

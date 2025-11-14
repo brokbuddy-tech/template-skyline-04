@@ -38,9 +38,9 @@ export function StickySearch() {
       <DialogTrigger asChild>
         <Button
           className={cn(
-            'fixed bottom-24 right-5 z-40 h-16 w-16 rounded-full bg-accent text-accent-foreground shadow-lg transition-all duration-500 ease-in-out',
+            'fixed top-24 right-5 z-40 h-16 w-16 rounded-full bg-accent text-accent-foreground shadow-lg transition-all duration-500 ease-in-out',
             isFooterVisible
-              ? 'opacity-0 scale-80 translate-y-10'
+              ? 'opacity-0 scale-80 -translate-y-10'
               : 'opacity-100 scale-100 translate-y-0'
           )}
           aria-label="Open advanced search"

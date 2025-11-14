@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +15,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '../ui/separator';
 import { SlidersHorizontal } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { properties } from '@/lib/data';
 
 const amenities = [
   'Pool',
@@ -28,7 +28,24 @@ const amenities = [
 ];
 
 export function AdvancedSearchModal() {
-  const [priceRange, setPriceRange] = useState([2500000, 7500000]);
+  const { minPrice, maxPrice } = useMemo(() => {
+    const prices = properties.map(p => p.price);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    // Round to nearest 50k
+    const roundToNearest50k = (num: number, direction: 'down' | 'up') => {
+        if (direction === 'down') {
+            return Math.floor(num / 50000) * 50000;
+        }
+        return Math.ceil(num / 50000) * 50000;
+    }
+    return { 
+        minPrice: roundToNearest50k(min, 'down'), 
+        maxPrice: roundToNearest50k(max, 'up') 
+    };
+  }, []);
+  
+  const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -82,14 +99,14 @@ export function AdvancedSearchModal() {
           <div className="space-y-2">
             <div className="flex justify-between items-end">
               <Label>Price Range</Label>
-              <span className='text-sm font-medium'>{formatCurrency(priceRange[0])} - {formatCurrency(priceRange[1])}{priceRange[1] === 10000000 ? '+' : ''}</span>
+              <span className='text-sm font-medium'>{formatCurrency(priceRange[0])} - {formatCurrency(priceRange[1])}{priceRange[1] === maxPrice ? '+' : ''}</span>
             </div>
             <Slider
               value={priceRange}
               onValueChange={(value) => setPriceRange(value)}
-              min={500000}
-              max={10000000}
-              step={100000}
+              min={minPrice}
+              max={maxPrice}
+              step={50000}
               className="mt-2"
             />
           </div>

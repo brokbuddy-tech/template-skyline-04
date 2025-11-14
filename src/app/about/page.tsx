@@ -1,8 +1,196 @@
+
+'use client';
+
+import { AnimateOnScroll } from "@/components/animate-on-scroll";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { CountUp } from "@/components/shared/count-up";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+import Image from "next/image";
+import Link from "next/link";
+import { useRef, useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { properties } from '@/lib/data';
+
+const stats = [
+  { value: 250, suffix: '+', label: 'Modern Properties' },
+  { value: 98, suffix: '%', label: 'Client Satisfaction' },
+  { value: 12, suffix: '+', label: 'Years of Experience' },
+  { value: 5, suffix: '+', label: 'Awards Won' },
+];
+
 export default function AboutPage() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const heroImage = PlaceHolderImages.find((img) => img.id === 'about-hero');
+  const founderImage = PlaceHolderImages.find((img) => img.id === 'founder-photo');
+  const ctaImage = PlaceHolderImages.find((img) => img.id === 'cta-background');
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const hero = heroRef.current;
+      if (!hero) return;
+
+      const rect = hero.getBoundingClientRect();
+      // Start effect when the top of the hero is at the top of the viewport
+      const start = rect.top + window.scrollY;
+      const end = start + hero.offsetHeight;
+
+      if (window.scrollY >= start && window.scrollY <= end) {
+        const progress = (window.scrollY - start) / (hero.offsetHeight * 0.75);
+        setScrollProgress(Math.min(progress, 1));
+      } else if (window.scrollY < start) {
+        setScrollProgress(0);
+      } else {
+        setScrollProgress(1);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scale = 1 + scrollProgress * 0.5;
+  const opacity = 1 - scrollProgress * 2;
+
+
   return (
-    <div className="container mx-auto py-24 text-center">
-      <h1 className="text-6xl font-headline">About Us</h1>
-      <p className="mt-4 text-lg text-muted-foreground">Learn more about Monks Estate Pro.</p>
+    <div className="bg-background">
+      {/* 1. Page Hero */}
+      <div ref={heroRef} className="relative h-[120vh] w-full">
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          {heroImage && (
+            <div
+              className="absolute inset-0 transition-transform duration-300 ease-out"
+              style={{ transform: `scale(${scale})` }}
+            >
+              <Image
+                src={heroImage.imageUrl}
+                alt={heroImage.description}
+                fill
+                className="object-cover"
+                priority
+                data-ai-hint={heroImage.imageHint}
+              />
+              <div className="absolute inset-0 bg-black/40"></div>
+            </div>
+          )}
+
+          <div
+            className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white p-8"
+            style={{ opacity: Math.max(0, opacity) }}
+          >
+            <h1 className="text-6xl md:text-8xl font-bold font-sans">
+              We are Monks Estate.
+            </h1>
+            <p className="mt-4 text-xl md:text-2xl text-balance">
+              Building dreams into <span className="text-accent">stunning real estate</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Our Philosophy */}
+      <section>
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 items-center">
+            <div className="md:col-span-2">
+                <AnimateOnScroll>
+                    <h2 className="text-5xl md:text-6xl font-headline">Our Mission</h2>
+                </AnimateOnScroll>
+            </div>
+            <div className="md:col-span-3">
+                <AnimateOnScroll delay={100}>
+                    <div className="space-y-6 text-lg text-muted-foreground">
+                        <p>
+                            At Monks Estate, our mission is to redefine the real estate experience through a commitment to minimalist design, unparalleled service, and a deep understanding of our clients' desires. We believe a home is more than just a property; it's a sanctuary, a canvas for life's moments, and a reflection of one's aspirations.
+                        </p>
+                        <p>
+                            We meticulously curate and craft properties that are not only aesthetically pleasing but also functional and timeless. By focusing on quality over quantity, we ensure that every home we represent is a masterpiece of architecture and design, ready to inspire its new inhabitants.
+                        </p>
+                    </div>
+                </AnimateOnScroll>
+            </div>
+        </div>
+      </section>
+      
+      {/* 3. Key Statistics */}
+      <section>
+        <div className="container mx-auto">
+             <AnimateOnScroll>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                {stats.map((stat, index) => (
+                  <Card key={index} className="bg-orange-50/50 dark:bg-transparent p-4 md:p-8 rounded-lg text-center" style={{backgroundColor: '#FFF5F2'}}>
+                    <h3 className="text-4xl sm:text-5xl md:text-7xl font-bold font-headline text-accent">
+                      <CountUp end={stat.value} duration={2} />
+                      {stat.suffix}
+                    </h3>
+                    <p className="text-accent mt-2 text-sm sm:text-base">{stat.label}</p>
+                  </Card>
+                ))}
+              </div>
+            </AnimateOnScroll>
+        </div>
+      </section>
+
+      {/* 4. Founder's Feature */}
+      <section>
+        <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <AnimateOnScroll className="overflow-hidden rounded-lg">
+                {founderImage && (
+                    <Image 
+                        src={founderImage.imageUrl}
+                        alt={founderImage.description}
+                        width={800}
+                        height={1000}
+                        className="w-full h-auto object-cover aspect-[4/5] transition-transform duration-500 ease-in-out hover:scale-105"
+                        data-ai-hint={founderImage.imageHint}
+                    />
+                )}
+            </AnimateOnScroll>
+            <div className="space-y-8">
+                <AnimateOnScroll delay={100}>
+                    <blockquote className="text-3xl md:text-4xl font-headline italic text-balance">
+                        &ldquo;We don&apos;t just sell properties; we curate lifestyles. Every detail is considered, every space is designed to evoke emotion and create a lasting sense of home.&rdquo;
+                    </blockquote>
+                </AnimateOnScroll>
+                <AnimateOnScroll delay={200}>
+                    <p className="text-lg text-muted-foreground">
+                        From the very beginning, my goal was to build a real estate firm that values artistry and integrity as much as it values commerce. We are dedicated to creating spaces that are both beautiful and meaningful, helping our clients find not just a house, but a place where they can truly belong.
+                    </p>
+                </AnimateOnScroll>
+                <AnimateOnScroll delay={300}>
+                    <p className="text-lg font-semibold">Alex Monks, Founder</p>
+                </AnimateOnScroll>
+            </div>
+        </div>
+      </section>
+
+      {/* 5. Final Call to Action */}
+      <section className="relative py-32">
+          {ctaImage && (
+            <Image 
+                src={ctaImage.imageUrl}
+                alt={ctaImage.description}
+                fill
+                className="object-cover"
+                data-ai-hint={ctaImage.imageHint}
+            />
+          )}
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="container mx-auto relative z-10 text-center text-white">
+            <AnimateOnScroll>
+                <h2 className="text-5xl md:text-6xl font-headline mb-8 text-balance">Ready to start your journey?</h2>
+                <Button size="lg" asChild>
+                    <Link href="/properties">
+                        Explore Properties
+                        <span className="group-hover:translate-x-1 transition-transform duration-300 ml-2">↗</span>
+                    </Link>
+                </Button>
+            </AnimateOnScroll>
+          </div>
+      </section>
     </div>
   );
 }

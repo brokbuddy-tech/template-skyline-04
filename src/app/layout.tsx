@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Manrope } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { ClientLayout } from '@/components/layout/client-layout';
@@ -43,7 +42,6 @@ export default function RootLayout({
             <main className="min-h-screen">{children}</main>
             <Footer />
           </ClientLayout>
-          <Toaster />
         </ThemeProvider>
       </body>
     </html>

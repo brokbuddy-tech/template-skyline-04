@@ -14,7 +14,7 @@ export function ServicesSection() {
           <AnimateOnScroll className="lg:pr-8">
             <div className="mb-8">
               <h2 className="text-4xl md:text-5xl font-headline font-medium text-balance">
-                Discover the range of real estate <span className="text-primary">services</span> we offer
+                Discover the range of real estate <span className="text-accent">services</span> we offer
               </h2>
             </div>
             {image && (
@@ -42,7 +42,7 @@ export function ServicesSection() {
                   className="border-b last:border-b-0 py-8"
                 >
                   <div className="flex gap-8">
-                    <span className="text-4xl font-bold font-headline text-muted-foreground/50">
+                    <span className="text-4xl font-bold font-headline text-accent">
                       0{index + 1}
                     </span>
                     <div>

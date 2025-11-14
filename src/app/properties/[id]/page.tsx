@@ -67,13 +67,13 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       <AnimateOnScroll>
         <div className="container mx-auto my-8">
             <div className="flex justify-center items-center gap-8 text-sm text-muted-foreground">
-                <a href="#" className="flex items-center gap-2 hover:text-primary">
+                <a href="#" className="flex items-center gap-2 hover:text-accent">
                     <Eye className="w-4 h-4" /> View Virtual Tour
                 </a>
-                <a href="#" className="flex items-center gap-2 hover:text-primary">
+                <a href="#" className="flex items-center gap-2 hover:text-accent">
                     <FileDown className="w-4 h-4" /> Download Brochure
                 </a>
-                <a href="#" className="flex items-center gap-2 hover:text-primary">
+                <a href="#" className="flex items-center gap-2 hover:text-accent">
                     <QrCode className="w-4 h-4" /> Get QR Code
                 </a>
             </div>
@@ -123,10 +123,10 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
           <div className="relative">
             <div className="sticky top-28 space-y-8">
                 <AnimateOnScroll delay={400}>
-                    <Card className="border-primary">
+                    <Card className="border-accent">
                         <CardHeader>
                             <CardTitle className="text-2xl">
-                                <span className="text-4xl font-bold">{formatPrice(property.price)}</span>
+                                <span className="text-4xl font-bold text-accent">{formatPrice(property.price)}</span>
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">

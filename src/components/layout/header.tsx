@@ -57,7 +57,7 @@ export function Header() {
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-2">
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground" asChild>
+          <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground" asChild>
             <Link href="/properties">Book Now</Link>
           </Button>
         </div>

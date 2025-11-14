@@ -59,8 +59,8 @@ export function AdvancedSearchModal() {
           <Label htmlFor="ai-search" className="text-base font-bold">AI-Powered Search</Label>
           <p className='text-sm text-muted-foreground mb-2'>Describe your perfect stay...</p>
           <div className='flex gap-2'>
-            <Input id="ai-search" placeholder="e.g., 'a 3-bedroom house in Malibu with an ocean view'" className="mt-0 rounded-full border-primary focus-visible:ring-primary" />
-            <Button type="submit" className='rounded-full bg-primary text-primary-foreground'>Let's Go AI</Button>
+            <Input id="ai-search" placeholder="e.g., 'a 3-bedroom house in Malibu with an ocean view'" className="mt-0 rounded-full border-accent focus-visible:ring-accent" />
+            <Button type="submit" className='rounded-full'>Let's Go AI</Button>
           </div>
         </div>
 
@@ -73,11 +73,11 @@ export function AdvancedSearchModal() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="beds">Bedrooms</Label>
-            <Input id="beds" type="number" placeholder="Any" className="border-primary focus-visible:ring-primary"/>
+            <Input id="beds" type="number" placeholder="Any" className="border-accent focus-visible:ring-accent"/>
           </div>
           <div className="space-y-2">
             <Label htmlFor="baths">Bathrooms</Label>
-            <Input id="baths" type="number" placeholder="Any" className="border-primary focus-visible:ring-primary"/>
+            <Input id="baths" type="number" placeholder="Any" className="border-accent focus-visible:ring-accent"/>
           </div>
         </div>
         
@@ -92,7 +92,7 @@ export function AdvancedSearchModal() {
             min={minPrice}
             max={maxPrice}
             step={50000}
-            className="mt-2 [&>span:last-child]:bg-primary [&>div]:bg-primary"
+            className="mt-2 [&>span:first-child>span]:bg-accent [&>span:last-child>span]:bg-accent [&>[role=slider]]:bg-accent"
           />
         </div>
         
@@ -101,7 +101,7 @@ export function AdvancedSearchModal() {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {amenities.map((amenity) => (
               <div key={amenity} className="flex items-center space-x-2">
-                <Checkbox id={amenity} className="border-primary data-[state=checked]:bg-primary"/>
+                <Checkbox id={amenity} className="border-accent data-[state=checked]:bg-accent"/>
                 <Label htmlFor={amenity} className="font-normal">
                   {amenity}
                 </Label>
@@ -111,8 +111,8 @@ export function AdvancedSearchModal() {
         </div>
       </div>
       <DialogFooter className='sm:justify-between'>
-          <Button type="button" variant="link" className="text-primary">Clear All</Button>
-          <Button type="submit" size="lg" className="bg-primary text-primary-foreground">Apply Filters</Button>
+          <Button type="button" variant="link" className="text-accent">Clear All</Button>
+          <Button type="submit" size="lg">Apply Filters</Button>
       </DialogFooter>
     </DialogContent>
   );

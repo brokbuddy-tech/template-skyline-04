@@ -71,7 +71,7 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
     const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
     return (
-        <Card className="border-primary w-full max-w-2xl mx-auto">
+        <Card className="border-accent w-full max-w-2xl mx-auto">
             <CardHeader>
                 <CardTitle className="text-4xl font-medium">Mortgage Estimator</CardTitle>
                 <CardDescription>Estimate your monthly mortgage payment.</CardDescription>
@@ -89,13 +89,13 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                 </div>
                  <div className="space-y-2">
                     <Label>Down Payment ({((downPayment / propertyPrice) * 100).toFixed(0)}%)</Label>
-                    <Slider value={[downPayment]} onValueChange={([val]) => handleDownPaymentChange(val)} max={propertyPrice} step={1000} />
+                    <Slider value={[downPayment]} onValueChange={([val]) => handleDownPaymentChange(val)} max={propertyPrice} step={1000} className="[&>span:first-child>span]:bg-accent [&>span:last-child>span]:bg-accent [&>[role=slider]]:bg-accent" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="interest-rate">Interest Rate (%)</Label>
                         <Input id="interest-rate" type="number" value={interestRate} onChange={e => setInterestRate(parseFloat(e.target.value))} step="0.1" />
-                        <Button variant="link" size="sm" className="p-0 h-auto" onClick={handleGetSuggestion} disabled={isSuggesting}>
+                        <Button variant="link" size="sm" className="p-0 h-auto text-accent" onClick={handleGetSuggestion} disabled={isSuggesting}>
                           {isSuggesting ? 'Getting suggestion...' : 'Get AI Suggested Rate'}
                         </Button>
                          {aiSuggestion && (
@@ -113,7 +113,7 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                 {monthlyPayment && (
                     <div className="w-full text-center pt-4">
                         <p className="text-muted-foreground">Estimated Monthly Payment</p>
-                        <p className="text-4xl font-bold font-headline">{formatCurrency(parseFloat(monthlyPayment))}</p>
+                        <p className="text-4xl font-bold font-headline text-accent">{formatCurrency(parseFloat(monthlyPayment))}</p>
                     </div>
                 )}
             </CardFooter>

@@ -20,12 +20,12 @@ export function StatsSection() {
           <div className="lg:col-span-2">
             <AnimateOnScroll>
               <h2 className="text-4xl md:text-5xl font-headline font-medium mb-6 text-balance">
-                Building dreams into stunning <span className="text-primary">real estate</span>
+                Building dreams into stunning <span className="text-accent">real estate</span>
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8 text-balance">
                 We take pride in our track record of success and the relationships we've built. Our numbers speak for themselves, showcasing our commitment to excellence in every project we undertake.
               </p>
-              <Button asChild variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              <Button asChild variant="outline" size="lg" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                 <Link href="/about">
                   More About Us
                   <span className="group-hover:translate-x-1 transition-transform duration-300">↗</span>

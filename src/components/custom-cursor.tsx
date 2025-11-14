@@ -6,8 +6,15 @@ import { cn } from '@/lib/utils';
 export function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const updateMousePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
@@ -27,7 +34,11 @@ export function CustomCursor() {
       window.removeEventListener('mousemove', updateMousePosition);
       document.removeEventListener('mouseover', handleMouseOver);
     };
-  }, []);
+  }, [isMounted]);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <>

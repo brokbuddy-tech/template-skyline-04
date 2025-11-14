@@ -89,6 +89,10 @@ const config = {
           "from": { transform: "translateX(0)" },
           "to": { transform: "translateX(101%)" },
         },
+        "infinite-scroll": {
+          "from": { transform: "translateX(0)" },
+          "to": { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -98,6 +102,7 @@ const config = {
         "splash-fill": "splash-fill 0.5s ease-in forwards 1.5s",
         "page-wipe-in": "page-wipe-in 400ms ease-in-out forwards",
         "page-wipe-out": "page-wipe-out 400ms ease-in-out forwards",
+        "infinite-scroll": "infinite-scroll 25s linear infinite",
       },
     },
   },

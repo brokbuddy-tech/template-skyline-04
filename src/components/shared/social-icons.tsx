@@ -3,10 +3,10 @@ import { cn } from '@/lib/utils';
 import { Instagram, Twitter, Linkedin, MessageSquare } from 'lucide-react';
 
 const socialLinks = [
-  { href: '#', icon: Instagram, name: 'Instagram' },
-  { href: '#', icon: Twitter, name: 'Twitter' },
-  { href: '#', icon: Linkedin, name: 'LinkedIn' },
-  { href: '#', icon: MessageSquare, name: 'WhatsApp' },
+  { href: '#', icon: Instagram, name: 'Instagram', hoverColor: 'group-hover:bg-[#d62976]' },
+  { href: '#', icon: Twitter, name: 'Twitter', hoverColor: 'group-hover:bg-[#00acee]' },
+  { href: '#', icon: Linkedin, name: 'LinkedIn', hoverColor: 'group-hover:bg-[#0072b1]' },
+  { href: '#', icon: MessageSquare, name: 'WhatsApp', hoverColor: 'group-hover:bg-[#128C7E]' },
 ];
 
 export function SocialIcons() {
@@ -22,7 +22,10 @@ export function SocialIcons() {
             'flex items-center justify-center overflow-hidden transition-all duration-300'
           )}
         >
-          <div className="absolute inset-0 bg-accent -translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+          <div className={cn(
+            "absolute inset-0 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out",
+            social.hoverColor
+          )}></div>
           <social.icon className="w-6 h-6 text-black transition-colors duration-300 ease-in-out group-hover:text-white z-10" />
         </a>
       ))}

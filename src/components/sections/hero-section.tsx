@@ -65,12 +65,13 @@ export function HeroSection() {
               priority
               data-ai-hint={heroImage.imageHint}
             />
+            <div className="absolute inset-0 bg-black/30"></div>
           </div>
         )}
 
         <div
           ref={contentRef}
-          className="absolute inset-0 z-10 grid grid-cols-12 items-center gap-8 px-8 container mx-auto"
+          className="absolute inset-0 z-10 grid grid-cols-12 items-center gap-8 px-8 container mx-auto text-white"
           style={{ opacity: Math.max(0, opacity) }}
         >
           {/* Left Column */}
@@ -109,7 +110,7 @@ export function HeroSection() {
 
           {/* Center Column */}
           <div className="col-span-8 flex justify-center items-center">
-             <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center mix-blend-difference">
+             <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
                Transforming Spaces, <br /> Realizing <span className="text-primary">Dreams.</span>
              </h1>
           </div>

@@ -35,7 +35,7 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-3xl font-headline font-medium transition-colors hover:text-primary"
+                className="text-3xl font-headline font-medium transition-colors hover:text-accent"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}

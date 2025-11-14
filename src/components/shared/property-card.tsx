@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { useContext } from 'react';
 import type { Property } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, BedDouble, Bath, Square, CheckCircle } from 'lucide-react';
 import { CurrencyContext } from '@/context/currency-context';
+import { cn } from '@/lib/utils';
 
 
 interface PropertyCardProps {
@@ -34,9 +35,25 @@ export function PropertyCard({ property }: PropertyCardProps) {
           )}
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out"></div>
           
-          {/* Arrow Icon */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 scale-80 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out">
+          {/* Arrow Icon for mobile */}
+          <div className="md:hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 scale-80 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out">
               <ArrowUpRight size={48} />
+          </div>
+
+          {/* Amenities for desktop hover */}
+          <div className="hidden md:flex absolute inset-0 p-6 flex-col justify-end text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out">
+            <h4 className="text-lg font-bold mb-2">Key Features</h4>
+            <ul className="space-y-1 text-sm">
+                {property.amenities.slice(0, 3).map(amenity => (
+                    <li key={amenity} className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-accent"/>
+                        <span>{amenity}</span>
+                    </li>
+                ))}
+            </ul>
+            <div className="absolute top-4 right-4">
+              <ArrowUpRight size={24} />
+            </div>
           </div>
         </div>
       </Link>

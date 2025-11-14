@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
-import { BedDouble, Bath, Square, MapPin, Eye, FileDown, QrCode } from "lucide-react";
+import { BedDouble, Bath, Square, MapPin, Eye, FileDown, QrCode, Waves, Dumbbell, Film, Wine, Sunset, ConciergeBell, Layers, ChefHat, MountainSnow, Mountain, Thermometer, Gamepad2, View, Home, Shield, PersonStanding, CookingPot, Flower2, Coffee, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +14,35 @@ import { Button } from "@/components/ui/button";
 import { MortgageCalculator } from "@/components/shared/mortgage-calculator";
 import { PropertyCard } from "@/components/shared/property-card";
 import { AnimateOnScroll } from "@/components/animate-on-scroll";
+
+const amenityIcons: { [key: string]: LucideIcon } = {
+  'Pool': Waves,
+  'Ocean View': Waves,
+  'Private Gym': Dumbbell,
+  'Home Theater': Film,
+  'Wine Cellar': Wine,
+  'Rooftop Terrace': Sunset,
+  'Concierge': ConciergeBell,
+  'Exposed Brick': Layers,
+  'Chef\'s Kitchen': ChefHat,
+  'Ski-in/Ski-out': MountainSnow,
+  'Hot Tub': Bath,
+  'Mountain View': Mountain,
+  'Sauna': Thermometer,
+  'Game Room': Gamepad2,
+  '360° City View': View,
+  'Private Pool': Waves,
+  'Smart Home': Home,
+  '24/7 Security': Shield,
+  'Beach Access': Waves,
+  'Yoga Deck': PersonStanding,
+  'Outdoor Kitchen': CookingPot,
+  'Surfboard Storage': Waves,
+  'Zen Garden': Flower2,
+  'Tea Room': Coffee,
+  'Hinoki Bath': Bath,
+  'Heated Floors': Thermometer,
+};
 
 export default function PropertyDetailPage({ params }: { params: { id: string } }) {
   const property = properties.find((p) => p.id === params.id);
@@ -111,11 +140,15 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
               <h2 className="text-3xl font-headline mb-6">Amenities</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {property.amenities.map(amenity => (
-                      <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg">
-                          {amenity}
-                      </Badge>
-                  ))}
+                  {property.amenities.map(amenity => {
+                      const Icon = amenityIcons[amenity];
+                      return (
+                          <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2">
+                              {Icon && <Icon className="w-4 h-4" />}
+                              <span>{amenity}</span>
+                          </Badge>
+                      )
+                  })}
               </div>
             </AnimateOnScroll>
           </div>

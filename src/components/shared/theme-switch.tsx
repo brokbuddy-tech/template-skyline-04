@@ -22,17 +22,17 @@ export function ThemeSwitch() {
   };
 
   return (
-    <div className="w-[94px] aspect-video rounded-lg has-[:checked]:bg-black bg-white border-2 border-black has-[:checked]:border-white group">
+    <div className="w-[90px] aspect-video rounded-lg has-[:checked]:bg-black bg-white border-2 border-black has-[:checked]:border-white group">
       <div className="flex h-full w-full px-1 items-center gap-x-1">
         <div className="w-3 h-3 flex-shrink-0 rounded-full border-2 border-black group-has-[:checked]:border-white" />
         <label htmlFor="switch" className="has-[:checked]:scale-x-[-1] w-full h-5 border-2 border-black rounded cursor-pointer group-has-[:checked]:border-white">
           <input type="checkbox" id="switch" className="hidden group" checked={isDark} onChange={toggleTheme} />
           <div className="w-full h-full bg-[#FF4D00] relative">
-            <div className="w-0 h-0 z-20 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[8px] border-t-black relative group-has-[:checked]:border-t-white">
-              <div className="w-0 h-0 absolute border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[5.5px] border-t-[#FF4D00] -top-[8px] -left-[7px]" />
+            <div className="w-0 h-0 z-20 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[6px] border-t-black relative group-has-[:checked]:border-t-white">
+              <div className="w-0 h-0 absolute border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[4.5px] border-t-[#FF4D00] -top-[6px] -left-[6px]" />
             </div>
-            <div className="w-[10px] h-5 z-10 absolute top-[4.5px] left-0 bg-[#FF4D00] border-r-2 border-b-2 border-black transform skew-y-[39deg] group-has-[:checked]:border-white" />
-            <div className="w-[10.5px] h-5 z-10 absolute top-[4.5px] left-[10px] bg-[#FF4D00] border-r-2 border-l-2 border-b-2 border-black transform skew-y-[-39deg] group-has-[:checked]:border-white" />
+            <div className="w-[9px] h-5 z-10 absolute top-[4.5px] left-0 bg-[#FF4D00] border-r-2 border-b-2 border-black transform skew-y-[39deg] group-has-[:checked]:border-white" />
+            <div className="w-[9.5px] h-5 z-10 absolute top-[4.5px] left-[9px] bg-[#FF4D00] border-r-2 border-l-2 border-b-2 border-black transform skew-y-[-39deg] group-has-[:checked]:border-white" />
           </div>
         </label>
         <div className="w-3 h-0.5 flex-shrink-0 bg-black rounded-full group-has-[:checked]:bg-white" />

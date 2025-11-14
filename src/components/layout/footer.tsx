@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { CurrencySwitcher } from '../shared/currency-switcher';
 import { AnimateOnScroll } from '../animate-on-scroll';
-import { FooterSearch } from '../shared/footer-search';
 
 export function Footer() {
   const navLinks = [
@@ -74,7 +73,6 @@ export function Footer() {
         </div>
       </div>
       <AnimateOnScroll className="space-y-8">
-        <FooterSearch />
         <div className="text-center text-muted-foreground text-sm font-body">
           <p>&copy; {new Date().getFullYear()} Monks Estate Pro. All Rights Reserved.</p>
         </div>

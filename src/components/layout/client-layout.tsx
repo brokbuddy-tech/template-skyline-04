@@ -36,7 +36,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           {children}
         </PageTransition>
       )}
-      <div className="fixed bottom-20 right-8 z-50 hidden md:block">
+      <div className="fixed bottom-24 right-8 z-50 hidden md:block">
         <AIChatbot />
       </div>
       <div className="fixed bottom-8 right-8 z-50 hidden md:block">

@@ -25,4 +25,5 @@ export type Testimonial = {
   author: string;
   location: string;
   image: string;
+  rating: number;
 };

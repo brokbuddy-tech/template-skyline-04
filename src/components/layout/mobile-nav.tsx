@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ThemeSwitch } from '../shared/theme-switch';
-import { CurrencySwitcher } from '../shared/currency-switcher';
 
 type NavLink = {
   href: string;

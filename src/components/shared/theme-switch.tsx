@@ -15,7 +15,7 @@ export function ThemeSwitch() {
   }, []);
 
   const buttonClasses =
-    'relative h-auto p-0 flex items-center justify-center';
+    'relative p-0 flex items-center justify-center h-10 w-10 rounded-full border border-black dark:border-white';
 
   if (!mounted) {
     return (
@@ -23,7 +23,7 @@ export function ThemeSwitch() {
         variant="ghost"
         size="icon"
         disabled
-        className={cn(buttonClasses, 'h-10 w-10')}
+        className={cn(buttonClasses)}
       >
         <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
         <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -36,7 +36,7 @@ export function ThemeSwitch() {
     <Button
       variant="ghost"
       size="icon"
-      className={cn(buttonClasses, 'h-10 w-10')}
+      className={cn(buttonClasses)}
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

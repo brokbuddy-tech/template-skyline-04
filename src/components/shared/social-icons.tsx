@@ -26,7 +26,7 @@ export function SocialIcons() {
             "absolute inset-0 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out",
             social.hoverColor
           )}></div>
-          <social.icon className="w-6 h-6 text-black transition-colors duration-300 ease-in-out group-hover:text-white z-10" />
+          <social.icon className="w-6 h-6 text-black dark:text-white transition-colors duration-300 ease-in-out group-hover:text-white z-10" />
         </a>
       ))}
     </div>

@@ -1,6 +1,8 @@
 'use client';
 
 import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 
 export function ThemeSwitch() {
@@ -12,31 +14,25 @@ export function ThemeSwitch() {
   }, []);
 
   if (!mounted) {
-    return null;
+    return (
+      <Button variant="outline" size="icon" disabled className="rounded-full">
+        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <span className="sr-only">Toggle theme</span>
+      </Button>
+    );
   }
 
-  const isDark = theme === 'dark';
-
-  const toggleTheme = () => {
-    setTheme(isDark ? 'light' : 'dark');
-  };
-
   return (
-    <div className="w-[90px] aspect-video rounded-lg has-[:checked]:bg-black bg-white border-2 border-black has-[:checked]:border-white group">
-      <div className="flex h-full w-full px-1 items-center gap-x-1">
-        <div className="w-3 h-3 flex-shrink-0 rounded-full border-2 border-black group-has-[:checked]:border-white" />
-        <label htmlFor="switch" className="has-[:checked]:scale-x-[-1] w-full h-5 border-2 border-black rounded cursor-pointer group-has-[:checked]:border-white">
-          <input type="checkbox" id="switch" className="hidden group" checked={isDark} onChange={toggleTheme} />
-          <div className="w-full h-full bg-[#FF4D00] relative">
-            <div className="w-0 h-0 z-20 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[6px] border-t-black relative group-has-[:checked]:border-t-white">
-              <div className="w-0 h-0 absolute border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[4.5px] border-t-[#FF4D00] -top-[6px] -left-[6px]" />
-            </div>
-            <div className="w-[9px] h-5 z-10 absolute top-[4.5px] left-0 bg-[#FF4D00] border-r-2 border-b-2 border-black transform skew-y-[39deg] group-has-[:checked]:border-white" />
-            <div className="w-[9.5px] h-5 z-10 absolute top-[4.5px] left-[9px] bg-[#FF4D00] border-r-2 border-l-2 border-b-2 border-black transform skew-y-[-39deg] group-has-[:checked]:border-white" />
-          </div>
-        </label>
-        <div className="w-3 h-0.5 flex-shrink-0 bg-black rounded-full group-has-[:checked]:bg-white" />
-      </div>
-    </div>
+    <Button
+      variant="outline"
+      size="icon"
+      className="rounded-full"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+    >
+      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Toggle theme</span>
+    </Button>
   );
 }

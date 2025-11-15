@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -62,8 +63,8 @@ export function TestimonialsSection() {
               })}
             </CarouselContent>
             <div className="hidden md:block">
-              <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 transform text-primary bg-transparent border-none hover:bg-accent h-12 w-12" />
-              <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 transform text-primary bg-transparent border-none hover:bg-accent h-12 w-12" />
+              <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 transform text-primary bg-transparent border-black dark:border-white hover:bg-accent h-12 w-12" />
+              <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 transform text-primary bg-transparent border-black dark:border-white hover:bg-accent h-12 w-12" />
             </div>
           </Carousel>
         </AnimateOnScroll>

@@ -53,10 +53,8 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           {children}
         </PageTransition>
       )}
-      <div className="fixed bottom-4 right-4 md:bottom-24 md:right-8 z-50">
+      <div className="fixed bottom-8 right-8 z-50 flex flex-col items-center gap-4">
         <AIChatbot />
-      </div>
-      <div className="fixed bottom-8 right-8 z-50 hidden md:block">
         <ThemeSwitch />
       </div>
       <Toaster />

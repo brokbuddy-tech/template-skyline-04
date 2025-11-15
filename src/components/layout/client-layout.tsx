@@ -7,6 +7,7 @@ import { CustomCursor } from "@/components/custom-cursor";
 import { ThemeSwitch } from "../shared/theme-switch";
 import { AIChatbot } from "../shared/ai-chatbot";
 import { Toaster } from "../ui/toaster";
+import { cn } from "@/lib/utils";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +56,9 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       )}
       <div className="fixed bottom-8 right-8 z-50 flex flex-col items-center gap-4">
         <AIChatbot />
-        <ThemeSwitch />
+        <div className="hidden md:block">
+          <ThemeSwitch />
+        </div>
       </div>
       <Toaster />
     </>

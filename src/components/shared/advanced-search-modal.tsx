@@ -1,3 +1,4 @@
+
 'use client'
 
 import {
@@ -12,8 +13,9 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '../ui/separator';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import { properties } from '@/lib/data';
+import { CurrencyContext } from '@/context/currency-context';
 
 const allAmenities = [
   'Pool',
@@ -25,22 +27,31 @@ const allAmenities = [
 ];
 
 export function AdvancedSearchModal() {
+  const { formatPrice, convertFromUSD } = useContext(CurrencyContext);
+
   const { minPrice, maxPrice } = useMemo(() => {
-    const prices = properties.map(p => p.price);
+    const prices = properties.map(p => convertFromUSD(p.price));
     const max = Math.max(...prices);
-    const roundToNearest50k = (num: number) => {
-        return Math.ceil(num / 50000) * 50000;
+    const roundToNearest = (num: number, nearest: number) => {
+        return Math.ceil(num / nearest) * nearest;
     }
-    return { 
+    // Adjust rounding based on magnitude for better steps in other currencies
+    const roundingFactor = max > 500000 ? 50000 : 10000;
+    return {
         minPrice: 0,
-        maxPrice: roundToNearest50k(max)
+        maxPrice: roundToNearest(max, roundingFactor)
     };
-  }, []);
+  }, [convertFromUSD]);
   
   const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
   const [beds, setBeds] = useState('');
   const [baths, setBaths] = useState('');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+
+  // Update price range when currency changes
+  useMemo(() => {
+    setPriceRange([minPrice, maxPrice]);
+  }, [minPrice, maxPrice]);
 
   const handleAmenityChange = (amenity: string) => {
     setSelectedAmenities(prev => 
@@ -55,15 +66,6 @@ export function AdvancedSearchModal() {
     setBeds('');
     setBaths('');
     setSelectedAmenities([]);
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
   };
 
   const handleNumericChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,14 +122,17 @@ export function AdvancedSearchModal() {
         <div className="space-y-2">
           <div className="flex justify-between items-end">
             <Label>Price Range</Label>
-            <span className='text-sm font-medium'>{formatCurrency(priceRange[0])} - {formatCurrency(priceRange[1])}{priceRange[1] === maxPrice ? '+' : ''}</span>
+            <span className='text-sm font-medium'>
+              {formatPrice(priceRange[0] / (useContext(CurrencyContext).rates[useContext(CurrencyContext).currency] || 1), true)} - 
+              {formatPrice(priceRange[1] / (useContext(CurrencyContext).rates[useContext(CurrencyContext).currency] || 1), true)}{priceRange[1] === maxPrice ? '+' : ''}
+            </span>
           </div>
           <Slider
             value={priceRange}
             onValueChange={(value) => setPriceRange(value)}
             min={minPrice}
             max={maxPrice}
-            step={50000}
+            step={maxPrice / 100}
             className="mt-2 [&>span:first-child>span]:bg-accent [&>span:last-child>span]:bg-accent [&>[role=slider]]:bg-accent"
           />
         </div>

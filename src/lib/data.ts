@@ -32,6 +32,9 @@ export const properties: Property[] = [
     amenities: ['Pool', 'Ocean View', 'Private Gym', 'Home Theater', 'Wine Cellar'],
     images: ['prop-1-1', 'prop-1-2', 'prop-1-3'],
     description: "Perched atop a Malibu cliffside, The Glass House offers breathtaking panoramic ocean views through its floor-to-ceiling windows. This architectural marvel blends minimalist design with luxurious comfort. Featuring an infinity pool that merges with the horizon, a state-of-the-art home theater, and a curated wine cellar, it's an entertainer's dream. The master suite provides a serene escape with its private balcony and spa-like bathroom. Experience coastal living at its absolute finest.",
+    referenceId: 'MB-GH-42',
+    trakheesi: '123456789',
+    reraPermit: '987654321',
   },
   {
     id: '2',
@@ -45,6 +48,7 @@ export const properties: Property[] = [
     amenities: ['Rooftop Terrace', 'Concierge', 'Exposed Brick', 'Chef\'s Kitchen'],
     images: ['prop-2-1'],
     description: 'Located in the heart of SoHo, this exquisite loft is a testament to timeless design. Exposed brick walls and original hardwood floors meet modern luxury in a spacious, open-concept layout. The chef\'s kitchen is equipped with top-of-the-line appliances, perfect for culinary explorations. A private rooftop terrace offers a rare, tranquil escape amidst the city buzz. With a 24/7 concierge service, every need is catered to in this urban sanctuary.',
+    referenceId: 'NY-UO-21',
   },
   {
     id: '3',
@@ -58,6 +62,7 @@ export const properties: Property[] = [
     amenities: ['Ski-in/Ski-out', 'Hot Tub', 'Mountain View', 'Sauna', 'Game Room'],
     images: ['prop-3-1'],
     description: 'The Evergreen Manor is the epitome of mountain luxury. With direct ski-in/ski-out access to Aspen\'s world-renowned slopes, this estate is a winter sports enthusiast\'s paradise. After a day on the mountain, unwind in the outdoor hot tub or indoor sauna, all while enjoying stunning, unobstructed mountain views. The interior boasts a grand fireplace, a professional-grade kitchen, and a cozy game room for endless entertainment. This is more than a home; it\'s a legacy.',
+    referenceId: 'AS-EM-85',
   },
   {
     id: '4',
@@ -71,6 +76,9 @@ export const properties: Property[] = [
     amenities: ['360° City View', 'Private Pool', 'Smart Home', '24/7 Security'],
     images: ['prop-4-1'],
     description: 'Commanding the entire top floor, Penthouse Panorama offers an unparalleled 360-degree view of the iconic Dubai skyline. This residence is the pinnacle of modern technology, with a fully integrated smart home system controlling everything from lighting to climate. The expansive terrace features a private infinity pool, creating a spectacular illusion of swimming in the sky. Every detail has been meticulously crafted for a life of effortless elegance and security.',
+    referenceId: 'DB-PP-35',
+    trakheesi: '987654321',
+    reraPermit: '123456789',
   },
   {
     id: '5',
@@ -84,6 +92,7 @@ export const properties: Property[] = [
     amenities: ['Beach Access', 'Yoga Deck', 'Outdoor Kitchen', 'Surfboard Storage'],
     images: ['prop-5-1'],
     description: 'Embrace the laid-back luxury of Byron Bay in this stunning coastal retreat. With private access to a secluded beach, this home is a sanctuary of peace and natural beauty. The open-plan living area flows seamlessly to an expansive yoga deck and outdoor kitchen, perfect for alfresco living. Designed with natural materials and a neutral palette, the home creates a tranquil atmosphere that calms the soul. It\'s the perfect base to explore the vibrant culture and pristine nature of the region.',
+    referenceId: 'AU-CR-38',
   },
   {
     id: '6',
@@ -97,6 +106,7 @@ export const properties: Property[] = [
     amenities: ['Zen Garden', 'Tea Room', 'Hinoki Bath', 'Heated Floors'],
     images: ['prop-6-1'],
     description: 'Inspired by traditional Japanese aesthetics, this minimalist villa is a masterpiece of design and tranquility. A private zen garden provides a serene backdrop to the clean, uncluttered interiors. The home features a dedicated tea room for quiet contemplation and a luxurious Hinoki wood bath for ultimate relaxation. Natural light floods the space, highlighting the beauty of the carefully selected materials. This is a home designed for mindfulness and a deep connection to its surroundings.',
+    referenceId: 'KY-MV-31',
   },
     {
     id: '7',
@@ -110,6 +120,7 @@ export const properties: Property[] = [
     amenities: ['Rooftop Terrace', 'Concierge', 'Exposed Brick', 'Chef\'s Kitchen'],
     images: ['prop-7-1'],
     description: 'This charming Parisian apartment is located in the heart of Le Marais. It features a beautiful rooftop terrace with stunning views of the city. The interior has been recently renovated with a modern kitchen and bathroom, but still retains its classic Parisian charm with exposed brick walls and hardwood floors.',
+    referenceId: 'PA-PA-12',
   },
   {
     id: '8',
@@ -123,6 +134,7 @@ export const properties: Property[] = [
     amenities: ['Pool', 'Mountain View', 'Wine Cellar', 'Game Room'],
     images: ['prop-8-1'],
     description: 'This magnificent estate is located in the rolling hills of Tuscany. It features a large swimming pool, a private vineyard, and breathtaking views of the surrounding countryside. The interior is spacious and luxurious, with 7 bedrooms, 8 bathrooms, a game room, and a wine cellar. This is the perfect place to relax and enjoy the Italian lifestyle.',
+    referenceId: 'IT-CE-100',
   },
 ];
 

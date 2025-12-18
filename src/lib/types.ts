@@ -12,6 +12,9 @@ export type Property = {
   amenities: string[];
   images: string[];
   description: string;
+  referenceId?: string;
+  trakheesi?: string;
+  reraPermit?: string;
 };
 
 export type Service = {

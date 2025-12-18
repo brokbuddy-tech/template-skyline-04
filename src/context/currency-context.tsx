@@ -22,14 +22,6 @@ interface ExchangeRates {
   [key: string]: number;
 }
 
-interface CurrencyContextType {
-  currency: Currency;
-  setCurrency: (currency: Currency) => void;
-  rates: ExchangeRates;
-  formatPrice: (usdPrice: number, useSymbol?: boolean) => string;
-  convertFromUSD: (usdPrice: number) => number;
-}
-
 const defaultRates: ExchangeRates = {
   'usd': 1,
   'aed': 3.67,
@@ -45,6 +37,14 @@ export const CurrencyContext = createContext<CurrencyContextType>({
   convertFromUSD: (usdPrice) => usdPrice,
 });
 
+interface CurrencyContextType {
+  currency: Currency;
+  setCurrency: (currency: Currency) => void;
+  rates: ExchangeRates;
+  formatPrice: (usdPrice: number, useSymbol?: boolean) => string;
+  convertFromUSD: (usdPrice: number) => number;
+}
+
 const fetchExchangeRates = async (): Promise<ExchangeRates> => {
   console.log('Fetching exchange rates...');
   try {
@@ -55,6 +55,7 @@ const fetchExchangeRates = async (): Promise<ExchangeRates> => {
     }
     const data = await response.json();
     if (data.success && data.rates) {
+      console.log('Successfully fetched live exchange rates.');
       return {
         usd: data.rates.USD,
         aed: data.rates.AED,
@@ -62,6 +63,7 @@ const fetchExchangeRates = async (): Promise<ExchangeRates> => {
         gbp: data.rates.GBP,
       };
     }
+    console.warn('API response for exchange rates was not successful, falling back to default rates.');
     return defaultRates;
   } catch (error) {
     console.error('Error fetching exchange rates:', error);
@@ -72,6 +74,7 @@ const fetchExchangeRates = async (): Promise<ExchangeRates> => {
 export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const [currency, setCurrencyState] = useState<Currency>('usd');
   const [rates, setRates] = useState<ExchangeRates>(defaultRates);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const storedCurrency = localStorage.getItem('userCurrency') as Currency;
@@ -82,6 +85,7 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
     const getRates = async () => {
       const fetchedRates = await fetchExchangeRates();
       setRates(fetchedRates);
+      setIsLoaded(true);
     };
     getRates();
   }, []);
@@ -92,9 +96,10 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   };
   
   const convertFromUSD = useCallback((usdPrice: number): number => {
+    if (!isLoaded) return usdPrice;
     const rate = rates[currency] || 1;
     return usdPrice * rate;
-  }, [currency, rates]);
+  }, [currency, rates, isLoaded]);
 
   const formatPrice = useCallback((usdPrice: number, useSymbol: boolean = true) => {
     const convertedPrice = convertFromUSD(usdPrice);

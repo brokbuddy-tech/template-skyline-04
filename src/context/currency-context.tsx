@@ -30,33 +30,48 @@ interface CurrencyContextType {
   convertFromUSD: (usdPrice: number) => number;
 }
 
+const defaultRates: ExchangeRates = {
+  'usd': 1,
+  'aed': 3.67,
+  'eur': 0.92,
+  'gbp': 0.79,
+};
+
 export const CurrencyContext = createContext<CurrencyContextType>({
   currency: 'usd',
   setCurrency: () => {},
-  rates: { usd: 1 },
+  rates: defaultRates,
   formatPrice: (usdPrice) => `$${usdPrice.toLocaleString()}`,
   convertFromUSD: (usdPrice) => usdPrice,
 });
 
-// Mock exchange rate fetch
 const fetchExchangeRates = async (): Promise<ExchangeRates> => {
   console.log('Fetching exchange rates...');
-  // In a real app, this would be an API call to e.g. exchangerate-api.com
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({
-        'usd': 1,
-        'aed': 3.67,
-        'eur': 0.92,
-        'gbp': 0.79,
-      });
-    }, 500);
-  });
+  try {
+    const response = await fetch('https://api.exchangerate.host/latest?base=USD&symbols=USD,AED,EUR,GBP');
+    if (!response.ok) {
+      console.warn('Failed to fetch live exchange rates, falling back to default rates.');
+      return defaultRates;
+    }
+    const data = await response.json();
+    if (data.success && data.rates) {
+      return {
+        usd: data.rates.USD,
+        aed: data.rates.AED,
+        eur: data.rates.EUR,
+        gbp: data.rates.GBP,
+      };
+    }
+    return defaultRates;
+  } catch (error) {
+    console.error('Error fetching exchange rates:', error);
+    return defaultRates;
+  }
 };
 
 export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const [currency, setCurrencyState] = useState<Currency>('usd');
-  const [rates, setRates] = useState<ExchangeRates>({ usd: 1 });
+  const [rates, setRates] = useState<ExchangeRates>(defaultRates);
 
   useEffect(() => {
     const storedCurrency = localStorage.getItem('userCurrency') as Currency;

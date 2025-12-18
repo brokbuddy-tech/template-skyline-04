@@ -35,6 +35,7 @@ export const properties: Property[] = [
     referenceId: 'MB-GH-42',
     trakheesi: '123456789',
     reraPermit: '987654321',
+    featured: true,
   },
   {
     id: '2',
@@ -63,6 +64,7 @@ export const properties: Property[] = [
     images: ['prop-3-1'],
     description: 'The Evergreen Manor is the epitome of mountain luxury. With direct ski-in/ski-out access to Aspen\'s world-renowned slopes, this estate is a winter sports enthusiast\'s paradise. After a day on the mountain, unwind in the outdoor hot tub or indoor sauna, all while enjoying stunning, unobstructed mountain views. The interior boasts a grand fireplace, a professional-grade kitchen, and a cozy game room for endless entertainment. This is more than a home; it\'s a legacy.',
     referenceId: 'AS-EM-85',
+    featured: true,
   },
   {
     id: '4',
@@ -107,6 +109,7 @@ export const properties: Property[] = [
     images: ['prop-6-1'],
     description: 'Inspired by traditional Japanese aesthetics, this minimalist villa is a masterpiece of design and tranquility. A private zen garden provides a serene backdrop to the clean, uncluttered interiors. The home features a dedicated tea room for quiet contemplation and a luxurious Hinoki wood bath for ultimate relaxation. Natural light floods the space, highlighting the beauty of the carefully selected materials. This is a home designed for mindfulness and a deep connection to its surroundings.',
     referenceId: 'KY-MV-31',
+    featured: true,
   },
     {
     id: '7',

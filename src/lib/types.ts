@@ -15,6 +15,7 @@ export type Property = {
   referenceId?: string;
   trakheesi?: string;
   reraPermit?: string;
+  featured?: boolean;
 };
 
 export type Service = {

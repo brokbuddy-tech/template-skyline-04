@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { useContext } from 'react';
 import type { Property } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ArrowUpRight, BedDouble, Bath, Square, CheckCircle } from 'lucide-react';
+import { ArrowUpRight, BedDouble, Bath, Square, CheckCircle, Star } from 'lucide-react';
 import { CurrencyContext } from '@/context/currency-context';
 import { cn } from '@/lib/utils';
+import { Badge } from '../ui/badge';
 
 
 interface PropertyCardProps {
@@ -32,6 +33,12 @@ export function PropertyCard({ property }: PropertyCardProps) {
               className="w-full h-auto object-cover aspect-[4/5] transition-transform duration-500"
               data-ai-hint={image.imageHint}
             />
+          )}
+          {property.featured && (
+            <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground rounded-full flex items-center gap-1 border-none">
+                <Star className="w-3 h-3" />
+                <span>Featured</span>
+            </Badge>
           )}
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out"></div>
           

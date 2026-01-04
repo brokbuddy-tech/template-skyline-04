@@ -1,3 +1,4 @@
+
 export type NavLink = {
   label: string;
   href: string;
@@ -143,6 +144,15 @@ export const navConfig: NavConfig = [
   },
   {
     label: 'More',
-    href: '/more',
+    dropdown: [
+      {
+        header: 'Company',
+        links: [
+          { label: 'About', href: '/about' },
+          { label: 'Contact', href: '/contact' },
+          { label: 'Map', href: '/map' },
+        ],
+      },
+    ],
   },
 ];

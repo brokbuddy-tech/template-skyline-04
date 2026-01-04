@@ -1,6 +1,8 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   ChevronDown,
@@ -16,12 +18,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas'];
 const bedOptions = ['Studio', '1', '2', '3', '4+'];
 const bathOptions = ['1', '2', '3', '4+'];
 
 export function StickySearch() {
+  const searchParams = useSearchParams();
+  const [transactionType, setTransactionType] = useState('Buy');
+
+  useEffect(() => {
+    const type = searchParams.get('type');
+    if (type === 'rent') {
+      setTransactionType('Rent');
+    } else {
+      setTransactionType('Buy');
+    }
+  }, [searchParams]);
+
   return (
     <div className="sticky top-[80px] z-30 w-full bg-background/95 backdrop-blur-sm py-4 border-b">
       <Dialog>
@@ -47,12 +62,12 @@ export function StickySearch() {
                     variant="outline-light"
                     className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
-                    Buy <ChevronDown size={16} />
+                    {transactionType} <ChevronDown size={16} />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>Buy</DropdownMenuItem>
-                  <DropdownMenuItem>Rent</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setTransactionType('Buy')}>Buy</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setTransactionType('Rent')}>Rent</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 

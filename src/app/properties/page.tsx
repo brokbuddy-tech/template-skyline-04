@@ -1,15 +1,20 @@
+
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { PropertyCard } from "@/components/shared/property-card";
 import { properties } from "@/lib/data";
 import { StickySearch } from '@/components/shared/sticky-search';
 import { Button } from '@/components/ui/button';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const PROPERTIES_PER_PAGE = 6;
 
 export default function PropertiesPage() {
   const [visibleProperties, setVisibleProperties] = useState(PROPERTIES_PER_PAGE);
+  
+  const headerImage = PlaceHolderImages.find((img) => img.id === 'cta-background');
 
   const handleLoadMore = () => {
     setVisibleProperties((prev) => prev + PROPERTIES_PER_PAGE);
@@ -20,8 +25,18 @@ export default function PropertiesPage() {
 
   return (
     <>
-      <section className="pt-24 pb-16 bg-background">
-        <div className="container mx-auto text-center">
+      <section className="relative py-24 md:py-32 bg-background text-white">
+        {headerImage && (
+            <Image 
+                src={headerImage.imageUrl}
+                alt={headerImage.description}
+                fill
+                className="object-cover"
+                data-ai-hint={headerImage.imageHint}
+            />
+        )}
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="container mx-auto text-center relative z-10">
           <h1 className="text-6xl md:text-7xl font-headline font-medium">Our Properties</h1>
         </div>
       </section>

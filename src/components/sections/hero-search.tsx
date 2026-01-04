@@ -24,38 +24,39 @@ export function HeroSearch() {
 
   const renderTab = (tab: string) => {
     const isActive = activeTab === tab;
-    const button = (
-        <Button
-          onClick={() => setActiveTab(tab)}
-          variant={isActive ? 'default' : 'outline'}
-          className={cn(
-            'rounded-full uppercase font-medium text-sm md:text-base px-6 py-2 transition-all',
-            isActive
-              ? 'bg-white text-black hover:bg-gray-200'
-              : 'bg-transparent border-white/50 text-white hover:bg-white/20 hover:text-white'
-          )}
-        >
-          {tab}
-        </Button>
+    
+    const buttonContent = (
+      <Button
+        onClick={() => setActiveTab(tab)}
+        variant={isActive ? 'default' : 'outline'}
+        className={cn(
+          'rounded-full uppercase font-medium text-sm md:text-base px-6 py-2 transition-all',
+          isActive
+            ? 'bg-white text-black hover:bg-gray-200'
+            : 'bg-transparent border-white/50 text-white hover:bg-white/20 hover:text-white'
+        )}
+      >
+        {tab}
+      </Button>
     );
 
     if (tab === 'Buy') {
         return (
-            <Link key={tab} href="/properties?type=buy" legacyBehavior>
-                <a onClick={() => setActiveTab(tab)}>{button}</a>
+            <Link key={tab} href="/properties?type=buy" passHref>
+                {buttonContent}
             </Link>
         )
     }
 
     if (tab === 'Rent') {
         return (
-            <Link key={tab} href="/properties?type=rent" legacyBehavior>
-                <a onClick={() => setActiveTab(tab)}>{button}</a>
+            <Link key={tab} href="/properties?type=rent" passHref>
+                {buttonContent}
             </Link>
         )
     }
 
-    return <div key={tab}>{button}</div>;
+    return <div key={tab}>{buttonContent}</div>;
   }
 
   return (

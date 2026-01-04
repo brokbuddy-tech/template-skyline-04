@@ -166,7 +166,35 @@ export const properties: Property[] = [
     type: 'Apartment',
     amenities: ['Pool', 'Ocean View', 'Private Gym'],
     images: ['prop-1-1'],
-    description: "A stunning 2-bedroom apartment in the heart of Mina Rashid by Emaar. Enjoy seaside living with resort-style amenities.",
+    description: `**Project Overview:**
+"Lyvia by Palace is a 50-story architectural masterpiece situated in the prestigious Green Gate district. Designed by Emaar in collaboration with Palace Hospitality, it offers expansive floor-to-ceiling windows that frame sweeping views of the Creek and Dubai skyline. The Lifestyle: Residents enjoy a unique "resort-style" living experience with direct access to the Creek Beach and Marina. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
+
+**Key Specifications:**
+- **Property Type:** Luxury Apartments & Townhouses
+- **Unit Configs:** 1, 2, 3 Bedroom Apts & 3 Bed Townhouses
+- **Payment Plan:** 80/20 (10% Down, 70% Construction, 20% Handover)
+- **Ownership:** Freehold
+- **Total Units:** 478 Units (50-Story Tower)
+
+**Unit Configuration Table:**
+- **1 Bedroom:** 1 Bath, 760 – 1,417 sq.ft, Starting at AED 1.98M
+- **2 Bedroom:** 2 Bath, 1,144 – 1,916 sq.ft, Starting at AED 3.1M
+- **3 Bedroom:** 4 Bath, 1,821 – 1,835 sq.ft, Starting at AED 4.5M
+- **Townhouse:** 3 Bed + Maid, ~3,238 sq.ft, On Request
+
+**Amenities & Lifestyle:**
+- **Wellness & Fitness:** Infinity Lap Pool & Rooftop Terraces, Cutting-edge Gym & Wellness Spaces, Sports Courts & Jogging Tracks
+- **Community & Leisure:** Landscaped Gardens & Pocket Parks, Children's Play Areas (Indoor/Outdoor), Direct Marina/Waterfront Access
+- **Palace Hospitality Services:** Exclusive Concierge Support, 24/7 Security & Valet
+
+**Payment Plan Breakdown:**
+- **10%** – Down Payment (Immediate / Booking)
+- **70%** – During Construction (7 Installments)
+- **20%** – On Handover (July 2029)
+
+**Location & Connectivity:**
+- **Neighborhood:** Green Gate District, Dubai Creek Harbour.
+- **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
     status: 'Off-plan',
     photoCount: 5,
     tag: 'Residential',
@@ -183,7 +211,29 @@ export const properties: Property[] = [
     type: 'Villa',
     amenities: ['Private Pool', 'Beach Access', 'Smart Home'],
     images: [],
-    description: "An exclusive villa on the iconic Palm Jumeirah. Developed by Nakheel, this property offers the ultimate in luxury and privacy.",
+    description: `**Project Overview:**
+"A beachfront villa by Nakheel, offering a premium blend of contemporary design and urban sophistication rising above the Arabian Gulf. Designed in collaboration with world-renowned architects, it offers expansive floor-to-ceiling windows that frame sweeping views of the sea and Dubai skyline. The Lifestyle: Residents enjoy a unique 'resort-style' living experience with direct access to a private beach. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private terraces that blend indoor luxury with outdoor serenity."
+
+**Key Specifications:**
+- **Property Type:** Luxury Villa
+- **Unit Configs:** 5 Bedroom Villa
+- **Payment Plan:** 60/40 (10% Down, 50% Construction, 40% Handover)
+- **Ownership:** Freehold
+- **Handover:** Q2 2027
+
+**Amenities & Lifestyle:**
+- **Wellness & Fitness:** Private Infinity Pool, State-of-the-art Gym
+- **Community & Leisure:** Private Beach Access, Landscaped Gardens
+- **Services:** Exclusive Concierge Support, 24/7 Security & Valet
+
+**Payment Plan Breakdown:**
+- **10%** – Down Payment (Immediate / Booking)
+- **50%** – During Construction (5 Installments)
+- **40%** – On Handover (Q2 2027)
+
+**Location & Connectivity:**
+- **Neighborhood:** Palm Jumeirah.
+- **Nearby Landmarks:** 15 Mins to Dubai Marina, 25 Mins to Downtown Dubai / Burj Khalifa, 30 Mins to Dubai International Airport (DXB).`,
     status: 'Off-plan',
     photoCount: 10,
     tag: 'Residential',
@@ -200,7 +250,34 @@ export const properties: Property[] = [
     type: 'Apartment',
     amenities: ['360° City View', 'Concierge', 'Pool'],
     images: ['prop-4-1'],
-    description: "A premium apartment by Emaar with direct views of the Burj Khalifa and The Dubai Fountain. The height of city living.",
+    description: `**Project Overview:**
+"Downtown Views II is a 55-story architectural masterpiece situated in the prestigious Downtown Dubai. Designed by Emaar, it offers expansive floor-to-ceiling windows that frame sweeping views of the Burj Khalifa and Dubai skyline. The Lifestyle: Residents enjoy a unique 'urban-style' living experience with direct access to The Dubai Mall. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
+
+**Key Specifications:**
+- **Property Type:** Luxury Apartments
+- **Unit Configs:** 1, 2, 3 Bedroom Apartments
+- **Payment Plan:** 70/30 (10% Down, 60% Construction, 30% Handover)
+- **Ownership:** Freehold
+- **Handover:** Q4 2026
+
+**Unit Configuration Table:**
+- **1 Bedroom:** 1 Bath, 700 – 900 sq.ft, Starting at AED 1.5M
+- **2 Bedroom:** 2 Bath, 1,100 – 1,500 sq.ft, Starting at AED 2.5M
+- **3 Bedroom:** 3 Bath, 1,600 – 2,000 sq.ft, Starting at AED 4.0M
+
+**Amenities & Lifestyle:**
+- **Wellness & Fitness:** Infinity Pool, State-of-the-art Gym
+- **Community & Leisure:** Direct Mall Access, Children's Play Areas
+- **Services:** Exclusive Concierge Support, 24/7 Security
+
+**Payment Plan Breakdown:**
+- **10%** – Down Payment (Immediate / Booking)
+- **60%** – During Construction (6 Installments)
+- **30%** – On Handover (Q4 2026)
+
+**Location & Connectivity:**
+- **Neighborhood:** Downtown Dubai.
+- **Nearby Landmarks:** 2 Mins to The Dubai Mall / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Dubai Marina. Direct Access to the Metro.`,
     status: 'Off-plan',
     photoCount: 8,
     tag: 'Residential',

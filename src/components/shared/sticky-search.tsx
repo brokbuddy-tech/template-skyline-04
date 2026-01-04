@@ -23,7 +23,7 @@ const bathOptions = ['1', '2', '3', '4+'];
 
 export function StickySearch() {
   return (
-    <div className="sticky top-[100px] z-30 w-full bg-background/95 backdrop-blur-sm py-4 border-b">
+    <div className="sticky top-[80px] z-30 w-full bg-background/95 backdrop-blur-sm py-4 border-b">
       <Dialog>
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-3">
@@ -44,8 +44,8 @@ export function StickySearch() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="outline"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium hover:bg-gray-50 cursor-pointer transition shadow-sm w-full justify-between"
+                    variant="outline-light"
+                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
                     Buy <ChevronDown size={16} />
                   </Button>
@@ -59,8 +59,8 @@ export function StickySearch() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="outline"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium hover:bg-gray-50 cursor-pointer transition shadow-sm w-full justify-between"
+                    variant="outline-light"
+                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
                     Type <ChevronDown size={16} />
                   </Button>
@@ -75,8 +75,8 @@ export function StickySearch() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="outline"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium hover:bg-gray-50 cursor-pointer transition shadow-sm w-full justify-between"
+                    variant="outline-light"
+                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
                     Beds <ChevronDown size={16} />
                   </Button>
@@ -90,8 +90,8 @@ export function StickySearch() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="outline"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium hover:bg-gray-50 cursor-pointer transition shadow-sm w-full justify-between"
+                    variant="outline-light"
+                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
                     Bath <ChevronDown size={16} />
                   </Button>

@@ -20,7 +20,7 @@ export default function PropertiesPage() {
 
   return (
     <>
-      <section className="pt-32 pb-16 bg-background">
+      <section className="pt-24 pb-16 bg-background">
         <div className="container mx-auto text-center">
           <h1 className="text-6xl md:text-7xl font-headline font-medium">Our Properties</h1>
         </div>

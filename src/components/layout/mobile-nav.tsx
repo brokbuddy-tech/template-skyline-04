@@ -5,17 +5,23 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ThemeSwitch } from '../shared/theme-switch';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import type { NavConfig } from '@/lib/nav-config';
 
-type NavLink = {
-  href: string;
-  label: string;
-};
-
-export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
+export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <label className="hamburger">
         <input type="checkbox" checked={isOpen} onChange={() => setIsOpen(!isOpen)} />
         <svg viewBox="0 0 32 32">
@@ -26,29 +32,55 @@ export function MobileNav({ navLinks }: { navLinks: NavLink[] }) {
 
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-background transition-transform duration-300 ease-in-out',
+          'fixed inset-0 z-40 bg-white transition-transform duration-300 ease-in-out',
           isOpen ? 'translate-y-0' : '-translate-y-full'
         )}
       >
-        <div className="container mx-auto flex flex-col items-center justify-between h-full py-20">
-          <nav className="flex flex-col items-center gap-8 text-center mt-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-3xl font-headline font-medium transition-colors hover:text-accent"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <div className="container mx-auto flex flex-col justify-between h-full py-20 overflow-y-auto">
+          <nav className="flex flex-col text-left mt-8 w-full">
+            <Accordion type="multiple" className="w-full">
+              {navLinks.map((link) =>
+                link.dropdown ? (
+                  <AccordionItem key={link.label} value={link.label}>
+                    <AccordionTrigger className="text-3xl font-headline font-medium text-gray-900 hover:text-rose-500 no-underline">
+                      {link.label}
+                    </AccordionTrigger>
+                    <AccordionContent className="pl-4">
+                      {link.dropdown.map((column, colIndex) => (
+                        <div key={colIndex} className="mb-6">
+                          <h3 className="font-bold text-gray-900 mb-2">{column.header}</h3>
+                          <ul className="space-y-2">
+                            {column.links.map((item) => (
+                              <li key={item.label}>
+                                <Link href={item.href} onClick={handleLinkClick} className="text-lg text-gray-700 hover:text-rose-500 block">
+                                  {item.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href!}
+                    className="text-3xl font-headline font-medium text-gray-900 hover:text-rose-500 py-4 border-b"
+                    onClick={handleLinkClick}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+            </Accordion>
           </nav>
-          <div className="flex flex-col items-center gap-8">
+          <div className="flex flex-col items-center gap-8 mt-auto pt-8">
             <Button
               variant="default"
               size="lg"
               asChild
-              onClick={() => setIsOpen(false)}
+              onClick={handleLinkClick}
             >
               <Link href="/properties">Book Now</Link>
             </Button>

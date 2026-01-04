@@ -38,11 +38,11 @@ export const navConfig: NavConfig = [
       {
         header: 'Off Plan',
         links: [
-          { label: 'Apartments', href: '/buy/off-plan/apartments' },
-          { label: 'Townhouses', href: '/buy/off-plan/townhouses' },
-          { label: 'Penthouses', href: '/buy/off-plan/penthouses' },
-          { label: 'Villas', href: '/buy/off-plan/villas' },
-          { label: 'View All', href: '/buy/off-plan' },
+          { label: 'Apartments', href: '/off-plan' },
+          { label: 'Townhouses', href: '/off-plan' },
+          { label: 'Penthouses', href: '/off-plan' },
+          { label: 'Villas', href: '/off-plan' },
+          { label: 'View All', href: '/off-plan' },
         ],
       },
       {

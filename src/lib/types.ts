@@ -8,7 +8,7 @@ export type Property = {
   bedrooms: number;
   bathrooms: number;
   sqft: number;
-  type: 'House' | 'Apartment' | 'Penthouse';
+  type: 'House' | 'Apartment' | 'Penthouse' | 'Townhouse' | 'Villa' | 'Office Space' | 'Hotel Apartment' | 'Duplex' | 'Retail';
   amenities: string[];
   images: string[];
   description: string;
@@ -16,6 +16,10 @@ export type Property = {
   trakheesi?: string;
   reraPermit?: string;
   featured?: boolean;
+  status?: 'Off-plan' | 'Ready';
+  photoCount?: number;
+  tag?: string;
+  developerLogo?: 'Emaar' | 'Nakheel';
 };
 
 export type Service = {

@@ -27,7 +27,7 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setHoveredIndex(null);
-    }, 100);
+    }, 200);
   };
 
   return (
@@ -48,13 +48,22 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
             <span>{item.label}</span>
             {item.dropdown && <ChevronDown className="w-4 h-4 transition-transform" />}
           </Link>
+          
+          {/* This is the invisible "bridge" to prevent premature closing */}
+          <div className="absolute bottom-0 left-0 w-full h-5" />
 
           <AnimatePresence>
             {hoveredIndex === index && item.dropdown && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeInOut' } }}
-                exit={{ opacity: 0, y: 5, transition: { duration: 0.2, ease: 'easeInOut' } }}
+                initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                transition={{
+                  type: 'spring',
+                  mass: 0.5,
+                  stiffness: 150,
+                  damping: 25,
+                }}
                 className="absolute top-full left-1/2 -translate-x-1/2 mt-2"
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={handleMouseLeave}

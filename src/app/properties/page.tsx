@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { PropertyCard } from "@/components/shared/property-card";
 import { properties } from "@/lib/data";
@@ -12,6 +13,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 const PROPERTIES_PER_PAGE = 6;
 
 export default function PropertiesPage() {
+  const searchParams = useSearchParams();
   const [visibleProperties, setVisibleProperties] = useState(PROPERTIES_PER_PAGE);
   
   const headerImage = PlaceHolderImages.find((img) => img.id === 'cta-background');
@@ -22,6 +24,9 @@ export default function PropertiesPage() {
 
   const propertiesToShow = properties.slice(0, visibleProperties);
   const canLoadMore = visibleProperties < properties.length;
+
+  const pageType = searchParams.get('type');
+  const title = pageType === 'rent' ? 'Properties for Rent' : 'Our Properties';
 
   return (
     <>
@@ -37,7 +42,7 @@ export default function PropertiesPage() {
         )}
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="container mx-auto text-center relative z-10">
-          <h1 className="text-6xl md:text-7xl font-headline font-medium">Our Properties</h1>
+          <h1 className="text-6xl md:text-7xl font-headline font-medium">{title}</h1>
         </div>
       </section>
       

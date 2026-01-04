@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
@@ -13,13 +14,20 @@ interface MegaMenuProps {
 
 export function MegaMenu({ navConfig }: MegaMenuProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = (index: number) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
     setHoveredIndex(index);
   };
 
   const handleMouseLeave = () => {
-    setHoveredIndex(null);
+    timeoutRef.current = setTimeout(() => {
+      setHoveredIndex(null);
+    }, 100);
   };
 
   return (
@@ -44,10 +52,12 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
           <AnimatePresence>
             {hoveredIndex === index && item.dropdown && (
               <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeOut' } }}
-                exit={{ opacity: 0, y: -10, transition: { duration: 0.15, ease: 'easeIn' } }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeInOut' } }}
+                exit={{ opacity: 0, y: 5, transition: { duration: 0.2, ease: 'easeInOut' } }}
                 className="absolute top-full left-1/2 -translate-x-1/2 mt-2"
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
               >
                 <div className="bg-white rounded-lg shadow-xl p-6 border border-gray-100">
                   <div 

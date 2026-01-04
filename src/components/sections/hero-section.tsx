@@ -7,6 +7,7 @@ import { Star } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { HeroSearch } from './hero-search';
 
 export function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -71,62 +72,15 @@ export function HeroSection() {
 
         <div
           ref={contentRef}
-          className="absolute inset-0 z-10 flex flex-col md:grid md:grid-cols-12 items-center gap-8 px-8 container mx-auto text-white"
+          className="absolute inset-0 z-20 flex flex-col justify-center items-center gap-8 px-4 container mx-auto text-white"
           style={{ opacity: Math.max(0, opacity) }}
         >
-          {/* Main Column - Center on mobile */}
-          <div className="md:col-span-8 flex justify-center items-center text-center order-1 md:order-2 mt-24 md:mt-0">
-             <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
-               Transforming Spaces, <br /> Realizing <span className="text-accent">Dreams.</span>
-             </h1>
+          <div className='text-center'>
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
+              Transforming Spaces, <br /> Realizing <span className="text-accent">Dreams.</span>
+            </h1>
           </div>
-          
-          {/* Left Column */}
-          <div className="md:col-span-2 flex flex-col items-center md:items-start gap-4 order-2 md:order-1">
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    'w-4 h-4',
-                    i < 5 ? 'text-accent fill-accent' : 'text-accent'
-                  )}
-                />
-              ))}
-            </div>
-            <p className="text-sm font-medium">12K Rating (4.9 average)</p>
-            <div className="flex -space-x-2">
-              {avatarImages.map((avatar, i) => (
-                avatar && (
-                  <Image
-                    key={avatar.id}
-                    src={avatar.imageUrl}
-                    alt={avatar.description}
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 rounded-full border-2 border-background"
-                    data-ai-hint={avatar.imageHint}
-                  />
-                )
-              ))}
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-background bg-primary text-primary-foreground">
-                <span className="text-lg font-bold">+</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="md:col-span-2 flex flex-col items-center md:items-end text-center md:text-right gap-4 order-3 md:order-3">
-            <p className="text-base">
-              Turning your vision into reality, we specialize in creating exceptional living spaces.
-            </p>
-            <Button size="lg" asChild>
-              <Link href="/properties">
-                Explore Properties
-                <span className="rotate-[-45deg] group-hover:rotate-0 transition-transform duration-300">↗</span>
-              </Link>
-            </Button>
-          </div>
+          <HeroSearch />
         </div>
       </div>
     </div>

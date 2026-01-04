@@ -47,6 +47,14 @@ export function HeroSearch() {
         )
     }
 
+    if (tab === 'Rent') {
+        return (
+            <Link key={tab} href="/properties?type=rent" legacyBehavior>
+                <a onClick={() => setActiveTab(tab)}>{button}</a>
+            </Link>
+        )
+    }
+
     return <div key={tab}>{button}</div>;
   }
 

@@ -41,8 +41,8 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
           <Link
             href={item.href || '#'}
             className={cn(
-              "flex items-center gap-1 px-3 py-2 text-sm text-gray-900 rounded-md transition-colors",
-              hoveredIndex === index ? "text-rose-500 bg-rose-50" : "hover:text-rose-500"
+              "flex items-center gap-1 px-3 py-2 text-sm text-gray-900 dark:text-white rounded-md transition-colors",
+              hoveredIndex === index ? "text-rose-500 bg-rose-50 dark:bg-gray-800" : "hover:text-rose-500"
             )}
           >
             <span>{item.label}</span>
@@ -68,20 +68,20 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={handleMouseLeave}
               >
-                <div className="bg-white rounded-lg shadow-xl p-6 border border-gray-100">
+                <div className="bg-white dark:bg-black rounded-lg shadow-xl p-6 border border-gray-100 dark:border-gray-800">
                   <div 
                     className="grid gap-x-12 gap-y-6"
                     style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, minmax(0, 1fr))` }}
                   >
                     {item.dropdown.map((column, colIndex) => (
                       <div key={colIndex}>
-                        <h3 className="font-bold text-gray-900 mb-3 text-base">{column.header}</h3>
+                        <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-base">{column.header}</h3>
                         <ul className="space-y-2">
                           {column.links.map((link) => (
                             <li key={link.label}>
                               <Link
                                 href={link.href}
-                                className="block text-sm text-gray-700 hover:text-rose-500 whitespace-nowrap"
+                                className="block text-sm text-gray-700 dark:text-gray-300 hover:text-rose-500 whitespace-nowrap"
                               >
                                 {link.label}
                               </Link>

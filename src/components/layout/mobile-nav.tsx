@@ -32,7 +32,7 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
 
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-white transition-transform duration-300 ease-in-out',
+          'fixed inset-0 z-[60] bg-white transition-transform duration-300 ease-in-out',
           isOpen ? 'translate-y-0' : '-translate-y-full'
         )}
       >

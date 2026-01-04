@@ -25,7 +25,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 w-full bg-white/95 border-b border-gray-100 h-[80px] flex items-center justify-between px-8 z-40 transition-all duration-300',
+        'sticky top-0 w-full bg-white/95 border-b border-gray-100 h-[80px] flex items-center justify-between px-8 z-50 transition-all duration-300',
         isScrolled && 'shadow-sm backdrop-blur-md'
       )}
     >

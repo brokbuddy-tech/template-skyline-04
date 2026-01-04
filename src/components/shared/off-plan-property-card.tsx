@@ -1,7 +1,9 @@
+
 'use client';
 
 import Image from 'next/image';
 import { useState, useContext } from 'react';
+import Link from 'next/link';
 import {
   Bed,
   Bath,
@@ -33,75 +35,77 @@ export function OffPlanPropertyCard({ property }: { property: Property }) {
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl transition-all duration-300 group">
-      {/* Image Section */}
-      <div className="relative h-[280px] w-full overflow-hidden">
-        {image ? (
-            <Image
-                src={image.imageUrl}
-                alt={property.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-        ) : (
-            <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
-                {DeveloperLogo && <DeveloperLogo className="w-24 h-auto text-gray-500" />}
+      <Link href={`/properties/${property.id}`} className="block">
+        {/* Image Section */}
+        <div className="relative h-[280px] w-full overflow-hidden">
+          {image ? (
+              <Image
+                  src={image.imageUrl}
+                  alt={property.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+          ) : (
+              <div className="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+                  {DeveloperLogo && <DeveloperLogo className="w-24 h-auto text-gray-500" />}
+              </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+          <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded-full">
+            <Camera size={14} />
+            <span>{property.photoCount}</span>
+          </div>
+
+          {property.tag && (
+              <div className="absolute top-4 right-4 bg-white text-gray-900 text-xs font-semibold px-2 py-1 rounded-full">
+                  {property.tag}
+              </div>
+          )}
+          
+          <button 
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsFavorited(!isFavorited); }}
+            className="absolute top-12 right-4 bg-white/90 p-2 rounded-full text-gray-700 hover:text-red-500 transition-colors z-10"
+          >
+            <Heart size={18} className={cn(isFavorited ? 'text-red-500 fill-current' : 'text-gray-600')} />
+          </button>
+
+          <button className="absolute bottom-4 right-4 bg-white p-2 rounded-full text-gray-700 shadow-md">
+              <MapPin size={18} />
+          </button>
+        </div>
+
+        {/* Details Section */}
+        <div className="p-6">
+          <p className="text-[#1E3A8A] dark:text-blue-400 text-2xl font-bold mb-1">
+            {formatPrice(property.price)}
+          </p>
+          <h3 className="font-semibold text-lg text-gray-900 dark:text-white truncate h-7">
+            {property.title}
+          </h3>
+
+          <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mt-3">
+            <div className="flex items-center gap-1.5">
+              <Bed size={16} />
+              <span>{property.bedrooms} Bed</span>
             </div>
-        )}
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-        <div className="absolute top-4 left-4 flex items-center gap-1.5 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded-full">
-          <Camera size={14} />
-          <span>{property.photoCount}</span>
-        </div>
-
-        {property.tag && (
-            <div className="absolute top-4 right-4 bg-white text-gray-900 text-xs font-semibold px-2 py-1 rounded-full">
-                {property.tag}
+            <div className="flex items-center gap-1.5">
+              <Bath size={16} />
+              <span>{property.bathrooms} Bath</span>
             </div>
-        )}
-        
-        <button 
-          onClick={(e) => { e.preventDefault(); setIsFavorited(!isFavorited); }}
-          className="absolute top-12 right-4 bg-white/90 p-2 rounded-full text-gray-700 hover:text-red-500 transition-colors"
-        >
-          <Heart size={18} className={cn(isFavorited ? 'text-red-500 fill-current' : 'text-gray-600')} />
-        </button>
-
-        <button className="absolute bottom-4 right-4 bg-white p-2 rounded-full text-gray-700 shadow-md">
-            <MapPin size={18} />
-        </button>
-      </div>
-
-      {/* Details Section */}
-      <div className="p-6">
-        <p className="text-[#1E3A8A] dark:text-blue-400 text-2xl font-bold mb-1">
-          {formatPrice(property.price)}
-        </p>
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white truncate h-7">
-          {property.title}
-        </h3>
-
-        <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mt-3">
-          <div className="flex items-center gap-1.5">
-            <Bed size={16} />
-            <span>{property.bedrooms} Bed</span>
+            <div className="flex items-center gap-1.5">
+              <Maximize size={16} />
+              <span>{property.sqft.toLocaleString()} sq-ft</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1.5">
-            <Bath size={16} />
-            <span>{property.bathrooms} Bath</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Maximize size={16} />
-            <span>{property.sqft.toLocaleString()} sq-ft</span>
+
+          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mt-3">
+              <MapPin size={16} />
+              <span>{property.location}</span>
           </div>
         </div>
-
-        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mt-3">
-            <MapPin size={16} />
-            <span>{property.location}</span>
-        </div>
-      </div>
+      </Link>
       
       {/* Footer Actions */}
       <div className="px-6 pb-6">

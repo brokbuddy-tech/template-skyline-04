@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -32,8 +33,9 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
 
       <div
         className={cn(
-          'fixed inset-0 z-40 bg-white transition-transform duration-300 ease-in-out',
-          isOpen ? 'translate-y-0' : '-translate-y-full invisible'
+          'fixed inset-0 z-40 bg-white dark:bg-black transition-transform duration-300 ease-in-out',
+          isOpen ? 'translate-y-0' : '-translate-y-full',
+          !isOpen && 'invisible'
         )}
       >
         <div className="container mx-auto flex flex-col justify-between h-full py-20 overflow-y-auto">
@@ -42,17 +44,17 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
               {navLinks.map((link) =>
                 link.dropdown ? (
                   <AccordionItem key={link.label} value={link.label}>
-                    <AccordionTrigger className="text-3xl font-headline font-medium text-gray-900 hover:text-rose-500 no-underline">
+                    <AccordionTrigger className="text-3xl font-headline font-medium text-gray-900 dark:text-gray-100 hover:text-rose-500 no-underline">
                       {link.label}
                     </AccordionTrigger>
                     <AccordionContent className="pl-4">
                       {link.dropdown.map((column, colIndex) => (
                         <div key={colIndex} className="mb-6">
-                          <h3 className="font-bold text-gray-900 mb-2">{column.header}</h3>
+                          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-2">{column.header}</h3>
                           <ul className="space-y-2">
                             {column.links.map((item) => (
                               <li key={item.label}>
-                                <Link href={item.href} onClick={handleLinkClick} className="text-lg text-gray-700 hover:text-rose-500 block">
+                                <Link href={item.href} onClick={handleLinkClick} className="text-lg text-gray-700 dark:text-gray-300 hover:text-rose-500 block">
                                   {item.label}
                                 </Link>
                               </li>
@@ -66,7 +68,7 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
                   <Link
                     key={link.href}
                     href={link.href!}
-                    className="text-3xl font-headline font-medium text-gray-900 hover:text-rose-500 py-4 border-b"
+                    className="text-3xl font-headline font-medium text-gray-900 dark:text-gray-100 hover:text-rose-500 py-4 border-b"
                     onClick={handleLinkClick}
                   >
                     {link.label}

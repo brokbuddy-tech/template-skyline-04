@@ -26,7 +26,7 @@ export default function PropertiesPage() {
   const canLoadMore = visibleProperties < properties.length;
 
   const pageType = searchParams.get('type');
-  const title = pageType === 'rent' ? 'Properties for Rent' : 'Our Properties';
+  const title = pageType === 'rent' ? 'Properties for Rent' : pageType === 'buy' ? 'Properties for Sale' : 'Our Properties';
 
   return (
     <>

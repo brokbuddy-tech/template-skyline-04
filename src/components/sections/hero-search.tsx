@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AdvancedSearchModal } from '../shared/advanced-search-modal';
+import Link from 'next/link';
 
 const searchTabs = ['Buy', 'Rent', 'Sell', 'Manage'];
 const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas', 'Offices'];
@@ -20,26 +22,40 @@ export function HeroSearch() {
   const [activeTab, setActiveTab] = useState('Buy');
   const [selectedType, setSelectedType] = useState('Choose Property Type');
 
+  const renderTab = (tab: string) => {
+    const isActive = activeTab === tab;
+    const button = (
+        <Button
+          onClick={() => setActiveTab(tab)}
+          variant={isActive ? 'default' : 'outline'}
+          className={cn(
+            'rounded-full uppercase font-medium text-sm md:text-base px-6 py-2 transition-all',
+            isActive
+              ? 'bg-white text-black hover:bg-gray-200'
+              : 'bg-transparent border-white/50 text-white hover:bg-white/20 hover:text-white'
+          )}
+        >
+          {tab}
+        </Button>
+    );
+
+    if (tab === 'Buy') {
+        return (
+            <Link key={tab} href="/properties?type=buy" legacyBehavior>
+                <a onClick={() => setActiveTab(tab)}>{button}</a>
+            </Link>
+        )
+    }
+
+    return <div key={tab}>{button}</div>;
+  }
+
   return (
     <Dialog>
       <div className="w-full max-w-5xl mx-auto p-4 z-20">
         {/* Part A: The Category Tabs */}
         <div className="flex items-center justify-center gap-2 md:gap-4 mb-4 overflow-x-auto pb-2">
-          {searchTabs.map((tab) => (
-            <Button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              variant={activeTab === tab ? 'default' : 'outline'}
-              className={cn(
-                'rounded-full uppercase font-medium text-sm md:text-base px-6 py-2 transition-all',
-                activeTab === tab
-                  ? 'bg-white text-black hover:bg-gray-200'
-                  : 'bg-transparent border-white/50 text-white hover:bg-white/20 hover:text-white'
-              )}
-            >
-              {tab}
-            </Button>
-          ))}
+          {searchTabs.map(renderTab)}
         </div>
 
         {/* Part B: The Search Bar */}

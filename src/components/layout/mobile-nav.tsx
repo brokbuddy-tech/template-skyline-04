@@ -32,8 +32,8 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
 
       <div
         className={cn(
-          'fixed inset-0 z-[60] bg-white transition-transform duration-300 ease-in-out',
-          isOpen ? 'translate-y-0' : '-translate-y-full'
+          'fixed inset-0 z-40 bg-white transition-transform duration-300 ease-in-out',
+          isOpen ? 'translate-y-0' : '-translate-y-full invisible'
         )}
       >
         <div className="container mx-auto flex flex-col justify-between h-full py-20 overflow-y-auto">

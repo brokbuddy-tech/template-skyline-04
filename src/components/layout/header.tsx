@@ -8,11 +8,26 @@ import { CurrencySwitcher } from '../shared/currency-switcher';
 import { ThemeSwitch } from '../shared/theme-switch';
 import { navConfig } from '@/lib/nav-config';
 import { MegaMenu } from './mega-menu';
+import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 export function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <header
-      className="sticky top-0 w-full bg-white border-b border-gray-100 h-[80px] flex items-center justify-between px-8 relative z-50"
+      className={cn(
+        'sticky top-0 w-full bg-white/95 border-b border-gray-100 h-[80px] flex items-center justify-between px-8 z-40 transition-all duration-300',
+        isScrolled && 'shadow-sm backdrop-blur-md'
+      )}
     >
       <div className="flex items-center">
         <Link href="/">

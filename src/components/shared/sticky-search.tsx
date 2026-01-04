@@ -49,7 +49,7 @@ export function StickySearch() {
                 placeholder="Community or Building..."
                 className="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-400 min-w-0"
               />
-              <button className="w-10 h-10 bg-[#1E3A8A] rounded-full flex items-center justify-center text-white hover:bg-blue-800 transition-all cursor-pointer flex-shrink-0">
+              <button className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white hover:bg-accent/90 transition-all cursor-pointer flex-shrink-0">
                 <Plus size={20} />
               </button>
             </div>
@@ -123,7 +123,7 @@ export function StickySearch() {
             <div className="flex items-center gap-3 w-full md:w-auto justify-center">
               <Button
                 size="icon"
-                className="w-14 h-14 bg-[#1E3A8A] rounded-full text-white shadow-md hover:scale-105 transition-transform"
+                className="w-14 h-14 bg-accent rounded-full text-white shadow-md hover:scale-105 transition-transform"
                 aria-label="Search"
               >
                 <Search size={24} />
@@ -132,7 +132,7 @@ export function StickySearch() {
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="w-14 h-14 bg-white rounded-full text-[#1E3A8A] shadow-md hover:bg-gray-100 transition"
+                  className="w-14 h-14 bg-white rounded-full text-accent shadow-md hover:bg-gray-100 transition"
                   aria-label="Advanced Filters"
                 >
                   <SlidersHorizontal size={24} />

@@ -177,19 +177,19 @@ Every residence at Lyvia is a sanctuary of light and space. With expansive floor
 
 ### The Lifestyle: A World of Unparalleled Amenities
 
-The lifestyle at Lyvia is a testament to the art of fine living, curated by Palace Hospitality. 
-*   **Wellness & Fitness:** Start your day with an invigorating swim in the magnificent infinity lap pool, unwind on the serene rooftop terraces, or pursue your fitness goals in the cutting-edge gym and dedicated wellness spaces.
-*   **Community & Leisure:** Stroll through beautifully landscaped gardens and pocket parks, watch your children delight in the indoor and outdoor play areas, or enjoy an afternoon barbecue. With direct access to the marina and waterfront promenade, your leisure options are as endless as the views.
-*   **Palace Hospitality Services:** Experience a life of effortless comfort with exclusive concierge support, 24/7 security, and convenient valet services, ensuring every need is met with impeccable attention.
+The lifestyle at Lyvia is a testament to the art of fine living, curated by Palace Hospitality.
+- **Wellness & Fitness:** Start your day with an invigorating swim in the magnificent infinity lap pool, unwind on the serene rooftop terraces, or pursue your fitness goals in the cutting-edge gym and dedicated wellness spaces.
+- **Community & Leisure:** Stroll through beautifully landscaped gardens and pocket parks, watch your children delight in the indoor and outdoor play areas, or enjoy an afternoon barbecue. With direct access to the marina and waterfront promenade, your leisure options are as endless as the views.
+- **Palace Hospitality Services:** Experience a life of effortless comfort with exclusive concierge support, 24/7 security, and convenient valet services, ensuring every need is met with impeccable attention.
 
-### The Investment: Strategic Location & Lasting Value
+### Location & Investment Potential: Strategic Growth in a Prime Location
 
 Strategically located in the high-growth Green Gate district of Dubai Creek Harbour, Lyvia offers unparalleled connectivity and significant investment potential. This prime location places you just minutes from Dubai's key destinations:
-*   **10 Mins** to Downtown Dubai & The Burj Khalifa
-*   **15 Mins** to Dubai International Airport (DXB)
-*   **20 Mins** to Business Bay & DIFC
+- **10 Mins** to Downtown Dubai & The Burj Khalifa
+- **15 Mins** to Dubai International Airport (DXB)
+- **20 Mins** to Business Bay & DIFC
 
-With a flexible 80/20 payment plan and the backing of Emaar's proven track record, Lyvia is not just a home—it is a secure and valuable asset in one of the world's most dynamic cities. Secure your future in Dubai's next iconic landmark.`,
+With a flexible 80/20 payment plan, an expected handover in Q3 2029, and the backing of Emaar's proven track record, Lyvia is not just a home—it is a secure and valuable asset in one of the world's most dynamic cities. Secure your future in Dubai's next iconic landmark by registering your interest today.`,
     status: 'Off-plan',
     photoCount: 5,
     tag: 'Residential',
@@ -206,27 +206,27 @@ With a flexible 80/20 payment plan and the backing of Emaar's proven track recor
     type: 'Villa',
     amenities: ['Private Pool', 'Beach Access', 'Smart Home'],
     images: [],
-    description: `### Beachfront Majesty: The Palm Jumeirah Signature Villa by Nakheel
+    description: `### Beachfront Majesty: A Signature Villa on The Palm Jumeirah
 
-Introducing an exclusive offering from Nakheel on the iconic Palm Jumeirah—a beachfront villa where architectural brilliance meets the tranquil rhythm of the Arabian Gulf. Designed for the discerning few, this residence offers a premium blend of contemporary design and urban sophistication, providing an unparalleled sanctuary with direct access to your private stretch of pristine sand.
+Introducing an exclusive beachfront villa by Nakheel on the iconic Palm Jumeirah, where architectural brilliance meets the tranquil rhythm of the Arabian Gulf. Designed for the discerning few, this residence offers a premium blend of contemporary design and urban sophistication, providing an unparalleled sanctuary with direct, private access to a pristine stretch of sand. This is the ultimate address for those who command the very best.
 
 ### The Residence: Exquisite Interiors with Boundless Horizons
 
-Step into a world of refined luxury. Every detail of this 5-bedroom villa is crafted to perfection, from the fluid open-plan layouts to the premium finishes in the state-of-the-art kitchen. Expansive floor-to-ceiling windows frame sweeping, unobstructed views of the sea and the glittering Dubai skyline, while private terraces create a seamless connection between the exquisite interiors and the serene beachfront environment. This is a home designed not just for living, but for experiencing.
+Step into a world of refined luxury where every detail is crafted to perfection. This 5-bedroom villa features fluid, open-plan layouts and premium finishes, including a state-of-the-art kitchen fit for a gourmand. Expansive floor-to-ceiling windows frame sweeping, unobstructed views of the sea and the glittering Dubai skyline, while private terraces create a seamless connection between the exquisite interiors and the serene beachfront environment. This is a home designed not just for living, but for experiencing.
 
 ### The Lifestyle: Your Private Resort-Style Escape
 
-Embrace a lifestyle of ultimate relaxation and privacy.
-*   **Wellness:** Begin your mornings with a dip in your private infinity pool, a workout in the state-of-the-art gym, or a stroll along your exclusive beach.
-*   **Entertaining:** Host unforgettable gatherings in your landscaped garden or spacious terrace, with the stunning backdrop of the Arabian Gulf.
-*   **Service:** Enjoy peace of mind with 24/7 security and access to exclusive concierge support, ensuring a life of effortless comfort and convenience.
+Embrace a lifestyle of ultimate relaxation, privacy, and effortless entertaining.
+- **Wellness & Serenity:** Begin your mornings with a dip in your private infinity pool as the sun rises over the Gulf, or take a meditative stroll along your exclusive beach.
+- **Exclusive Entertaining:** Host unforgettable gatherings in your landscaped garden or on the spacious terrace, with the stunning backdrop of the Arabian Gulf providing a dramatic setting for any occasion.
+- **Peace of Mind:** Enjoy the comfort and security that comes with 24/7 surveillance and access to exclusive concierge support, ensuring a life of effortless convenience.
 
-### The Investment: A Trophy Asset in a World-Class Location
+### Location & Investment Potential: A Trophy Asset in a World-Class Location
 
-Owning a villa on the Palm Jumeirah is an investment in a global landmark. This prestigious address offers both an exceptional lifestyle and a robust potential for capital appreciation, backed by Nakheel's legacy of creating iconic communities. The flexible 60/40 payment plan makes securing this trophy asset more attainable.
-*   **15 Mins** to Dubai Marina
-*   **25 Mins** to Downtown Dubai / Burj Khalifa
-*   **30 Mins** to Dubai International Airport (DXB)
+Owning a villa on the Palm Jumeirah is an investment in a global landmark. This prestigious address guarantees an exceptional lifestyle and robust potential for capital appreciation, backed by Nakheel's legacy of creating iconic communities. The flexible 60/40 payment plan makes securing this trophy asset more attainable.
+- **15 Mins** to Dubai Marina
+- **25 Mins** to Downtown Dubai / Burj Khalifa
+- **30 Mins** to Dubai International Airport (DXB)
 
 Don't miss this rare opportunity to own a piece of paradise. Register your interest today to receive the exclusive brochure and floor plans.`,
     status: 'Off-plan',
@@ -247,26 +247,26 @@ Don't miss this rare opportunity to own a piece of paradise. Register your inter
     images: ['prop-4-1'],
     description: `### Downtown Views II: Live Above it All in the Heart of Dubai
 
-Experience the pinnacle of urban living at Downtown Views II, a 55-story tower by Emaar that offers a front-row seat to the most iconic skyline in the world. Situated in the prestigious Downtown Dubai, this is where luxury, convenience, and breathtaking views converge. With direct access to The Dubai Mall, you are seamlessly connected to world-class retail, dining, and entertainment.
+Experience the pinnacle of urban living at Downtown Views II, a striking 55-story tower by Emaar that offers a front-row seat to the most iconic skyline in the world. Situated in the prestigious Downtown Dubai, this is where luxury, convenience, and breathtaking views converge. With direct, air-conditioned access to The Dubai Mall, you are seamlessly connected to a world of unparalleled retail, dining, and entertainment.
 
 ### The Residence: Sophisticated Design with Iconic Vistas
 
-Each apartment at Downtown Views II is a masterclass in modern design. The expansive floor-to-ceiling windows don't just illuminate the space—they frame postcard-perfect views of the Burj Khalifa and the vibrant cityscape. The interiors are defined by fluid open-plan layouts, modern kitchens with premium finishes, and private balconies that allow you to step out and soak in the energy of Downtown Dubai.
+Each apartment at Downtown Views II is a masterclass in modern, minimalist design. The expansive floor-to-ceiling windows don't just illuminate the space—they frame postcard-perfect, unobstructed views of the Burj Khalifa and the vibrant city below. The interiors are defined by fluid open-plan layouts, contemporary kitchens with premium finishes, and private balconies that allow you to step out and soak in the electric energy of Downtown Dubai.
 
 ### The Lifestyle: An Extension of the World's Most Exciting Neighborhood
 
-Your life at Downtown Views II is complemented by a suite of world-class amenities designed for relaxation and recreation.
-*   **Wellness:** Rejuvenate in the stunning temperature-controlled infinity pool or maintain your fitness regime in the state-of-the-art gym.
-*   **Family & Leisure:** With direct, air-conditioned access to The Dubai Mall and dedicated children's play areas, every member of the family is catered for.
-*   **Convenience:** Enjoy the peace of mind that comes with 24/7 security and exclusive concierge services, ready to assist with your every need.
+Your life at Downtown Views II is complemented by a suite of world-class amenities designed for relaxation, recreation, and family enjoyment.
+- **Wellness & Recreation:** Rejuvenate in the stunning temperature-controlled infinity pool overlooking the city, or maintain your fitness regime in the state-of-the-art gym with panoramic views.
+- **Family & Convenience:** With dedicated children's play areas and direct access to The Dubai Mall, every member of the family is catered for.
+- **Effortless Living:** Enjoy the peace of mind that comes with 24/7 security and exclusive concierge services, ready to assist with your every need.
 
-### The Investment: A Prime Asset with Unbeatable Connectivity
+### Location & Investment Potential: A Prime Asset with Unbeatable Connectivity
 
-Investing in Downtown Views II means securing a property in one of the most sought-after locations globally. This address guarantees high rental demand and strong potential for capital appreciation. The flexible 70/30 payment plan enhances its investment appeal.
-*   **2 Mins** to The Dubai Mall & Burj Khalifa
-*   **15 Mins** to Dubai International Airport (DXB)
-*   **20 Mins** to Dubai Marina
-*   **Direct Access** to the Dubai Metro
+Investing in Downtown Views II means securing a blue-chip property in one of the most sought-after locations globally. This address guarantees high rental demand and strong potential for capital appreciation, enhanced by a flexible 70/30 payment plan. Its connectivity is second to none:
+- **2 Mins** to The Dubai Mall & Burj Khalifa
+- **15 Mins** to Dubai International Airport (DXB)
+- **20 Mins** to Dubai Marina
+- **Direct Access** to the Dubai Metro and major highways.
 
 Secure your place in the center of now. Contact us to learn more about this exceptional investment and lifestyle opportunity.`,
     status: 'Off-plan',

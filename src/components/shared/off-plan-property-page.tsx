@@ -16,6 +16,8 @@ import {
   HandHelping,
   Banknote,
   LandPlot,
+  MapPin,
+  Clock,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -40,6 +42,7 @@ import { Badge } from '../ui/badge';
 import { amenityIcons } from '@/lib/amenity-icons';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { LocationMap } from './location-map';
+import { Card } from '../ui/card';
 
 interface OffPlanPropertyPageProps {
   property: Property;
@@ -78,6 +81,14 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
       completed: false,
     },
   ];
+
+  const nearbyPlaces = [
+      { name: 'Downtown Dubai', time: '10 min' },
+      { name: 'Burj Khalifa', time: '10 min' },
+      { name: 'Dubai International Airport', time: '15 min' },
+      { name: 'Business Bay', time: '20 min' },
+  ];
+
   return (
     <div className="bg-background">
       <OffPlanHeroGallery property={property} />
@@ -380,6 +391,28 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                 <LocationMap />
             </div>
 
+            <Separator className="my-12" />
+
+            {/* Nearby Places Section */}
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Nearby Places</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {nearbyPlaces.map((place) => (
+                  <Card key={place.name} className="flex items-center gap-4 p-4 bg-gray-50 border-gray-100">
+                      <div className="bg-white p-3 rounded-lg border border-gray-200">
+                          <MapPin className="w-5 h-5 text-accent" />
+                      </div>
+                      <div>
+                          <p className="font-semibold text-foreground">{place.name}</p>
+                          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                              <Clock className="w-3 h-3" />
+                              <span>{place.time} away</span>
+                          </div>
+                      </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
 
           </div>
 

@@ -36,6 +36,8 @@ import {
 } from "@/components/ui/dialog"
 import { PropertyDescriptionDisplay } from './property-description-display';
 import { Separator } from '../ui/separator';
+import { Badge } from '../ui/badge';
+import { amenityIcons } from '@/lib/amenity-icons';
 
 interface OffPlanPropertyPageProps {
   property: Property;
@@ -329,6 +331,25 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                   </DialogContent>
                 </Dialog>
             </div>
+            
+            <Separator className="my-12"/>
+
+            {/* Amenities Section */}
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Amenities</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {property.amenities.map(amenity => {
+                      const Icon = amenityIcons[amenity];
+                      return (
+                          <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2 border-gray-200 bg-gray-50">
+                              {Icon && <Icon className="w-4 h-4 text-accent" />}
+                              <span>{amenity}</span>
+                          </Badge>
+                      )
+                  })}
+              </div>
+            </div>
+
           </div>
 
           {/* Right Column */}
@@ -366,3 +387,5 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
     </div>
   );
 }
+
+    

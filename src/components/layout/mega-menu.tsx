@@ -77,50 +77,28 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
                     "bg-white dark:bg-black rounded-lg shadow-xl border border-gray-100 dark:border-gray-800",
                     isCommercialMenu ? "min-w-[400px] p-8" : "p-6"
                   )}>
-                    {isCommercialMenu ? (
-                      <div className="grid grid-cols-2 gap-12">
-                        {item.dropdown?.map((column, colIndex) => (
-                          <div key={colIndex}>
-                            <h3 className="text-lg font-bold text-[#1E1E2C] dark:text-white mb-4">{column.header}</h3>
-                            <ul className="space-y-3">
-                              {column.links.map((link) => (
-                                <li key={link.label}>
-                                  <Link
-                                    href={link.href}
-                                    className="block text-[15px] text-gray-600 dark:text-gray-400 font-medium hover:text-rose-500 transition-colors"
-                                  >
-                                    {link.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div 
-                        className="grid gap-x-12 gap-y-6 auto-cols-max"
-                        style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, auto)` }}
-                      >
-                        {item.dropdown.map((column, colIndex) => (
-                          <div key={colIndex}>
-                            <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-base">{column.header}</h3>
-                            <ul className="space-y-2">
-                              {column.links.map((link) => (
-                                <li key={link.label}>
-                                  <Link
-                                    href={link.href}
-                                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-rose-500 whitespace-nowrap"
-                                  >
-                                    {link.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <div 
+                      className="grid gap-x-12 gap-y-6 auto-cols-max"
+                      style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, auto)` }}
+                    >
+                      {item.dropdown.map((column, colIndex) => (
+                        <div key={colIndex}>
+                          <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-base">{column.header}</h3>
+                          <ul className="space-y-2">
+                            {column.links.map((link) => (
+                              <li key={link.label}>
+                                <Link
+                                  href={link.href}
+                                  className="block text-sm text-gray-700 dark:text-gray-300 hover:text-rose-500 whitespace-nowrap"
+                                >
+                                  {link.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               )}

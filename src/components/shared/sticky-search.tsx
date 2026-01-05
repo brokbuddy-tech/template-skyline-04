@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   ChevronDown,
@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
+import Link from 'next/link';
 
 const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas'];
 const bedOptions = ['Studio', '1', '2', '3', '4+'];
@@ -27,6 +28,7 @@ const bathOptions = ['1', '2', '3', '4+'];
 
 export function StickySearch() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [transactionType, setTransactionType] = useState('Buy');
 
   useEffect(() => {
@@ -37,6 +39,14 @@ export function StickySearch() {
       setTransactionType('Buy');
     }
   }, [searchParams]);
+
+  const handleTransactionTypeChange = (value: string) => {
+    if (value) {
+        setTransactionType(value);
+        const newPath = value === 'Rent' ? '/properties?type=rent' : '/properties?type=buy';
+        router.push(newPath);
+    }
+  };
 
   return (
     <div className="sticky top-[80px] z-30 w-full bg-background/95 backdrop-blur-sm py-4 border-b">
@@ -60,16 +70,14 @@ export function StickySearch() {
               <ToggleGroup
                 type="single"
                 value={transactionType}
-                onValueChange={(value) => {
-                  if (value) setTransactionType(value);
-                }}
+                onValueChange={handleTransactionTypeChange}
                 className="bg-white rounded-full p-1 shadow-sm border gap-0"
               >
                 <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-6 py-2 text-sm border-none">
-                  Buy
+                    Buy
                 </ToggleGroupItem>
                 <ToggleGroupItem value="Rent" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-6 py-2 text-sm border-none">
-                  Rent
+                    Rent
                 </ToggleGroupItem>
               </ToggleGroup>
 

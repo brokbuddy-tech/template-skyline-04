@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${manrope.variable} font-body antialiased`}
+        className={`${inter.variable} ${manrope.variable} font-body antialiased overflow-x-hidden`}
       >
         <ThemeProvider
           attribute="class"

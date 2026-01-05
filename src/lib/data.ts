@@ -167,7 +167,10 @@ export const properties: Property[] = [
     amenities: ['Pool', 'Ocean View', 'Private Gym'],
     images: ['prop-1-1'],
     description: `**Project Overview:**
-"Lyvia by Palace is a 50-story architectural masterpiece situated in the prestigious Green Gate district. Designed by Emaar in collaboration with Palace Hospitality, it offers expansive floor-to-ceiling windows that frame sweeping views of the Creek and Dubai skyline. The Lifestyle: Residents enjoy a unique "resort-style" living experience with direct access to the Creek Beach and Marina. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
+"Lyvia by Palace is a 50-story architectural masterpiece situated in the prestigious Green Gate district. Designed by Emaar in collaboration with Palace Hospitality, it offers expansive floor-to-ceiling windows that frame sweeping views of the Creek and Dubai skyline."
+
+**The Lifestyle:**
+"Residents enjoy a unique 'resort-style' living experience with direct access to the Creek Beach and Marina. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
 
 **Key Specifications:**
 - **Property Type:** Luxury Apartments & Townhouses
@@ -212,7 +215,10 @@ export const properties: Property[] = [
     amenities: ['Private Pool', 'Beach Access', 'Smart Home'],
     images: [],
     description: `**Project Overview:**
-"A beachfront villa by Nakheel, offering a premium blend of contemporary design and urban sophistication rising above the Arabian Gulf. Designed in collaboration with world-renowned architects, it offers expansive floor-to-ceiling windows that frame sweeping views of the sea and Dubai skyline. The Lifestyle: Residents enjoy a unique 'resort-style' living experience with direct access to a private beach. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private terraces that blend indoor luxury with outdoor serenity."
+"A beachfront villa by Nakheel, offering a premium blend of contemporary design and urban sophistication rising above the Arabian Gulf. Designed in collaboration with world-renowned architects, it offers expansive floor-to-ceiling windows that frame sweeping views of the sea and Dubai skyline."
+
+**The Lifestyle:**
+"Residents enjoy a unique 'resort-style' living experience with direct access to a private beach. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private terraces that blend indoor luxury with outdoor serenity."
 
 **Key Specifications:**
 - **Property Type:** Luxury Villa
@@ -251,7 +257,10 @@ export const properties: Property[] = [
     amenities: ['360° City View', 'Concierge', 'Pool'],
     images: ['prop-4-1'],
     description: `**Project Overview:**
-"Downtown Views II is a 55-story architectural masterpiece situated in the prestigious Downtown Dubai. Designed by Emaar, it offers expansive floor-to-ceiling windows that frame sweeping views of the Burj Khalifa and Dubai skyline. The Lifestyle: Residents enjoy a unique 'urban-style' living experience with direct access to The Dubai Mall. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
+"Downtown Views II is a 55-story architectural masterpiece situated in the prestigious Downtown Dubai. Designed by Emaar, it offers expansive floor-to-ceiling windows that frame sweeping views of the Burj Khalifa and Dubai skyline."
+
+**The Lifestyle:**
+"Residents enjoy a unique 'urban-style' living experience with direct access to The Dubai Mall. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
 
 **Key Specifications:**
 - **Property Type:** Luxury Apartments

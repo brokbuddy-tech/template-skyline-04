@@ -75,10 +75,6 @@ export const navConfig: NavConfig = [
     ]
   },
   {
-    label: 'Luxe',
-    href: '/luxe'
-  },
-  {
     label: 'Commercial',
     href: '/commercial'
   },

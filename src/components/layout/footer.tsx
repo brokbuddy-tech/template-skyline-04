@@ -1,5 +1,7 @@
+
 import Link from 'next/link';
 import { AnimateOnScroll } from '../animate-on-scroll';
+import { ThemeSwitch } from '../shared/theme-switch';
 
 export function Footer() {
   const navLinks = [
@@ -64,8 +66,9 @@ export function Footer() {
         </div>
       </div>
       <AnimateOnScroll className="space-y-8">
-        <div className="text-center text-sm font-body">
+        <div className="flex justify-between items-center text-sm font-body">
           <p className="text-black dark:text-accent-foreground">&copy; 2025 Monks Estate Pro. All Rights Reserved.</p>
+          <ThemeSwitch />
         </div>
       </AnimateOnScroll>
     </footer>

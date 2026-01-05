@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Logo } from '../logo';
 import { MobileNav } from './mobile-nav';
 import { CurrencySwitcher } from '../shared/currency-switcher';
-import { ThemeSwitch } from '../shared/theme-switch';
 import { navConfig } from '@/lib/nav-config';
 import { MegaMenu } from './mega-menu';
 import { cn } from '@/lib/utils';
@@ -41,7 +40,6 @@ export function Header() {
       </nav>
 
       <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
-        <ThemeSwitch />
         <CurrencySwitcher />
         <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground" asChild>
           <Link href="/properties">Book Now</Link>

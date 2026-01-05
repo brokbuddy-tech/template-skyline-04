@@ -54,11 +54,11 @@ export function StickySearch() {
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-3">
             {/* Part A: Location Input */}
-            <div className="bg-white rounded-full pl-6 pr-2 py-2 shadow-sm flex items-center flex-1 w-full min-w-0">
+            <div className="bg-white dark:bg-black rounded-full pl-6 pr-2 py-2 shadow-sm flex items-center flex-1 w-full min-w-0">
               <input
                 type="text"
                 placeholder="Community or Building..."
-                className="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-400 min-w-0"
+                className="bg-transparent flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 min-w-0"
               />
               <button className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white hover:bg-accent/90 transition-all cursor-pointer flex-shrink-0">
                 <Plus size={20} />
@@ -71,7 +71,7 @@ export function StickySearch() {
                 type="single"
                 value={transactionType}
                 onValueChange={handleTransactionTypeChange}
-                className="bg-white rounded-full p-1 shadow-sm border gap-0"
+                className="bg-white dark:bg-black rounded-full p-1 shadow-sm border gap-0"
               >
                 <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-6 py-2 text-sm border-none">
                     Buy
@@ -85,7 +85,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
                     Type <ChevronDown size={16} />
                   </Button>
@@ -101,7 +101,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
                     Beds <ChevronDown size={16} />
                   </Button>
@@ -116,7 +116,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between"
                   >
                     Bath <ChevronDown size={16} />
                   </Button>
@@ -142,7 +142,7 @@ export function StickySearch() {
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="w-14 h-14 bg-white rounded-full text-accent shadow-md hover:bg-gray-100 transition"
+                  className="w-14 h-14 bg-white dark:bg-black rounded-full text-accent shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                   aria-label="Advanced Filters"
                 >
                   <SlidersHorizontal size={24} />

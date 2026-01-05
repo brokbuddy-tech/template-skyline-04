@@ -91,15 +91,15 @@ export function HeroSearch() {
           </div>
 
           {/* Desktop Search Bar */}
-          <div className="hidden md:flex bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-2xl items-center gap-3 w-full">
+          <div className="hidden md:flex bg-white/90 dark:bg-black/90 backdrop-blur-sm rounded-full p-2 shadow-2xl items-center gap-3 w-full">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="bg-gray-100/80 rounded-full px-6 py-4 flex items-center justify-between min-w-[220px] w-auto cursor-pointer hover:bg-gray-200 transition">
-                  <span className="text-gray-700 truncate">{selectedType}</span>
+                <div className="bg-gray-100/80 dark:bg-gray-800/80 rounded-full px-6 py-4 flex items-center justify-between min-w-[220px] w-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                  <span className="text-gray-700 dark:text-gray-200 truncate">{selectedType}</span>
                   <ChevronDown className="w-5 h-5 text-accent ml-2" />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[220px] bg-white">
+              <DropdownMenuContent className="w-[220px]">
                 {propertyTypes.map((type) => (
                   <DropdownMenuItem
                     key={type}
@@ -115,7 +115,7 @@ export function HeroSearch() {
             <input
               type="text"
               placeholder="Community or Building..."
-              className="bg-gray-100/80 rounded-full px-6 py-4 flex-1 outline-none text-gray-700 placeholder-gray-500 w-full"
+              className="bg-gray-100/80 dark:bg-gray-800/80 rounded-full px-6 py-4 flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 w-full"
             />
 
             <div className="flex items-center gap-3 w-auto justify-end">
@@ -130,7 +130,7 @@ export function HeroSearch() {
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="w-14 h-14 bg-gray-100 rounded-full text-accent hover:bg-gray-200 transition"
+                  className="w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-full text-accent hover:bg-gray-200 dark:hover:bg-gray-700 transition"
                   aria-label="Filters"
                 >
                   <SlidersHorizontal className="w-6 h-6" />
@@ -144,12 +144,12 @@ export function HeroSearch() {
             {/* Row 2: Property Type Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="w-full bg-white rounded-full h-[60px] flex items-center px-6 shadow-lg">
-                  <span className="text-black font-medium">{selectedType}</span>
-                  <ChevronDown className="w-5 h-5 text-blue-800 ml-auto" />
+                <div className="w-full bg-white dark:bg-black rounded-full h-[60px] flex items-center px-6 shadow-lg">
+                  <span className="text-black dark:text-white font-medium">{selectedType}</span>
+                  <ChevronDown className="w-5 h-5 text-accent ml-auto" />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[calc(100vw-2rem)] bg-white">
+              <DropdownMenuContent className="w-[calc(100vw-2rem)]">
                 {propertyTypes.map((type) => (
                   <DropdownMenuItem
                     key={type}
@@ -163,17 +163,17 @@ export function HeroSearch() {
             </DropdownMenu>
 
             {/* Row 3: Search Input & Actions */}
-            <div className="w-full bg-white rounded-full h-[60px] flex items-center pl-6 pr-2 shadow-lg">
+            <div className="w-full bg-white dark:bg-black rounded-full h-[60px] flex items-center pl-6 pr-2 shadow-lg">
               <input
                 type="text"
                 placeholder="Community or Building..."
-                className="flex-1 outline-none text-gray-600 placeholder-gray-400 bg-transparent"
+                className="flex-1 outline-none text-gray-600 dark:text-gray-300 placeholder-gray-400 bg-transparent"
               />
-              <Button size="icon" className="w-10 h-10 bg-[#1E3A8A] rounded-full flex items-center justify-center text-white ml-2 flex-shrink-0">
+              <Button size="icon" className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white ml-2 flex-shrink-0">
                   <Search className="w-5 h-5" />
               </Button>
               <DialogTrigger asChild>
-                <Button size="icon" variant="ghost" className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-[#1E3A8A] ml-2 flex-shrink-0">
+                <Button size="icon" variant="ghost" className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-accent ml-2 flex-shrink-0">
                     <SlidersHorizontal className="w-5 h-5" />
                 </Button>
               </DialogTrigger>

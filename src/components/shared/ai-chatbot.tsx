@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -115,7 +116,7 @@ export function AIChatbot() {
         className="cursor-pointer"
         aria-label="Toggle AI Chat"
       >
-        <div className="transform scale-[.39]">
+        <div className="transform scale-[.4095]">
             <MetaballLoader />
         </div>
       </div>

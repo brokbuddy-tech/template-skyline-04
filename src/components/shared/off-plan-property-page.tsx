@@ -27,6 +27,15 @@ import {
 import { OffPlanHeroGallery } from './off-plan-hero-gallery';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { PropertyDescriptionDisplay } from './property-description-display';
+import { Separator } from '../ui/separator';
 
 interface OffPlanPropertyPageProps {
   property: Property;
@@ -296,6 +305,29 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                     )}
                 </div>
               </div>
+            </div>
+
+            <Separator className="my-12"/>
+
+            {/* Description Section */}
+            <div className="mb-12">
+                <h2 className="text-xl font-bold text-[#1E1E2C] mb-4">About This Project</h2>
+                <div className="text-muted-foreground space-y-4 line-clamp-3">
+                  <PropertyDescriptionDisplay description={property.description} />
+                </div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="link" className="text-accent p-0 mt-2">Read Full Description</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-3xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl font-headline">{property.title}</DialogTitle>
+                    </DialogHeader>
+                    <div className="prose dark:prose-invert max-w-full">
+                      <PropertyDescriptionDisplay description={property.description} />
+                    </div>
+                  </DialogContent>
+                </Dialog>
             </div>
           </div>
 

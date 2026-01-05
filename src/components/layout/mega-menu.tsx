@@ -34,7 +34,6 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
     <div className="flex gap-2 relative" onMouseLeave={handleMouseLeave}>
       {navConfig.map((item, index) => {
         const isCommercialMenu = item.label === 'Commercial';
-        const isSimpleDropdown = false; // We are not using the simple dropdown for now.
 
         return (
           <div
@@ -79,33 +78,24 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
                     isCommercialMenu ? "min-w-[400px] p-8" : "p-6"
                   )}>
                     {isCommercialMenu ? (
-                      <div>
-                        <div className="grid grid-cols-2 gap-12">
-                          {item.dropdown?.slice(0, 2).map((column, colIndex) => (
-                            <div key={colIndex}>
-                              <h3 className="text-lg font-bold text-[#1E1E2C] dark:text-white mb-4">{column.header}</h3>
-                              <ul className="space-y-3">
-                                {column.links.map((link) => (
-                                  <li key={link.label}>
-                                    <Link
-                                      href={link.href}
-                                      className="block text-[15px] text-gray-600 dark:text-gray-400 font-medium hover:text-[#E11D48] transition-colors"
-                                    >
-                                      {link.label}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          ))}
-                        </div>
-                        {item.dropdown && item.dropdown.length > 2 && (
-                           <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
-                             <Link href={item.dropdown[2].links[0].href} className="text-[#E11D48] font-bold hover:underline">
-                               {item.dropdown[2].links[0].label}
-                             </Link>
-                           </div>
-                        )}
+                      <div className="grid grid-cols-2 gap-12">
+                        {item.dropdown?.map((column, colIndex) => (
+                          <div key={colIndex}>
+                            <h3 className="text-lg font-bold text-[#1E1E2C] dark:text-white mb-4">{column.header}</h3>
+                            <ul className="space-y-3">
+                              {column.links.map((link) => (
+                                <li key={link.label}>
+                                  <Link
+                                    href={link.href}
+                                    className="block text-[15px] text-gray-600 dark:text-gray-400 font-medium hover:text-rose-500 transition-colors"
+                                  >
+                                    {link.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
                       </div>
                     ) : (
                       <div 

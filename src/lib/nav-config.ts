@@ -28,10 +28,10 @@ export const navConfig: NavConfig = [
       {
         header: 'Residential',
         links: [
-          { label: 'Apartments', href: '/properties?type=buy' },
-          { label: 'Townhouses', href: '/properties?type=buy' },
-          { label: 'Penthouses', href: '/properties?type=buy' },
-          { label: 'Villas', href: '/properties?type=buy' },
+          { label: 'Apartments', href: '/properties?type=buy&propertyType=Apartment' },
+          { label: 'Townhouses', href: '/properties?type=buy&propertyType=Townhouse' },
+          { label: 'Penthouses', href: '/properties?type=buy&propertyType=Penthouse' },
+          { label: 'Villas', href: '/properties?type=buy&propertyType=Villa' },
           { label: 'View All', href: '/properties?type=buy' },
         ],
       },
@@ -78,6 +78,7 @@ export const navConfig: NavConfig = [
           { label: 'Warehouses for Sale', href: '/properties?type=buy&propertyType=Warehouse' },
           { label: 'Full Buildings for Sale', href: '/properties?type=buy&propertyType=Building' },
           { label: 'Plots for Sale', href: '/properties?type=buy&propertyType=Land' },
+          { label: 'View All Commercial', href: '/properties?category=commercial' },
         ]
       },
       {
@@ -89,12 +90,6 @@ export const navConfig: NavConfig = [
           { label: 'Staff Accommodation', href: '/properties?type=rent&propertyType=StaffAccommodation' },
         ]
       },
-      {
-        header: ' ', // Empty header for the full-width link
-        links: [
-          { label: 'View All Commercial >', href: '/properties?category=commercial' },
-        ]
-      }
     ]
   },
   {

@@ -86,26 +86,21 @@ export const navConfig: NavConfig = [
     label: 'Services',
     dropdown: [
       {
-        header: 'Services',
+        header: 'Client Services',
         links: [
             { label: 'Asset Management', href: '/services/asset-management' },
             { label: 'Holiday Homes', href: '/services/holiday-homes' },
-            { label: 'Commercial', href: '/services/commercial' },
-        ]
-      },
-      {
-        header: '',
-        links: [
-            { label: 'Investment Advisory', href: '/services/investment-advisory' },
-            { label: 'Luxury', href: '/services/luxury' },
+            { label: 'List Your Property', href: '/services/list-your-property' },
             { label: 'Property Valuation', href: '/services/property-valuation' },
         ]
       },
       {
-        header: '',
+        header: 'Advisory',
         links: [
-            { label: 'List Your Property', href: '/services/list-your-property' },
+            { label: 'Investment Advisory', href: '/services/investment-advisory' },
             { label: 'Mortgage Advisory', href: '/services/mortgage-advisory' },
+            { label: 'Luxury Portfolio', href: '/services/luxury' },
+            { label: 'Commercial Sales', href: '/services/commercial' },
         ]
       }
     ]

@@ -30,17 +30,17 @@ export function Header() {
         isScrolled && 'shadow-sm backdrop-blur-md'
       )}
     >
-      <div className="flex items-center">
+      <div className="flex items-center flex-shrink-0">
         <Link href="/">
           <Logo />
         </Link>
       </div>
 
-      <nav className="hidden lg:flex items-center justify-center flex-1">
+      <nav className="hidden lg:flex items-center justify-center flex-1 min-w-0">
         <MegaMenu navConfig={navConfig} />
       </nav>
 
-      <div className="hidden lg:flex items-center gap-4">
+      <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
         <ThemeSwitch />
         <CurrencySwitcher />
         <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground" asChild>

@@ -48,6 +48,17 @@ interface OffPlanPropertyPageProps {
   property: Property;
 }
 
+const offices = [
+    { name: 'Monks Estate - Al Furjan', address: 'FRJP R-27B Pavilion AL Furjan South Pavilion, Dubai' },
+    { name: 'Monks Estate - Bay Square 1', address: 'Bldg. 01 Office 801, 802, 806 Bay Square, Business Bay, Dubai' },
+    { name: 'Monks Estate - Building 13', address: 'Bldg. 13, Office 303 & 304 Bay Square Business Bay, Dubai' },
+    { name: 'Monks Estate - City Walk', address: 'City Walk Boulevard Shop 8 -02, Dubai' },
+    { name: 'Monks Estate - Dubai Harbour Beachfront', address: 'Unit 12, Groundfloor Dubai Harbour Masters Bldg., Dubai' },
+    { name: 'Monks Estate - Dubai Hills', address: 'Park Heights Square Building 2- Level 6 Unit 603-604' },
+    { name: 'Monks Estate - Dubai Marina', address: '1401 Marina Plaza, Dubai Marina, Dubai' },
+    { name: 'Monks Estate - Dubai South Branch', address: 'The Pulse Residence Icon - R02 Shop' }
+];
+
 export function OffPlanPropertyPage({ property }: { property: Property }) {
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const masterplanImage = PlaceHolderImages.find((img) => img.id === 'masterplan');
@@ -414,6 +425,23 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
               </div>
             </div>
 
+            <Separator className="my-12" />
+            
+            {/* Our Offices Section */}
+            <section className="py-16 px-6 bg-gray-50 rounded-xl">
+                <div className="max-w-7xl mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-headline font-bold text-black mb-12">Our offices</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-8">
+                        {offices.map((office) => (
+                            <div key={office.name}>
+                                <h3 className="text-base font-semibold text-gray-900 mb-2">{office.name}</h3>
+                                <p className="text-sm text-gray-500 leading-relaxed max-w-[250px]">{office.address}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
           </div>
 
           {/* Right Column */}
@@ -455,3 +483,4 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
     
 
     
+

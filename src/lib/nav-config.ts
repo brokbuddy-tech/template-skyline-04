@@ -87,10 +87,6 @@ export const navConfig: NavConfig = [
     href: '/sell',
   },
   {
-    label: 'Agents',
-    href: '/agents',
-  },
-  {
     label: 'Services',
     dropdown: [
       {

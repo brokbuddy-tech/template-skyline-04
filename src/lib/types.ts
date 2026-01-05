@@ -17,6 +17,7 @@ export type Property = {
   reraPermit?: string;
   featured?: boolean;
   status?: 'Off-plan' | 'Ready';
+  transactionType: 'Sale' | 'Rent';
   photoCount?: number;
   tag?: string;
   developerLogo?: 'Emaar' | 'Nakheel';

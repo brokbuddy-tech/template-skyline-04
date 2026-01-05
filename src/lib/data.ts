@@ -38,6 +38,7 @@ export const properties: Property[] = [
     reraPermit: '987654321',
     featured: true,
     status: 'Ready',
+    transactionType: 'Sale',
     photoCount: 12,
   },
   {
@@ -54,6 +55,7 @@ export const properties: Property[] = [
     description: 'Located in the heart of SoHo, this exquisite loft is a testament to timeless design. Exposed brick walls and original hardwood floors meet modern luxury in a spacious, open-concept layout. The chef\'s kitchen is equipped with top-of-the-line appliances, perfect for culinary explorations. A private rooftop terrace offers a rare, tranquil escape amidst the city buzz. With a 24/7 concierge service, every need is catered to in this urban sanctuary.',
     referenceId: 'NY-UO-21',
     status: 'Ready',
+    transactionType: 'Sale',
     photoCount: 8,
   },
   {
@@ -71,6 +73,7 @@ export const properties: Property[] = [
     referenceId: 'AS-EM-85',
     featured: true,
     status: 'Ready',
+    transactionType: 'Sale',
     photoCount: 25,
   },
   {
@@ -89,6 +92,7 @@ export const properties: Property[] = [
     trakheesi: '987654321',
     reraPermit: '123456789',
     status: 'Ready',
+    transactionType: 'Sale',
     photoCount: 18,
   },
   {
@@ -105,6 +109,7 @@ export const properties: Property[] = [
     description: 'Embrace the laid-back luxury of Byron Bay in this stunning coastal retreat. With private access to a secluded beach, this home is a sanctuary of peace and natural beauty. The open-plan living area flows seamlessly to an expansive yoga deck and outdoor kitchen, perfect for alfresco living. Designed with natural materials and a neutral palette, the home creates a tranquil atmosphere that calms the soul. It\'s the perfect base to explore the vibrant culture and pristine nature of the region.',
     referenceId: 'AU-CR-38',
     status: 'Ready',
+    transactionType: 'Sale',
     photoCount: 15,
   },
   {
@@ -122,6 +127,7 @@ export const properties: Property[] = [
     referenceId: 'KY-MV-31',
     featured: true,
     status: 'Ready',
+    transactionType: 'Sale',
     photoCount: 22,
   },
     {
@@ -138,6 +144,7 @@ export const properties: Property[] = [
     description: 'This charming Parisian apartment is located in the heart of Le Marais. It features a beautiful rooftop terrace with stunning views of the city. The interior has been recently renovated with a modern kitchen and bathroom, but still retains its classic Parisian charm with exposed brick walls and hardwood floors.',
     referenceId: 'PA-PA-12',
     status: 'Ready',
+    transactionType: 'Rent',
     photoCount: 9,
   },
   {
@@ -154,6 +161,7 @@ export const properties: Property[] = [
     description: 'This magnificent estate is located in the rolling hills of Tuscany. It features a large swimming pool, a private vineyard, and breathtaking views of the surrounding countryside. The interior is spacious and luxurious, with 7 bedrooms, 8 bathrooms, a game room, and a wine cellar. This is the perfect place to relax and enjoy the Italian lifestyle.',
     referenceId: 'IT-CE-100',
     status: 'Ready',
+    transactionType: 'Sale',
     photoCount: 30,
   },
   {
@@ -200,6 +208,7 @@ With a flexible 80/20 payment plan, an expected handover in Q3 2029, and the bac
 - **Neighborhood:** Green Gate District, Dubai Creek Harbour.
 - **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
     status: 'Off-plan',
+    transactionType: 'Sale',
     photoCount: 5,
     tag: 'Residential',
     developerLogo: 'Emaar',
@@ -248,6 +257,7 @@ Don't miss this rare opportunity to own a piece of paradise. Register your inter
 - **Neighborhood:** Green Gate District, Dubai Creek Harbour.
 - **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
     status: 'Off-plan',
+    transactionType: 'Sale',
     photoCount: 10,
     tag: 'Residential',
     developerLogo: 'Nakheel',
@@ -297,6 +307,7 @@ Secure your place in the center of now. Contact us to learn more about this exce
 - **Neighborhood:** Green Gate District, Dubai Creek Harbour.
 - **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
     status: 'Off-plan',
+    transactionType: 'Sale',
     photoCount: 8,
     tag: 'Residential',
     developerLogo: 'Emaar',

@@ -19,6 +19,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
   const image = PlaceHolderImages.find((img) => img.id === property.images[0]);
   const { formatPrice } = useContext(CurrencyContext);
 
+  const isForSale = property.transactionType === 'Sale';
 
   return (
     <div className="group" data-hoverable="true">
@@ -34,8 +35,18 @@ export function PropertyCard({ property }: PropertyCardProps) {
               data-ai-hint={image.imageHint}
             />
           )}
+
+          <div
+            className={cn(
+              'absolute top-4 left-4 z-10 rounded-[4px] px-3 py-1 text-white text-[10px] font-bold uppercase tracking-wider',
+              isForSale ? 'bg-rose-600' : 'bg-emerald-500'
+            )}
+          >
+            {isForSale ? 'For Sale' : 'For Rent'}
+          </div>
+
           {property.featured && (
-            <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground rounded-full flex items-center gap-1 border-none">
+            <Badge className="absolute top-4 right-4 bg-accent text-accent-foreground rounded-full flex items-center gap-1 border-none">
                 <Star className="w-3 h-3" />
                 <span>Featured</span>
             </Badge>

@@ -28,11 +28,11 @@ export const navConfig: NavConfig = [
       {
         header: 'Residential',
         links: [
-          { label: 'Apartments', href: '/buy/residential/apartments' },
-          { label: 'Townhouses', href: '/buy/residential/townhouses' },
-          { label: 'Penthouses', href: '/buy/residential/penthouses' },
-          { label: 'Villas', href: '/buy/residential/villas' },
-          { label: 'View All', href: '/buy/residential' },
+          { label: 'Apartments', href: '/properties?type=buy' },
+          { label: 'Townhouses', href: '/properties?type=buy' },
+          { label: 'Penthouses', href: '/properties?type=buy' },
+          { label: 'Villas', href: '/properties?type=buy' },
+          { label: 'View All', href: '/properties?type=buy' },
         ],
       },
       {
@@ -48,8 +48,8 @@ export const navConfig: NavConfig = [
       {
         header: 'Commercial',
         links: [
-          { label: 'Offices', href: '/buy/commercial/offices' },
-          { label: 'View All', href: '/buy/commercial' },
+          { label: 'Offices', href: '/properties?type=buy' },
+          { label: 'View All', href: '/properties?type=buy' },
         ],
       },
     ],
@@ -60,23 +60,23 @@ export const navConfig: NavConfig = [
         {
             header: 'Rent',
             links: [
-                { label: 'Apartments', href: '/rent/apartments' },
-                { label: 'Offices', href: '/rent/offices' },
-                { label: 'Townhouses', href: '/rent/townhouses' },
+                { label: 'Apartments', href: '/properties?type=rent' },
+                { label: 'Offices', href: '/properties?type=rent' },
+                { label: 'Townhouses', href: '/properties?type=rent' },
             ],
         },
         {
             header: '',
             links: [
-                { label: 'Villas', href: '/rent/villas' },
-                { label: 'Commercial', href: '/rent/commercial' },
+                { label: 'Villas', href: '/properties?type=rent' },
+                { label: 'Commercial', href: '/properties?type=rent' },
             ]
         }
     ]
   },
   {
     label: 'Commercial',
-    href: '/commercial'
+    href: '/properties?type=buy'
   },
   {
     label: 'Sell',
@@ -99,8 +99,6 @@ export const navConfig: NavConfig = [
         links: [
             { label: 'Investment Advisory', href: '/services/investment-advisory' },
             { label: 'Mortgage Advisory', href: '/services/mortgage-advisory' },
-            { label: 'Luxury Portfolio', href: '/services/luxury' },
-            { label: 'Commercial Sales', href: '/services/commercial' },
         ]
       }
     ]

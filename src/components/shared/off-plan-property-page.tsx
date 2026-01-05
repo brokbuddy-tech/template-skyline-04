@@ -12,6 +12,10 @@ import {
   HelpCircle,
   FileDown,
   MessageSquare,
+  ShieldCheck,
+  HandHelping,
+  Banknote,
+  LandPlot,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -21,12 +25,23 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { OffPlanHeroGallery } from './off-plan-hero-gallery';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 interface OffPlanPropertyPageProps {
   property: Property;
 }
 
 export function OffPlanPropertyPage({ property }: { property: Property }) {
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentUrl = window.location.href;
+      setQrCodeUrl(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`);
+    }
+  }, []);
+  
   const timelineSteps = [
     {
       label: 'Project Announcement',
@@ -257,6 +272,28 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Regulatory Information */}
+            <div className="mb-12">
+              <div className="p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-start gap-6">
+                <div>
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-accent"/> Regulatory Information</h3>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5"/> <strong>Reference ID:</strong> {property.referenceId || 'N/A'}</li>
+                    <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5"/> <strong>Trakheesi:</strong> {property.trakheesi || 'N/A'}</li>
+                    <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5"/> <strong>RERA Permit:</strong> {property.reraPermit || 'N/A'}</li>
+                  </ul>
+                </div>
+                <div className="text-center w-full sm:w-auto">
+                    <p className="text-sm font-bold mb-2">DLD Permit</p>
+                    {qrCodeUrl ? (
+                        <Image src={qrCodeUrl} alt="DLD Permit QR Code" width={100} height={100} />
+                    ) : (
+                        <div className="w-[100px] h-[100px] bg-muted animate-pulse"></div>
+                    )}
                 </div>
               </div>
             </div>

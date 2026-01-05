@@ -38,6 +38,7 @@ import { PropertyDescriptionDisplay } from './property-description-display';
 import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
 import { amenityIcons } from '@/lib/amenity-icons';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 interface OffPlanPropertyPageProps {
   property: Property;
@@ -45,6 +46,7 @@ interface OffPlanPropertyPageProps {
 
 export function OffPlanPropertyPage({ property }: { property: Property }) {
   const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const masterplanImage = PlaceHolderImages.find((img) => img.id === 'masterplan');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -348,6 +350,25 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                       )
                   })}
               </div>
+            </div>
+
+            <Separator className="my-12"/>
+
+            {/* Masterplan Section */}
+            <div className="mb-12">
+              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Masterplan</h2>
+              {masterplanImage && (
+                <div className="rounded-xl overflow-hidden border border-gray-100">
+                  <Image
+                    src={masterplanImage.imageUrl}
+                    alt={masterplanImage.description}
+                    width={1600}
+                    height={900}
+                    className="w-full h-auto object-cover"
+                    data-ai-hint={masterplanImage.imageHint}
+                  />
+                </div>
+              )}
             </div>
 
           </div>

@@ -107,6 +107,12 @@
       "description": "Third person for hero avatars",
       "imageUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "imageHint": "woman portrait"
+    },
+    {
+      "id": "masterplan",
+      "description": "An architectural masterplan of a new development.",
+      "imageUrl": "https://images.unsplash.com/photo-1581092446347-a8bce17ae804?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "imageHint": "architectural plan"
     }
   ]
 }

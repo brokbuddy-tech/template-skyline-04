@@ -16,13 +16,13 @@
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 18 100% 50%; /* #FF4D00 */
+    --accent: 211 100% 50%; /* #0085ff */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%; /* #E5E5E5 which is close to #EAEAEA */
     --input: 0 0% 89.8%;
-    --ring: 18 100% 50%;
+    --ring: 211 100% 50%;
     --radius: 0.5rem;
   }
  
@@ -39,13 +39,13 @@
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 18 100% 50%;
+    --accent: 211 100% 50%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 18 100% 50%;
+    --ring: 211 100% 50%;
   }
 }
  
@@ -515,11 +515,11 @@
 
 /* Metaball Loader */
 .metaball-loader {
-    --color-one: #FF4D00;
-    --color-two: #CC3F00;
-    --color-three: #FF4D0080;
-    --color-four: #CC3F0080;
-    --color-five: #FF4D0040;
+    --color-one: hsl(var(--accent));
+    --color-two: hsl(var(--accent));
+    --color-three: hsla(var(--accent), 0.5);
+    --color-four: hsla(var(--accent), 0.5);
+    --color-five: hsla(var(--accent), 0.25);
     --time-animation: 2s;
     --size: 0.6;
     position: relative;
@@ -656,3 +656,5 @@
       filter: hue-rotate(0deg);
     }
   }
+
+    

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -25,7 +26,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 w-full bg-white/95 dark:bg-black/95 border-b border-gray-100 dark:border-gray-800 h-[80px] flex items-center justify-between px-8 z-50 transition-all duration-300',
+        'sticky top-0 w-full bg-white/95 dark:bg-black/95 border-b border-gray-100 dark:border-gray-800 h-[80px] flex items-center justify-between px-4 sm:px-8 z-50 transition-all duration-300',
         isScrolled && 'shadow-sm backdrop-blur-md'
       )}
     >

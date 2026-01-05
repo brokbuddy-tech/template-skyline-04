@@ -119,10 +119,6 @@ export const navConfig: NavConfig = [
     ]
   },
   {
-    label: 'Trends',
-    href: '/trends',
-  },
-  {
     label: 'Explore',
     dropdown: [
       {

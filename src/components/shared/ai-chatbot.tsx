@@ -116,7 +116,7 @@ export function AIChatbot() {
         className="cursor-pointer"
         aria-label="Toggle AI Chat"
       >
-        <div className="transform scale-[.4095]">
+        <div className="transform scale-[.819]">
             <MetaballLoader />
         </div>
       </div>

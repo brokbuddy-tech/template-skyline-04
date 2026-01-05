@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useContext } from 'react';
@@ -19,6 +20,7 @@ import { amenityIcons } from '@/lib/amenity-icons';
 import { ReadMore } from '@/components/shared/read-more';
 import { AgentSidebar } from '@/components/shared/agent-sidebar';
 import { LocationMap } from '@/components/shared/location-map';
+import { OffPlanPropertyPage } from '@/components/shared/off-plan-property-page';
 
 const propertyTypeIcons: { [key: string]: React.ElementType } = {
   'House': Building,
@@ -43,6 +45,10 @@ export default function PropertyDetailPage() {
 
   if (!property) {
     notFound();
+  }
+  
+  if (property.status === 'Off-plan') {
+    return <OffPlanPropertyPage property={property} />;
   }
 
   const propertyImages = property.images.map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean);

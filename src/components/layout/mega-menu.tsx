@@ -75,13 +75,13 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
                   onMouseLeave={handleMouseLeave}
                 >
                   {isSimpleDropdown ? (
-                     <div className="w-[240px] bg-white dark:bg-black rounded-b-lg shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden py-0">
-                        <ul className="flex flex-col">
+                     <div className="w-[240px] bg-white dark:bg-black rounded-b-lg shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden p-1">
+                        <ul className="flex flex-col gap-1">
                             {item.dropdown[0].links.map((link) => (
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        className="block w-full px-6 py-3 text-[14px] font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-black hover:bg-rose-600 hover:text-white transition-colors duration-150"
+                                        className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 rounded-md hover:bg-rose-50 hover:text-rose-500 dark:hover:bg-gray-800 transition-colors duration-150"
                                     >
                                         {link.label}
                                     </Link>

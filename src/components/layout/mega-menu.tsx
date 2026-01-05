@@ -32,71 +32,78 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
 
   return (
     <div className="flex gap-2 relative" onMouseLeave={handleMouseLeave}>
-      {navConfig.map((item, index) => (
-        <div
-          key={item.label}
-          className="relative"
-          onMouseEnter={() => handleMouseEnter(index)}
-        >
-          <Link
-            href={item.href || '#'}
-            className={cn(
-              "flex items-center gap-1 px-3 py-2 text-sm text-gray-900 dark:text-white rounded-md transition-colors",
-              hoveredIndex === index ? "text-rose-500 bg-rose-50 dark:bg-gray-800" : "hover:text-rose-500"
-            )}
-          >
-            <span>{item.label}</span>
-            {item.dropdown && <ChevronDown className="w-4 h-4 transition-transform" />}
-          </Link>
-          
-          {/* This is the invisible "bridge" to prevent premature closing */}
-          <div className="absolute bottom-0 left-0 w-full h-5" />
+      {navConfig.map((item, index) => {
+        const isLastTwo = index >= navConfig.length - 2;
 
-          <AnimatePresence>
-            {hoveredIndex === index && item.dropdown && (
-              <motion.div
-                initial={{ opacity: 0, y: 15, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                transition={{
-                  type: 'spring',
-                  mass: 0.5,
-                  stiffness: 150,
-                  damping: 25,
-                }}
-                className="absolute top-full left-1/2 -translate-x-1/2 mt-2"
-                onMouseEnter={() => handleMouseEnter(index)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <div className="bg-white dark:bg-black rounded-lg shadow-xl p-6 border border-gray-100 dark:border-gray-800">
-                  <div 
-                    className="grid gap-x-12 gap-y-6 auto-cols-max"
-                    style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, auto)` }}
-                  >
-                    {item.dropdown.map((column, colIndex) => (
-                      <div key={colIndex}>
-                        <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-base">{column.header}</h3>
-                        <ul className="space-y-2">
-                          {column.links.map((link) => (
-                            <li key={link.label}>
-                              <Link
-                                href={link.href}
-                                className="block text-sm text-gray-700 dark:text-gray-300 hover:text-rose-500 whitespace-nowrap"
-                              >
-                                {link.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
+        return (
+          <div
+            key={item.label}
+            className="relative"
+            onMouseEnter={() => handleMouseEnter(index)}
+          >
+            <Link
+              href={item.href || '#'}
+              className={cn(
+                "flex items-center gap-1 px-3 py-2 text-sm text-gray-900 dark:text-white rounded-md transition-colors",
+                hoveredIndex === index ? "text-rose-500 bg-rose-50 dark:bg-gray-800" : "hover:text-rose-500"
+              )}
+            >
+              <span>{item.label}</span>
+              {item.dropdown && <ChevronDown className="w-4 h-4 transition-transform" />}
+            </Link>
+            
+            {/* This is the invisible "bridge" to prevent premature closing */}
+            <div className="absolute bottom-0 left-0 w-full h-5" />
+
+            <AnimatePresence>
+              {hoveredIndex === index && item.dropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                  transition={{
+                    type: 'spring',
+                    mass: 0.5,
+                    stiffness: 150,
+                    damping: 25,
+                  }}
+                  className={cn(
+                    "absolute top-full mt-2",
+                    isLastTwo ? "right-0" : "left-1/2 -translate-x-1/2"
+                  )}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div className="bg-white dark:bg-black rounded-lg shadow-xl p-6 border border-gray-100 dark:border-gray-800">
+                    <div 
+                      className="grid gap-x-12 gap-y-6 auto-cols-max"
+                      style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, auto)` }}
+                    >
+                      {item.dropdown.map((column, colIndex) => (
+                        <div key={colIndex}>
+                          <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-base">{column.header}</h3>
+                          <ul className="space-y-2">
+                            {column.links.map((link) => (
+                              <li key={link.label}>
+                                <Link
+                                  href={link.href}
+                                  className="block text-sm text-gray-700 dark:text-gray-300 hover:text-rose-500 whitespace-nowrap"
+                                >
+                                  {link.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )
+      })}
     </div>
   );
 }

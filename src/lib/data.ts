@@ -1,3 +1,4 @@
+
 import type { Property, Service, Testimonial } from './types';
 import { Award, Handshake, KeyRound, Search } from 'lucide-react';
 
@@ -324,3 +325,5 @@ export const testimonials: Testimonial[] = [
     rating: 5,
   }
 ];
+
+    

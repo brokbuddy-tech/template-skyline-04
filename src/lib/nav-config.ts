@@ -20,7 +20,7 @@ export type NavConfig = NavItem[];
 export const navConfig: NavConfig = [
   {
     label: 'New Projects',
-    href: '/new-projects',
+    href: '/off-plan',
   },
   {
     label: 'Buy',

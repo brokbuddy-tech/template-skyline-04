@@ -30,7 +30,7 @@ export function HeroSection() {
         >
           <div className='text-center'>
             <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
-              Transforming Spaces, <br /> Realizing <span className="text-rose-400">Dreams.</span>
+              Transforming Spaces, <br /> Realizing <span className="text-[#e30f00]">Dreams.</span>
             </h1>
           </div>
           <HeroSearch />

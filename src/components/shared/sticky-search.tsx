@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
 const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas'];
 const bedOptions = ['Studio', '1', '2', '3', '4+'];
@@ -56,20 +57,21 @@ export function StickySearch() {
 
             {/* Part B: Quick Filters */}
             <div className="grid grid-cols-2 md:flex md:flex-row gap-3 w-full md:w-auto">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline-light"
-                    className="bg-white rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 font-medium cursor-pointer transition shadow-sm w-full justify-between"
-                  >
-                    {transactionType} <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onSelect={() => setTransactionType('Buy')}>Buy</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => setTransactionType('Rent')}>Rent</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <ToggleGroup
+                type="single"
+                value={transactionType}
+                onValueChange={(value) => {
+                  if (value) setTransactionType(value);
+                }}
+                className="bg-white rounded-full p-1 shadow-sm border gap-0"
+              >
+                <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-6 py-2 text-sm border-none">
+                  Buy
+                </ToggleGroupItem>
+                <ToggleGroupItem value="Rent" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-6 py-2 text-sm border-none">
+                  Rent
+                </ToggleGroupItem>
+              </ToggleGroup>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

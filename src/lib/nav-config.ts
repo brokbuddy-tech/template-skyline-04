@@ -85,6 +85,7 @@ export const navConfig: NavConfig = [
           { label: 'Shops for sale', href: '/properties?type=buy&propertyType=Retail' },
           { label: 'Shops for rent', href: '/properties?type=rent&propertyType=Retail' },
           { label: 'Plots for sale', href: '/properties?type=buy&propertyType=Land' },
+          { label: 'View All', href: '/properties?type=buy' },
         ]
       }
     ]

@@ -18,15 +18,23 @@ export default function PropertiesPage() {
   
   const headerImage = PlaceHolderImages.find((img) => img.id === 'cta-background');
 
+  const pageType = searchParams.get('type');
+  const title = pageType === 'rent' ? 'Properties for Rent' : pageType === 'buy' ? 'Properties for Sale' : 'Our Properties';
+
+  const filteredProperties = properties.filter(property => {
+    if (!pageType) return true;
+    if (pageType === 'rent') return property.transactionType === 'Rent';
+    if (pageType === 'buy') return property.transactionType === 'Sale';
+    return true;
+  });
+
   const handleLoadMore = () => {
     setVisibleProperties((prev) => prev + PROPERTIES_PER_PAGE);
   };
 
-  const propertiesToShow = properties.slice(0, visibleProperties);
-  const canLoadMore = visibleProperties < properties.length;
+  const propertiesToShow = filteredProperties.slice(0, visibleProperties);
+  const canLoadMore = visibleProperties < filteredProperties.length;
 
-  const pageType = searchParams.get('type');
-  const title = pageType === 'rent' ? 'Properties for Rent' : pageType === 'buy' ? 'Properties for Sale' : 'Our Properties';
 
   return (
     <>

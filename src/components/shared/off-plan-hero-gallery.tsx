@@ -43,13 +43,13 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
             Artist Impression
           </div>
           <div className="absolute bottom-4 right-4 flex gap-3">
-            <Button variant="outline" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white">
+            <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground">
               <Camera size={16} /> <span className="ml-2">Virtual Tour</span>
             </Button>
-            <Button variant="outline" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white">
+            <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground">
               <Play size={16} /> <span className="ml-2">Watch Video</span>
             </Button>
-            <Button variant="outline" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white">
+            <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground">
               <MapPin size={16} /> <span className="ml-2">Show on Map</span>
             </Button>
           </div>

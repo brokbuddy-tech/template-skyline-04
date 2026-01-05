@@ -45,13 +45,6 @@ export const navConfig: NavConfig = [
           { label: 'View All', href: '/off-plan' },
         ],
       },
-      {
-        header: 'Commercial',
-        links: [
-          { label: 'Offices', href: '/properties?type=buy' },
-          { label: 'View All', href: '/properties?type=buy' },
-        ],
-      },
     ],
   },
   {
@@ -78,14 +71,28 @@ export const navConfig: NavConfig = [
     label: 'Commercial',
     dropdown: [
       {
-        header: 'Commercial',
+        header: 'Sales',
         links: [
-          { label: 'Offices for sale', href: '/properties?type=buy&propertyType=Office' },
-          { label: 'Offices for rent', href: '/properties?type=rent&propertyType=Office' },
-          { label: 'Shops for sale', href: '/properties?type=buy&propertyType=Retail' },
-          { label: 'Shops for rent', href: '/properties?type=rent&propertyType=Retail' },
-          { label: 'Plots for sale', href: '/properties?type=buy&propertyType=Land' },
-          { label: 'View All', href: '/properties?type=buy' },
+          { label: 'Offices for Sale', href: '/properties?type=buy&propertyType=Office' },
+          { label: 'Shops for Sale', href: '/properties?type=buy&propertyType=Retail' },
+          { label: 'Warehouses for Sale', href: '/properties?type=buy&propertyType=Warehouse' },
+          { label: 'Full Buildings for Sale', href: '/properties?type=buy&propertyType=Building' },
+          { label: 'Plots for Sale', href: '/properties?type=buy&propertyType=Land' },
+        ]
+      },
+      {
+        header: 'Leasing',
+        links: [
+          { label: 'Offices for Rent', href: '/properties?type=rent&propertyType=Office' },
+          { label: 'Shops for Rent', href: '/properties?type=rent&propertyType=Retail' },
+          { label: 'Warehouses for Rent', href: '/properties?type=rent&propertyType=Warehouse' },
+          { label: 'Staff Accommodation', href: '/properties?type=rent&propertyType=StaffAccommodation' },
+        ]
+      },
+      {
+        header: ' ', // Empty header for the full-width link
+        links: [
+          { label: 'View All Commercial >', href: '/properties?category=commercial' },
         ]
       }
     ]

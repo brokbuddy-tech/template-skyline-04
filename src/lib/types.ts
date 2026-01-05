@@ -8,7 +8,7 @@ export type Property = {
   bedrooms: number;
   bathrooms: number;
   sqft: number;
-  type: 'House' | 'Apartment' | 'Penthouse' | 'Townhouse' | 'Villa' | 'Office Space' | 'Hotel Apartment' | 'Duplex' | 'Retail';
+  type: 'House' | 'Apartment' | 'Penthouse' | 'Townhouse' | 'Villa' | 'Office Space' | 'Hotel Apartment' | 'Duplex' | 'Retail' | 'Warehouse' | 'Building' | 'Land' | 'StaffAccommodation';
   amenities: string[];
   images: string[];
   description: string;
@@ -20,6 +20,7 @@ export type Property = {
   photoCount?: number;
   tag?: string;
   developerLogo?: 'Emaar' | 'Nakheel';
+  category?: string;
 };
 
 export type Service = {

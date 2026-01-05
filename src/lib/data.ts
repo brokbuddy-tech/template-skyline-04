@@ -134,7 +134,7 @@ export const properties: Property[] = [
     id: '7',
     title: 'The Parisian Apartment',
     location: 'Paris, France',
-    price: 1800000,
+    price: 4500,
     bedrooms: 2,
     bathrooms: 1,
     sqft: 1200,

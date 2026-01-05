@@ -70,8 +70,8 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
               >
                 <div className="bg-white dark:bg-black rounded-lg shadow-xl p-6 border border-gray-100 dark:border-gray-800">
                   <div 
-                    className="grid gap-x-12 gap-y-6"
-                    style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, minmax(0, 1fr))` }}
+                    className="grid gap-x-12 gap-y-6 auto-cols-max"
+                    style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, auto)` }}
                   >
                     {item.dropdown.map((column, colIndex) => (
                       <div key={colIndex}>

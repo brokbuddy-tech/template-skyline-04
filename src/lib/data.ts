@@ -167,38 +167,29 @@ export const properties: Property[] = [
     type: 'Apartment',
     amenities: ['Pool', 'Ocean View', 'Private Gym'],
     images: ['prop-1-1'],
-    description: `**Project Overview:**
-"Lyvia by Palace is a 50-story architectural masterpiece situated in the prestigious Green Gate district. Designed by Emaar in collaboration with Palace Hospitality, it offers expansive floor-to-ceiling windows that frame sweeping views of the Creek and Dubai skyline."
+    description: `### Lyvia by Palace: Where Urban Sophistication Meets Waterfront Serenity
 
-**The Lifestyle:**
-"Residents enjoy a unique 'resort-style' living experience with direct access to the Creek Beach and Marina. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
+Rising elegantly above the shimmering waters of Dubai Creek Harbour, Lyvia by Palace represents the pinnacle of branded waterfront living. Developed by the legendary Emaar Properties in an exclusive collaboration with Palace Hospitality, this 50-story architectural masterpiece offers a curated lifestyle that blends resort-style indulgence with seamless urban connectivity. Arrive home to a statement of prestige, where every detail is crafted for an extraordinary life.
 
-**Key Specifications:**
-- **Property Type:** Luxury Apartments & Townhouses
-- **Unit Configs:** 1, 2, 3 Bedroom Apts & 3 Bed Townhouses
-- **Payment Plan:** 80/20 (10% Down, 70% Construction, 20% Handover)
-- **Ownership:** Freehold
-- **Total Units:** 478 Units (50-Story Tower)
+### The Residence: A Sanctuary of Light and Space
 
-**Unit Configuration Table:**
-- **1 Bedroom:** 1 Bath, 760 – 1,417 sq.ft, Starting at AED 1.98M
-- **2 Bedroom:** 2 Bath, 1,144 – 1,916 sq.ft, Starting at AED 3.1M
-- **3 Bedroom:** 4 Bath, 1,821 – 1,835 sq.ft, Starting at AED 4.5M
-- **Townhouse:** 3 Bed + Maid, ~3,238 sq.ft, On Request
+Every residence at Lyvia is a sanctuary of light and space. With expansive floor-to-ceiling windows, homes are bathed in natural light, offering breathtaking, panoramic vistas of the Creek Marina and the iconic Dubai skyline. The interiors feature fluid, open-plan layouts with bespoke finishes and premium materials, creating an atmosphere of understated elegance. Private balconies and terraces seamlessly extend your living space, blurring the line between indoor luxury and the stunning beauty of the outdoors.
 
-**Amenities & Lifestyle:**
-- **Wellness & Fitness:** Infinity Lap Pool & Rooftop Terraces, Cutting-edge Gym & Wellness Spaces, Sports Courts & Jogging Tracks
-- **Community & Leisure:** Landscaped Gardens & Pocket Parks, Children's Play Areas (Indoor/Outdoor), Direct Marina/Waterfront Access
-- **Palace Hospitality Services:** Exclusive Concierge Support, 24/7 Security & Valet
+### The Lifestyle: A World of Unparalleled Amenities
 
-**Payment Plan Breakdown:**
-- **10%** – Down Payment (Immediate / Booking)
-- **70%** – During Construction (7 Installments)
-- **20%** – On Handover (July 2029)
+The lifestyle at Lyvia is a testament to the art of fine living, curated by Palace Hospitality. 
+*   **Wellness & Fitness:** Start your day with an invigorating swim in the magnificent infinity lap pool, unwind on the serene rooftop terraces, or pursue your fitness goals in the cutting-edge gym and dedicated wellness spaces.
+*   **Community & Leisure:** Stroll through beautifully landscaped gardens and pocket parks, watch your children delight in the indoor and outdoor play areas, or enjoy an afternoon barbecue. With direct access to the marina and waterfront promenade, your leisure options are as endless as the views.
+*   **Palace Hospitality Services:** Experience a life of effortless comfort with exclusive concierge support, 24/7 security, and convenient valet services, ensuring every need is met with impeccable attention.
 
-**Location & Connectivity:**
-- **Neighborhood:** Green Gate District, Dubai Creek Harbour.
-- **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
+### The Investment: Strategic Location & Lasting Value
+
+Strategically located in the high-growth Green Gate district of Dubai Creek Harbour, Lyvia offers unparalleled connectivity and significant investment potential. This prime location places you just minutes from Dubai's key destinations:
+*   **10 Mins** to Downtown Dubai & The Burj Khalifa
+*   **15 Mins** to Dubai International Airport (DXB)
+*   **20 Mins** to Business Bay & DIFC
+
+With a flexible 80/20 payment plan and the backing of Emaar's proven track record, Lyvia is not just a home—it is a secure and valuable asset in one of the world's most dynamic cities. Secure your future in Dubai's next iconic landmark.`,
     status: 'Off-plan',
     photoCount: 5,
     tag: 'Residential',
@@ -215,32 +206,29 @@ export const properties: Property[] = [
     type: 'Villa',
     amenities: ['Private Pool', 'Beach Access', 'Smart Home'],
     images: [],
-    description: `**Project Overview:**
-"A beachfront villa by Nakheel, offering a premium blend of contemporary design and urban sophistication rising above the Arabian Gulf. Designed in collaboration with world-renowned architects, it offers expansive floor-to-ceiling windows that frame sweeping views of the sea and Dubai skyline."
+    description: `### Beachfront Majesty: The Palm Jumeirah Signature Villa by Nakheel
 
-**The Lifestyle:**
-"Residents enjoy a unique 'resort-style' living experience with direct access to a private beach. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private terraces that blend indoor luxury with outdoor serenity."
+Introducing an exclusive offering from Nakheel on the iconic Palm Jumeirah—a beachfront villa where architectural brilliance meets the tranquil rhythm of the Arabian Gulf. Designed for the discerning few, this residence offers a premium blend of contemporary design and urban sophistication, providing an unparalleled sanctuary with direct access to your private stretch of pristine sand.
 
-**Key Specifications:**
-- **Property Type:** Luxury Villa
-- **Unit Configs:** 5 Bedroom Villa
-- **Payment Plan:** 60/40 (10% Down, 50% Construction, 40% Handover)
-- **Ownership:** Freehold
-- **Handover:** Q2 2027
+### The Residence: Exquisite Interiors with Boundless Horizons
 
-**Amenities & Lifestyle:**
-- **Wellness & Fitness:** Private Infinity Pool, State-of-the-art Gym
-- **Community & Leisure:** Private Beach Access, Landscaped Gardens
-- **Services:** Exclusive Concierge Support, 24/7 Security & Valet
+Step into a world of refined luxury. Every detail of this 5-bedroom villa is crafted to perfection, from the fluid open-plan layouts to the premium finishes in the state-of-the-art kitchen. Expansive floor-to-ceiling windows frame sweeping, unobstructed views of the sea and the glittering Dubai skyline, while private terraces create a seamless connection between the exquisite interiors and the serene beachfront environment. This is a home designed not just for living, but for experiencing.
 
-**Payment Plan Breakdown:**
-- **10%** – Down Payment (Immediate / Booking)
-- **50%** – During Construction (5 Installments)
-- **40%** – On Handover (Q2 2027)
+### The Lifestyle: Your Private Resort-Style Escape
 
-**Location & Connectivity:**
-- **Neighborhood:** Palm Jumeirah.
-- **Nearby Landmarks:** 15 Mins to Dubai Marina, 25 Mins to Downtown Dubai / Burj Khalifa, 30 Mins to Dubai International Airport (DXB).`,
+Embrace a lifestyle of ultimate relaxation and privacy.
+*   **Wellness:** Begin your mornings with a dip in your private infinity pool, a workout in the state-of-the-art gym, or a stroll along your exclusive beach.
+*   **Entertaining:** Host unforgettable gatherings in your landscaped garden or spacious terrace, with the stunning backdrop of the Arabian Gulf.
+*   **Service:** Enjoy peace of mind with 24/7 security and access to exclusive concierge support, ensuring a life of effortless comfort and convenience.
+
+### The Investment: A Trophy Asset in a World-Class Location
+
+Owning a villa on the Palm Jumeirah is an investment in a global landmark. This prestigious address offers both an exceptional lifestyle and a robust potential for capital appreciation, backed by Nakheel's legacy of creating iconic communities. The flexible 60/40 payment plan makes securing this trophy asset more attainable.
+*   **15 Mins** to Dubai Marina
+*   **25 Mins** to Downtown Dubai / Burj Khalifa
+*   **30 Mins** to Dubai International Airport (DXB)
+
+Don't miss this rare opportunity to own a piece of paradise. Register your interest today to receive the exclusive brochure and floor plans.`,
     status: 'Off-plan',
     photoCount: 10,
     tag: 'Residential',
@@ -257,37 +245,30 @@ export const properties: Property[] = [
     type: 'Apartment',
     amenities: ['360° City View', 'Concierge', 'Pool'],
     images: ['prop-4-1'],
-    description: `**Project Overview:**
-"Downtown Views II is a 55-story architectural masterpiece situated in the prestigious Downtown Dubai. Designed by Emaar, it offers expansive floor-to-ceiling windows that frame sweeping views of the Burj Khalifa and Dubai skyline."
+    description: `### Downtown Views II: Live Above it All in the Heart of Dubai
 
-**The Lifestyle:**
-"Residents enjoy a unique 'urban-style' living experience with direct access to The Dubai Mall. The interiors boast modern kitchens with premium finishes, fluid open-plan layouts, and private balconies that blend indoor luxury with outdoor serenity."
+Experience the pinnacle of urban living at Downtown Views II, a 55-story tower by Emaar that offers a front-row seat to the most iconic skyline in the world. Situated in the prestigious Downtown Dubai, this is where luxury, convenience, and breathtaking views converge. With direct access to The Dubai Mall, you are seamlessly connected to world-class retail, dining, and entertainment.
 
-**Key Specifications:**
-- **Property Type:** Luxury Apartments
-- **Unit Configs:** 1, 2, 3 Bedroom Apartments
-- **Payment Plan:** 70/30 (10% Down, 60% Construction, 30% Handover)
-- **Ownership:** Freehold
-- **Handover:** Q4 2026
+### The Residence: Sophisticated Design with Iconic Vistas
 
-**Unit Configuration Table:**
-- **1 Bedroom:** 1 Bath, 700 – 900 sq.ft, Starting at AED 1.5M
-- **2 Bedroom:** 2 Bath, 1,100 – 1,500 sq.ft, Starting at AED 2.5M
-- **3 Bedroom:** 3 Bath, 1,600 – 2,000 sq.ft, Starting at AED 4.0M
+Each apartment at Downtown Views II is a masterclass in modern design. The expansive floor-to-ceiling windows don't just illuminate the space—they frame postcard-perfect views of the Burj Khalifa and the vibrant cityscape. The interiors are defined by fluid open-plan layouts, modern kitchens with premium finishes, and private balconies that allow you to step out and soak in the energy of Downtown Dubai.
 
-**Amenities & Lifestyle:**
-- **Wellness & Fitness:** Infinity Pool, State-of-the-art Gym
-- **Community & Leisure:** Direct Mall Access, Children's Play Areas
-- **Services:** Exclusive Concierge Support, 24/7 Security
+### The Lifestyle: An Extension of the World's Most Exciting Neighborhood
 
-**Payment Plan Breakdown:**
-- **10%** – Down Payment (Immediate / Booking)
-- **60%** – During Construction (6 Installments)
-- **30%** – On Handover (Q4 2026)
+Your life at Downtown Views II is complemented by a suite of world-class amenities designed for relaxation and recreation.
+*   **Wellness:** Rejuvenate in the stunning temperature-controlled infinity pool or maintain your fitness regime in the state-of-the-art gym.
+*   **Family & Leisure:** With direct, air-conditioned access to The Dubai Mall and dedicated children's play areas, every member of the family is catered for.
+*   **Convenience:** Enjoy the peace of mind that comes with 24/7 security and exclusive concierge services, ready to assist with your every need.
 
-**Location & Connectivity:**
-- **Neighborhood:** Downtown Dubai.
-- **Nearby Landmarks:** 2 Mins to The Dubai Mall / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Dubai Marina. Direct Access to the Metro.`,
+### The Investment: A Prime Asset with Unbeatable Connectivity
+
+Investing in Downtown Views II means securing a property in one of the most sought-after locations globally. This address guarantees high rental demand and strong potential for capital appreciation. The flexible 70/30 payment plan enhances its investment appeal.
+*   **2 Mins** to The Dubai Mall & Burj Khalifa
+*   **15 Mins** to Dubai International Airport (DXB)
+*   **20 Mins** to Dubai Marina
+*   **Direct Access** to the Dubai Metro
+
+Secure your place in the center of now. Contact us to learn more about this exceptional investment and lifestyle opportunity.`,
     status: 'Off-plan',
     photoCount: 8,
     tag: 'Residential',

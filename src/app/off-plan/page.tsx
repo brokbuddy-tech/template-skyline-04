@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { properties } from '@/lib/data';
-import { OffPlanPropertyCard } from '@/components/shared/off-plan-property-card';
 import { cn } from '@/lib/utils';
 import type { Property } from '@/lib/types';
+import { PropertyCard } from '@/components/shared/property-card';
 
 const filterOptions = ['Townhouse', 'Apartment', 'Villa', 'Office Space', 'Hotel Apartment', 'Duplex', 'Penthouse', 'Retail'];
 
@@ -54,9 +54,9 @@ export default function OffPlanPage() {
         </div>
 
         {/* Property Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
           {filteredProperties.map((property) => (
-            <OffPlanPropertyCard key={property.id} property={property as Property} />
+            <PropertyCard key={property.id} property={property as Property} />
           ))}
         </div>
       </div>

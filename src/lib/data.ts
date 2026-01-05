@@ -189,7 +189,16 @@ Strategically located in the high-growth Green Gate district of Dubai Creek Harb
 - **15 Mins** to Dubai International Airport (DXB)
 - **20 Mins** to Business Bay & DIFC
 
-With a flexible 80/20 payment plan, an expected handover in Q3 2029, and the backing of Emaar's proven track record, Lyvia is not just a home—it is a secure and valuable asset in one of the world's most dynamic cities. Secure your future in Dubai's next iconic landmark by registering your interest today.`,
+With a flexible 80/20 payment plan, an expected handover in Q3 2029, and the backing of Emaar's proven track record, Lyvia is not just a home—it is a secure and valuable asset in one of the world's most dynamic cities. Secure your future in Dubai's next iconic landmark by registering your interest today.
+
+### Payment Plan Breakdown:
+- **10%** – Down Payment (Immediate / Booking)
+- **70%** – During Construction (7 Installments)
+- **20%** – On Handover (July 2029)
+
+### Location & Connectivity:
+- **Neighborhood:** Green Gate District, Dubai Creek Harbour.
+- **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
     status: 'Off-plan',
     photoCount: 5,
     tag: 'Residential',
@@ -228,7 +237,16 @@ Owning a villa on the Palm Jumeirah is an investment in a global landmark. This 
 - **25 Mins** to Downtown Dubai / Burj Khalifa
 - **30 Mins** to Dubai International Airport (DXB)
 
-Don't miss this rare opportunity to own a piece of paradise. Register your interest today to receive the exclusive brochure and floor plans.`,
+Don't miss this rare opportunity to own a piece of paradise. Register your interest today to receive the exclusive brochure and floor plans.
+
+### Payment Plan Breakdown:
+- **10%** – Down Payment (Immediate / Booking)
+- **70%** – During Construction (7 Installments)
+- **20%** – On Handover (July 2029)
+
+### Location & Connectivity:
+- **Neighborhood:** Green Gate District, Dubai Creek Harbour.
+- **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
     status: 'Off-plan',
     photoCount: 10,
     tag: 'Residential',
@@ -268,7 +286,16 @@ Investing in Downtown Views II means securing a blue-chip property in one of the
 - **20 Mins** to Dubai Marina
 - **Direct Access** to the Dubai Metro and major highways.
 
-Secure your place in the center of now. Contact us to learn more about this exceptional investment and lifestyle opportunity.`,
+Secure your place in the center of now. Contact us to learn more about this exceptional investment and lifestyle opportunity.
+
+### Payment Plan Breakdown:
+- **10%** – Down Payment (Immediate / Booking)
+- **70%** – During Construction (7 Installments)
+- **20%** – On Handover (July 2029)
+
+### Location & Connectivity:
+- **Neighborhood:** Green Gate District, Dubai Creek Harbour.
+- **Nearby Landmarks:** 10 Mins to Downtown Dubai / Burj Khalifa, 15 Mins to Dubai International Airport (DXB), 20 Mins to Business Bay & DIFC. Direct Access to Creek Marina & Water Taxi Stations.`,
     status: 'Off-plan',
     photoCount: 8,
     tag: 'Residential',

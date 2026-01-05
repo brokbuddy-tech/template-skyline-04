@@ -10,6 +10,7 @@ import { navConfig } from '@/lib/nav-config';
 import { MegaMenu } from './mega-menu';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { ThemeSwitch } from '../shared/theme-switch';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,9 +42,7 @@ export function Header() {
 
       <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
         <CurrencySwitcher />
-        <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground" asChild>
-          <Link href="/properties">Book Now</Link>
-        </Button>
+        <ThemeSwitch />
       </div>
 
       <div className="lg:hidden flex items-center gap-4">

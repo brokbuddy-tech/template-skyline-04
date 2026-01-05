@@ -39,6 +39,7 @@ import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
 import { amenityIcons } from '@/lib/amenity-icons';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { LocationMap } from './location-map';
 
 interface OffPlanPropertyPageProps {
   property: Property;
@@ -370,6 +371,15 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                 </div>
               )}
             </div>
+            
+            <Separator className="my-12"/>
+
+            {/* Location Map Section */}
+            <div className="mb-12">
+                <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Location</h2>
+                <LocationMap />
+            </div>
+
 
           </div>
 
@@ -408,5 +418,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
     </div>
   );
 }
+
+    
 
     

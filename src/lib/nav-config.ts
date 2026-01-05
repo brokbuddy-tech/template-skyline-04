@@ -76,7 +76,18 @@ export const navConfig: NavConfig = [
   },
   {
     label: 'Commercial',
-    href: '/properties?type=buy'
+    dropdown: [
+      {
+        header: 'Commercial',
+        links: [
+          { label: 'Offices for sale', href: '/properties?type=buy&propertyType=Office' },
+          { label: 'Offices for rent', href: '/properties?type=rent&propertyType=Office' },
+          { label: 'Shops for sale', href: '/properties?type=buy&propertyType=Retail' },
+          { label: 'Shops for rent', href: '/properties?type=rent&propertyType=Retail' },
+          { label: 'Plots for sale', href: '/properties?type=buy&propertyType=Land' },
+        ]
+      }
+    ]
   },
   {
     label: 'Sell',

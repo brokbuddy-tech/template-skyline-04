@@ -33,7 +33,7 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
   return (
     <div className="flex gap-2 relative" onMouseLeave={handleMouseLeave}>
       {navConfig.map((item, index) => {
-        const isLastTwo = index >= navConfig.length - 2;
+        const isSimpleDropdown = item.label === 'Commercial';
 
         return (
           <div
@@ -69,35 +69,52 @@ export function MegaMenu({ navConfig }: MegaMenuProps) {
                   }}
                   className={cn(
                     "absolute top-full mt-2",
-                    isLastTwo ? "right-0" : "left-1/2 -translate-x-1/2"
+                    isSimpleDropdown ? "left-0" : "left-1/2 -translate-x-1/2"
                   )}
                   onMouseEnter={() => handleMouseEnter(index)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <div className="bg-white dark:bg-black rounded-lg shadow-xl p-6 border border-gray-100 dark:border-gray-800">
-                    <div 
-                      className="grid gap-x-12 gap-y-6 auto-cols-max"
-                      style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, auto)` }}
-                    >
-                      {item.dropdown.map((column, colIndex) => (
-                        <div key={colIndex}>
-                          <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-base">{column.header}</h3>
-                          <ul className="space-y-2">
-                            {column.links.map((link) => (
-                              <li key={link.label}>
-                                <Link
-                                  href={link.href}
-                                  className="block text-sm text-gray-700 dark:text-gray-300 hover:text-rose-500 whitespace-nowrap"
-                                >
-                                  {link.label}
-                                </Link>
-                              </li>
+                  {isSimpleDropdown ? (
+                     <div className="w-[240px] bg-white dark:bg-black rounded-b-lg shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden py-0">
+                        <ul className="flex flex-col">
+                            {item.dropdown[0].links.map((link) => (
+                                <li key={link.label}>
+                                    <Link
+                                        href={link.href}
+                                        className="block w-full px-6 py-3 text-[14px] font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-black hover:bg-rose-600 hover:text-white transition-colors duration-150"
+                                    >
+                                        {link.label}
+                                    </Link>
+                                </li>
                             ))}
-                          </ul>
-                        </div>
-                      ))}
+                        </ul>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="bg-white dark:bg-black rounded-lg shadow-xl p-6 border border-gray-100 dark:border-gray-800">
+                        <div 
+                          className="grid gap-x-12 gap-y-6 auto-cols-max"
+                          style={{ gridTemplateColumns: `repeat(${item.dropdown.length}, auto)` }}
+                        >
+                          {item.dropdown.map((column, colIndex) => (
+                            <div key={colIndex}>
+                              <h3 className="font-bold text-gray-900 dark:text-white mb-3 text-base">{column.header}</h3>
+                              <ul className="space-y-2">
+                                {column.links.map((link) => (
+                                  <li key={link.label}>
+                                    <Link
+                                      href={link.href}
+                                      className="block text-sm text-gray-700 dark:text-gray-300 hover:text-rose-500 whitespace-nowrap"
+                                    >
+                                      {link.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

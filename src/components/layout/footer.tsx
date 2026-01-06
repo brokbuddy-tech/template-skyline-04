@@ -68,7 +68,6 @@ export function Footer() {
       <AnimateOnScroll className="space-y-8">
         <div className="flex justify-between items-center text-sm font-body">
           <p className="text-white dark:text-accent-foreground">&copy; 2025 Monks Estate Pro. All Rights Reserved.</p>
-          <ThemeSwitch />
         </div>
       </AnimateOnScroll>
     </footer>

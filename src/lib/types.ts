@@ -23,6 +23,7 @@ export type Property = {
   tag?: string;
   developerLogo?: 'Emaar' | 'Nakheel';
   category?: string;
+  nearby?: { name: string; time: string }[];
 };
 
 export type Service = {

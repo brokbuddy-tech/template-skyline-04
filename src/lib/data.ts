@@ -40,6 +40,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Sale',
     photoCount: 12,
+    nearby: [
+        { name: 'Zuma Beach', time: '5 min' },
+        { name: 'Malibu Pier', time: '10 min' },
+        { name: 'Santa Monica', time: '25 min' },
+        { name: 'LAX Airport', time: '45 min' },
+    ],
   },
   {
     id: '2',
@@ -57,6 +63,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Sale',
     photoCount: 8,
+    nearby: [
+        { name: 'Washington Square Park', time: '5 min walk' },
+        { name: 'Canal Street Market', time: '10 min walk' },
+        { name: 'One World Trade Center', time: '15 min subway' },
+        { name: 'Times Square', time: '20 min subway' },
+    ],
   },
   {
     id: '3',
@@ -75,6 +87,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Sale',
     photoCount: 25,
+     nearby: [
+        { name: 'Aspen Mountain', time: '0 min' },
+        { name: 'Downtown Aspen', time: '5 min drive' },
+        { name: 'Maroon Bells', time: '20 min drive' },
+        { name: 'Aspen Airport', time: '15 min drive' },
+    ],
   },
   {
     id: '4',
@@ -94,6 +112,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Sale',
     photoCount: 18,
+    nearby: [
+        { name: 'Downtown Dubai', time: '10 min' },
+        { name: 'Burj Khalifa', time: '10 min' },
+        { name: 'Dubai International Airport', time: '15 min' },
+        { name: 'Business Bay', time: '20 min' },
+    ],
   },
   {
     id: '5',
@@ -111,6 +135,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Sale',
     photoCount: 15,
+     nearby: [
+        { name: 'Wategos Beach', time: '2 min walk' },
+        { name: 'Cape Byron Lighthouse', time: '15 min walk' },
+        { name: 'Byron Bay Town', time: '5 min drive' },
+        { name: 'Ballina Airport', time: '30 min drive' },
+    ],
   },
   {
     id: '6',
@@ -129,6 +159,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Sale',
     photoCount: 22,
+    nearby: [
+        { name: 'Kinkaku-ji Temple', time: '10 min walk' },
+        { name: 'Arashiyama Bamboo Grove', time: '20 min drive' },
+        { name: 'Gion District', time: '30 min drive' },
+        { name: 'Kyoto Station', time: '35 min drive' },
+    ],
   },
     {
     id: '7',
@@ -146,6 +182,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Rent',
     photoCount: 9,
+    nearby: [
+        { name: 'Place des Vosges', time: '5 min walk' },
+        { name: 'Louvre Museum', time: '15 min metro' },
+        { name: 'Eiffel Tower', time: '25 min metro' },
+        { name: 'Gare du Nord', time: '20 min metro' },
+    ],
   },
   {
     id: '8',
@@ -163,6 +205,12 @@ export const properties: Property[] = [
     status: 'Ready',
     transactionType: 'Sale',
     photoCount: 30,
+    nearby: [
+        { name: 'Florence', time: '45 min drive' },
+        { name: 'Siena', time: '1 hour drive' },
+        { name: 'Pisa', time: '1.5 hour drive' },
+        { name: 'Local Vineyard', time: '5 min walk' },
+    ],
   },
   {
     id: '9',
@@ -181,6 +229,12 @@ export const properties: Property[] = [
     photoCount: 5,
     tag: 'Residential',
     developerLogo: 'Emaar',
+    nearby: [
+        { name: 'Downtown Dubai', time: '10 min' },
+        { name: 'Burj Khalifa', time: '10 min' },
+        { name: 'Dubai International Airport', time: '15 min' },
+        { name: 'Business Bay', time: '20 min' },
+    ],
   },
   {
     id: '10',
@@ -199,6 +253,12 @@ export const properties: Property[] = [
     photoCount: 10,
     tag: 'Residential',
     developerLogo: 'Nakheel',
+    nearby: [
+        { name: 'Downtown Dubai', time: '10 min' },
+        { name: 'Burj Khalifa', time: '10 min' },
+        { name: 'Dubai International Airport', time: '15 min' },
+        { name: 'Business Bay', time: '20 min' },
+    ],
   },
   {
     id: '11',
@@ -217,6 +277,12 @@ export const properties: Property[] = [
     photoCount: 8,
     tag: 'Residential',
     developerLogo: 'Emaar',
+    nearby: [
+        { name: 'Downtown Dubai', time: '10 min' },
+        { name: 'Burj Khalifa', time: '10 min' },
+        { name: 'Dubai International Airport', time: '15 min' },
+        { name: 'Business Bay', time: '20 min' },
+    ],
   },
 ];
 

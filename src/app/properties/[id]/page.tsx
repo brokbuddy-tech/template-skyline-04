@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
-import { BedDouble, Bath, Square, MapPin, Building, LandPlot, HandHelping, Banknote, ShieldCheck } from "lucide-react";
+import { BedDouble, Bath, Square, MapPin, Building, LandPlot, HandHelping, Banknote, ShieldCheck, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import { LocationMap } from '@/components/shared/location-map';
 import { OffPlanPropertyPage } from '@/components/shared/off-plan-property-page';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
 import { UpfrontCostModal } from '@/components/shared/upfront-cost-modal';
+import { Card } from '@/components/ui/card';
 
 const propertyTypeIcons: { [key: string]: React.ElementType } = {
   'House': Building,
@@ -189,6 +190,32 @@ export default function PropertyDetailPage() {
                 <h2 className="text-3xl font-headline mb-6">Location</h2>
                 <LocationMap />
             </AnimateOnScroll>
+            
+            {property.nearby && property.nearby.length > 0 && (
+                <>
+                    <Separator className="my-12" />
+                    <AnimateOnScroll>
+                        <h2 className="text-3xl font-headline mb-6">Nearby Landmarks</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {property.nearby.map((place) => (
+                                <Card key={place.name} className="flex items-center gap-4 p-4">
+                                    <div className="bg-muted p-3 rounded-lg">
+                                        <MapPin className="w-5 h-5 text-accent" />
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold text-foreground">{place.name}</p>
+                                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                            <Clock className="w-3 h-3" />
+                                            <span>{place.time} away</span>
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+                    </AnimateOnScroll>
+                </>
+            )}
+
           </div>
           
           {/* Right Column (Agent Sidebar) */}

@@ -113,7 +113,7 @@ export function AIChatbot() {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="cursor-pointer"
+        className="cursor-pointer hidden md:block"
         aria-label="Toggle AI Chat"
       >
         <div className="transform scale-[.819]">

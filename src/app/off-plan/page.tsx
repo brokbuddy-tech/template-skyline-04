@@ -27,9 +27,6 @@ export default function OffPlanPage() {
           <h1 className="text-3xl md:text-4xl font-bold text-[#1E1E2C] dark:text-white">
             Off Plan Projects for Buy
           </h1>
-          <Button className="hidden md:inline-flex bg-[#1E1E2C] hover:bg-[#1E1E2C]/90 text-white rounded-full">
-            Explore Off Plan Properties
-          </Button>
         </header>
 
         {/* Filter Bar */}

@@ -19,7 +19,7 @@ export function AgentSidebar() {
 
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="bg-[#fdfbf5] p-6">
+        <div className="bg-white p-6">
             <div className="flex flex-col items-center text-center">
                 {agentImage && (
                     <Image 
@@ -55,7 +55,7 @@ export function AgentSidebar() {
                 </div>
             </div>
         </div>
-        <div className="bg-[#fdfbf5] p-6 text-black text-center">
+        <div className="bg-white p-6 text-black text-center">
             <h3 className="text-lg font-bold">Register Your Interest</h3>
             <p className="text-sm mt-2 mb-4">For more information or to view the full brochure, fill out the form.</p>
             <Button variant="outline" className="w-full uppercase border-black text-black hover:bg-black hover:text-white">

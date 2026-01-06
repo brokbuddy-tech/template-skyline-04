@@ -4,7 +4,7 @@
 import Image from "next/image"
 import { PlaceHolderImages } from "@/lib/placeholder-images"
 import { Button } from "../ui/button"
-import { Phone, MessageSquare, Link as LinkIcon, Instagram, Facebook, Twitter, Linkedin } from "lucide-react"
+import { Phone, MessageSquare, Link as LinkIcon, Instagram, Facebook, Twitter, Linkedin, FileDown } from "lucide-react"
 
 export function AgentSidebar() {
   const agentImage = PlaceHolderImages.find((img) => img.id === 'founder-photo');
@@ -41,6 +41,9 @@ export function AgentSidebar() {
             </Button>
             <Button size="lg" variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                 <MessageSquare className="mr-2 h-4 w-4"/> Message
+            </Button>
+            <Button size="lg" variant="outline" className="w-full">
+                <FileDown className="mr-2 h-4 w-4"/> Download Brochure
             </Button>
         </div>
         

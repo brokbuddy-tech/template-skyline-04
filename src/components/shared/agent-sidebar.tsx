@@ -19,7 +19,7 @@ export function AgentSidebar() {
 
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="bg-cream-100 p-6">
+        <div className="bg-[#fdfbf5] p-6">
             <div className="flex flex-col items-center text-center">
                 {agentImage && (
                     <Image 
@@ -35,10 +35,10 @@ export function AgentSidebar() {
             </div>
             
             <div className="mt-6 grid grid-cols-2 gap-3">
-                <Button size="lg" className="w-full bg-[#f5f5dc] hover:bg-[#e0e0ca] text-black">
+                <Button size="lg" className="w-full bg-[#fdfbf5] hover:bg-[#e0e0ca] text-black">
                     <Phone className="mr-2 h-4 w-4"/> PHONE
                 </Button>
-                <Button size="lg" className="w-full bg-[#f5f5dc] hover:bg-[#e0e0ca] text-black">
+                <Button size="lg" className="w-full bg-[#fdfbf5] hover:bg-[#e0e0ca] text-black">
                     <MessageSquare className="mr-2 h-4 w-4"/> WHATSAPP
                 </Button>
             </div>
@@ -47,7 +47,7 @@ export function AgentSidebar() {
                 <p className="text-sm uppercase font-semibold tracking-wider mb-3">Share this property</p>
                 <div className="flex justify-center gap-3">
                     {socialLinks.map(social => (
-                        <Button key={social.name} variant="default" size="icon" className="h-10 w-10 rounded-full bg-[#f5f5dc] hover:bg-[#e0e0ca] text-black">
+                        <Button key={social.name} variant="default" size="icon" className="h-10 w-10 rounded-full bg-[#fdfbf5] hover:bg-[#e0e0ca] text-black">
                             <social.icon className="h-4 w-4" />
                             <span className="sr-only">{social.name}</span>
                         </Button>
@@ -55,7 +55,7 @@ export function AgentSidebar() {
                 </div>
             </div>
         </div>
-        <div className="bg-[#f5f5dc] p-6 text-black text-center">
+        <div className="bg-[#fdfbf5] p-6 text-black text-center">
             <h3 className="text-lg font-bold">Register Your Interest</h3>
             <p className="text-sm mt-2 mb-4">For more information or to view the full brochure, fill out the form.</p>
             <Button variant="outline" className="w-full uppercase border-black text-black hover:bg-black hover:text-white">

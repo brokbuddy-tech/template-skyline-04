@@ -456,8 +456,8 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                   <Input placeholder="Phone" type="tel" />
                   <Input placeholder="Email" type="email" />
                   <ToggleGroup type="single" defaultValue="end-user" className="w-full">
-                    <ToggleGroupItem value="investor" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background">I am an Investor</ToggleGroupItem>
-                    <ToggleGroupItem value="end-user" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background">I am an End User</ToggleGroupItem>
+                    <ToggleGroupItem value="investor" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background dark:data-[state=on]:bg-white dark:data-[state=on]:text-black">I am an Investor</ToggleGroupItem>
+                    <ToggleGroupItem value="end-user" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background dark:data-[state=on]:bg-white dark:data-[state=on]:text-black">I am an End User</ToggleGroupItem>
                   </ToggleGroup>
                   <Button className="w-full bg-foreground hover:bg-foreground/90 text-background">
                     Register Interest
@@ -483,5 +483,6 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
     
 
     
+
 
 

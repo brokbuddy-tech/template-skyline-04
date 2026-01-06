@@ -53,7 +53,7 @@ export function HeroSection() {
           className="absolute inset-0 z-20 flex flex-col justify-center items-center gap-8 px-4 container mx-auto text-white"
         >
           <div className='text-center'>
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white text-center">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white text-center text-balance">
               Transforming Spaces, <br /> Realizing <span className="text-[#ff3223]">Dreams.</span>
             </h1>
           </div>

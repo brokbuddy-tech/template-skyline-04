@@ -114,6 +114,7 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="bg-background">
+      {/* 1. Image Gallery */}
       <AnimateOnScroll>
         <section className="py-0 px-0 md:px-8 md:py-16">
           {/* Mobile Carousel */}
@@ -163,171 +164,169 @@ export default function PropertyDetailPage() {
         </section>
       </AnimateOnScroll>
 
-      <div className="container mx-auto">
-        <div className="lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
-            <div className="lg:col-span-8 w-full">
-                <section className="pt-8 px-0">
-                    <AnimateOnScroll>
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
-                        <div className='mb-2 sm:mb-0'>
-                        <h1 className="text-3xl md:text-5xl font-headline font-medium">{property.title}</h1>
-                        {isForRent && (
-                            <Dialog>
-                            <DialogTrigger asChild>
-                                <Button variant="link" className="text-sm p-0 h-auto text-muted-foreground hover:text-accent mt-2">
-                                See upfront cost
-                                </Button>
-                            </DialogTrigger>
-                            <UpfrontCostModal annualRent={property.price} />
-                            </Dialog>
+      {/* 2. Main Content & Sidebar */}
+      <div className="container mx-auto px-4 sm:px-8">
+        <div className="lg:grid lg:grid-cols-12 lg:gap-x-8">
+          {/* Left Column: Main Content */}
+          <div className="lg:col-span-8">
+            <section className="pt-8 px-0">
+                <AnimateOnScroll>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                    <div className='mb-2 sm:mb-0'>
+                    <h1 className="text-3xl md:text-5xl font-headline font-medium">{property.title}</h1>
+                    {isForRent && (
+                        <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="link" className="text-sm p-0 h-auto text-muted-foreground hover:text-accent mt-2">
+                            See upfront cost
+                            </Button>
+                        </DialogTrigger>
+                        <UpfrontCostModal annualRent={property.price} />
+                        </Dialog>
+                    )}
+                    </div>
+                    <div className="sm:text-right flex-shrink-0 sm:pl-4">
+                    <span className="text-2xl md:text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
+                    </div>
+                </div>
+                </AnimateOnScroll>
+
+                <AnimateOnScroll delay={100}>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-md border-y py-4 mb-8">
+                    <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-muted-foreground" /> <span> {property.location}</span></div>
+                    <Separator orientation="vertical" className="h-5 hidden sm:block" />
+                    <div className="flex items-center gap-2"><BedDouble className="w-5 h-5 text-muted-foreground" /> <span>{property.bedrooms} Beds</span></div>
+                    <Separator orientation="vertical" className="h-5" />
+                    <div className="flex items-center gap-2"><Bath className="w-5 h-5 text-muted-foreground" /> <span>{property.bathrooms} Baths</span></div>
+                    <Separator orientation="vertical" className="h-5 hidden sm:block" />
+                    <div className="flex items-center gap-2"><Square className="w-5 h-5 text-muted-foreground" /> <span>{property.sqft.toLocaleString()} sqft</span></div>
+                    <Separator orientation="vertical" className="h-5" />
+                    <div className="flex items-center gap-2"><PropertyTypeIcon className="w-5 h-5 text-muted-foreground" /> <span>{property.type}</span></div>
+                </div>
+                </AnimateOnScroll>
+
+                <AnimateOnScroll delay={200}>
+                    <h2 className="text-3xl font-headline mb-4">Description</h2>
+                    <ReadMore text={property.description} />
+                </AnimateOnScroll>
+
+                <Separator className="my-12"/>
+                
+                <AnimateOnScroll delay={300}>
+                <h2 className="text-3xl font-headline mb-6">Amenities</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {property.amenities.map(amenity => {
+                        const Icon = amenityIcons[amenity];
+                        return (
+                            <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2">
+                                {Icon && <Icon className="w-4 h-4" />}
+                                <span>{amenity}</span>
+                            </Badge>
+                        )
+                    })}
+                </div>
+                </AnimateOnScroll>
+
+                <Separator className="my-12"/>
+
+                {/* Regulatory Information */}
+                <AnimateOnScroll delay={400}>
+                <div className="p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-start gap-6">
+                    <div>
+                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-accent"/> Regulatory Information</h3>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5"/> <strong>Reference ID:</strong> {property.referenceId || 'N/A'}</li>
+                        <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5"/> <strong>Trakheesi:</strong> {property.trakheesi || 'N/A'}</li>
+                        <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5"/> <strong>RERA Permit:</strong> {property.reraPermit || 'N/A'}</li>
+                    </ul>
+                    </div>
+                    <div className="text-center w-full flex flex-col items-center sm:w-auto sm:items-end">
+                        <p className="text-sm font-bold mb-2">DLD Permit</p>
+                        {qrCodeUrl ? (
+                            <Image src={qrCodeUrl} alt="DLD Permit QR Code" width={100} height={100} />
+                        ) : (
+                            <div className="w-[100px] h-[100px] bg-muted animate-pulse"></div>
                         )}
-                        </div>
-                        <div className="sm:text-right flex-shrink-0 sm:pl-4">
-                        <span className="text-2xl md:text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
-                        </div>
                     </div>
-                    </AnimateOnScroll>
+                </div>
+                </AnimateOnScroll>
 
-                    <AnimateOnScroll delay={100}>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-md border-y py-4 mb-8">
-                        <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-muted-foreground" /> <span> {property.location}</span></div>
-                        <Separator orientation="vertical" className="h-5 hidden sm:block" />
-                        <div className="flex items-center gap-2"><BedDouble className="w-5 h-5 text-muted-foreground" /> <span>{property.bedrooms} Beds</span></div>
-                        <Separator orientation="vertical" className="h-5" />
-                        <div className="flex items-center gap-2"><Bath className="w-5 h-5 text-muted-foreground" /> <span>{property.bathrooms} Baths</span></div>
-                        <Separator orientation="vertical" className="h-5 hidden sm:block" />
-                        <div className="flex items-center gap-2"><Square className="w-5 h-5 text-muted-foreground" /> <span>{property.sqft.toLocaleString()} sqft</span></div>
-                        <Separator orientation="vertical" className="h-5" />
-                        <div className="flex items-center gap-2"><PropertyTypeIcon className="w-5 h-5 text-muted-foreground" /> <span>{property.type}</span></div>
-                    </div>
-                    </AnimateOnScroll>
-
-                    <AnimateOnScroll delay={200}>
-                        <h2 className="text-3xl font-headline mb-4">Description</h2>
-                        <ReadMore text={property.description} />
-                    </AnimateOnScroll>
-
+                {!isForRent && (
+                <>
                     <Separator className="my-12"/>
-                    
-                    <AnimateOnScroll delay={300}>
-                    <h2 className="text-3xl font-headline mb-6">Amenities</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {property.amenities.map(amenity => {
-                            const Icon = amenityIcons[amenity];
-                            return (
-                                <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2">
-                                    {Icon && <Icon className="w-4 h-4" />}
-                                    <span>{amenity}</span>
-                                </Badge>
-                            )
-                        })}
-                    </div>
+                    {/* Mortgage Calculator */}
+                    <AnimateOnScroll>
+                        <MortgageCalculator propertyPrice={property.price}/>
                     </AnimateOnScroll>
+                </>
+                )}
 
-                    <Separator className="my-12"/>
-
-                    {/* Regulatory Information */}
-                    <AnimateOnScroll delay={400}>
-                    <div className="p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-start gap-6">
-                        <div>
-                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-accent"/> Regulatory Information</h3>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5"/> <strong>Reference ID:</strong> {property.referenceId || 'N/A'}</li>
-                            <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5"/> <strong>Trakheesi:</strong> {property.trakheesi || 'N/A'}</li>
-                            <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5"/> <strong>RERA Permit:</strong> {property.reraPermit || 'N/A'}</li>
-                        </ul>
-                        </div>
-                        <div className="text-center w-full flex flex-col items-center sm:w-auto sm:items-end">
-                            <p className="text-sm font-bold mb-2">DLD Permit</p>
-                            {qrCodeUrl ? (
-                                <Image src={qrCodeUrl} alt="DLD Permit QR Code" width={100} height={100} />
-                            ) : (
-                                <div className="w-[100px] h-[100px] bg-muted animate-pulse"></div>
-                            )}
-                        </div>
-                    </div>
-                    </AnimateOnScroll>
-
-                    {!isForRent && (
+                <Separator className="my-12"/>
+                
+                {/* Location Map */}
+                <AnimateOnScroll>
+                    <h2 className="text-3xl font-headline mb-6">Location</h2>
+                    <LocationMap />
+                </AnimateOnScroll>
+                
+                {property.nearby && property.nearby.length > 0 && (
                     <>
-                        <Separator className="my-12"/>
-                        {/* Mortgage Calculator */}
+                        <Separator className="my-12" />
                         <AnimateOnScroll>
-                            <MortgageCalculator propertyPrice={property.price}/>
+                            <h2 className="text-3xl font-headline mb-6">Nearby Landmarks</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {property.nearby.map((place) => (
+                                    <Card key={place.name} className="flex items-center gap-4 p-4">
+                                        <div className="bg-muted p-3 rounded-lg">
+                                            <MapPin className="w-5 h-5 text-accent" />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-foreground">{place.name}</p>
+                                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                                <Clock className="w-3 h-3" />
+                                                <span>{place.time} away</span>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                ))}
+                            </div>
                         </AnimateOnScroll>
                     </>
-                    )}
+                )}
+            </section>
+          </div>
 
-                    <Separator className="my-12"/>
-                    
-                    {/* Location Map */}
-                    <AnimateOnScroll>
-                        <h2 className="text-3xl font-headline mb-6">Location</h2>
-                        <LocationMap />
-                    </AnimateOnScroll>
-                    
-                    {property.nearby && property.nearby.length > 0 && (
-                        <>
-                            <Separator className="my-12" />
-                            <AnimateOnScroll>
-                                <h2 className="text-3xl font-headline mb-6">Nearby Landmarks</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {property.nearby.map((place) => (
-                                        <Card key={place.name} className="flex items-center gap-4 p-4">
-                                            <div className="bg-muted p-3 rounded-lg">
-                                                <MapPin className="w-5 h-5 text-accent" />
-                                            </div>
-                                            <div>
-                                                <p className="font-semibold text-foreground">{place.name}</p>
-                                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                                    <Clock className="w-3 h-3" />
-                                                    <span>{place.time} away</span>
-                                                </div>
-                                            </div>
-                                        </Card>
-                                    ))}
-                                </div>
-                            </AnimateOnScroll>
-                        </>
-                    )}
-                </section>
-
-                {/* Agent Sidebar for Mobile */}
-                <div className="lg:hidden container mx-auto mt-12 px-8">
-                    <AgentSidebar />
-                </div>
+          {/* Right Column: Sidebar */}
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-24 space-y-8">
+              <AgentSidebar />
             </div>
-            
-            {/* Right Column (Agent Sidebar) */}
-            <div className="hidden lg:block lg:col-span-4 relative">
-                <div className="lg:sticky lg:top-24">
-                    <AgentSidebar />
-                </div>
-            </div>
+          </div>
         </div>
       </div>
       
-      {/* Recommendations */}
+      {/* 3. Recommendations */}
       <AnimateOnScroll>
-          <section className="bg-muted/30">
-              <div className="container mx-auto">
-                <div className="text-center mb-16">
-                <h2 className="text-5xl md:text-6xl font-medium">You Might Also Like</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-                {recommendedProperties.map((prop) => (
-                    <PropertyCard key={prop.id} property={prop} />
-                ))}
-                </div>
-                <div className="text-center mt-16">
-                    <Button asChild size="lg">
-                        <Link href="/properties">View All Properties</Link>
-                    </Button>
-                </div>
+        <section className="bg-muted/30">
+            <div className="container mx-auto">
+              <div className="text-center mb-16">
+              <h2 className="text-5xl md:text-6xl font-medium">You Might Also Like</h2>
               </div>
-          </section>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+              {recommendedProperties.map((prop) => (
+                  <PropertyCard key={prop.id} property={prop} />
+              ))}
+              </div>
+              <div className="text-center mt-16">
+                  <Button asChild size="lg">
+                      <Link href="/properties">View All Properties</Link>
+                  </Button>
+              </div>
+            </div>
+        </section>
       </AnimateOnScroll>
       
+      {/* 4. FAQs */}
       <FaqAccordion propertyName={property.title} faqs={faqData} />
     </div>
   );

@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { Property } from '@/lib/types';
@@ -31,7 +32,7 @@ export function OffPlanCard({ property }: { property: Property }) {
           )}
           {/* Red Ribbon */}
           <div className="absolute top-0 left-0 w-10 h-10">
-            <div className="absolute transform -rotate-45 bg-red-600 text-center text-white font-semibold py-1 left-[-34px] top-[16px] w-[120px]">
+            <div className="absolute transform -rotate-45 bg-red-600 text-center text-white font-semibold py-1 left-[-34px] top-[16px] w-[120px] shadow-lg border-b-2 border-red-800">
                 New
             </div>
           </div>

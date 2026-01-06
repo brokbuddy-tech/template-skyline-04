@@ -95,16 +95,10 @@ export default function PropertyDetailPage() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h1 className="text-4xl md:text-5xl font-headline font-medium">{property.title}</h1>
-                  <p className="text-lg text-muted-foreground flex items-center gap-2 mt-2">
-                    <MapPin className="w-5 h-5" /> {property.location}
-                  </p>
-                </div>
-                <div className="text-right flex-shrink-0 pl-4">
-                  <span className="text-3xl md:text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
-                  {isForRent && (
+                   {isForRent && (
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="link" className="text-sm p-0 h-auto text-muted-foreground hover:text-accent">
+                        <Button variant="link" className="text-sm p-0 h-auto text-muted-foreground hover:text-accent mt-2">
                           See upfront cost
                         </Button>
                       </DialogTrigger>
@@ -112,11 +106,16 @@ export default function PropertyDetailPage() {
                     </Dialog>
                   )}
                 </div>
+                <div className="text-right flex-shrink-0 pl-4">
+                  <span className="text-3xl md:text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
+                </div>
               </div>
             </AnimateOnScroll>
 
             <AnimateOnScroll delay={100}>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-md border-y py-4 mb-8">
+                  <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-muted-foreground" /> <span> {property.location}</span></div>
+                  <Separator orientation="vertical" className="h-5" />
                   <div className="flex items-center gap-2"><BedDouble className="w-5 h-5 text-muted-foreground" /> <span>{property.bedrooms} Beds</span></div>
                   <Separator orientation="vertical" className="h-5" />
                   <div className="flex items-center gap-2"><Bath className="w-5 h-5 text-muted-foreground" /> <span>{property.bathrooms} Baths</span></div>

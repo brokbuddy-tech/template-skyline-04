@@ -164,7 +164,7 @@ export default function PropertyDetailPage() {
       </AnimateOnScroll>
 
       <div className="container mx-auto">
-        <div className="lg:grid lg:grid-cols-[64%,32%] lg:gap-[4%]">
+        <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8">
             <div className="w-full">
                 <section className="pt-8 px-0">
                     <AnimateOnScroll>
@@ -291,6 +291,28 @@ export default function PropertyDetailPage() {
                         </>
                     )}
                 </section>
+                {/* Agent Sidebar for Mobile */}
+                <div className="lg:hidden container mx-auto mt-12 px-8">
+                    <AgentSidebar />
+                </div>
+                {/* Recommendations */}
+                <AnimateOnScroll>
+                    <section className="bg-muted/30">
+                        <div className="text-center mb-16">
+                        <h2 className="text-5xl md:text-6xl font-medium">You Might Also Like</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+                        {recommendedProperties.map((prop) => (
+                            <PropertyCard key={prop.id} property={prop} />
+                        ))}
+                        </div>
+                        <div className="text-center mt-16">
+                            <Button asChild size="lg">
+                                <Link href="/properties">View All Properties</Link>
+                            </Button>
+                        </div>
+                    </section>
+                </AnimateOnScroll>
             </div>
             
             {/* Right Column (Agent Sidebar) */}
@@ -301,29 +323,6 @@ export default function PropertyDetailPage() {
             </div>
         </div>
 
-        {/* Agent Sidebar for Mobile */}
-        <div className="lg:hidden container mx-auto mt-12 px-8">
-            <AgentSidebar />
-        </div>
-
-        {/* Recommendations */}
-        <AnimateOnScroll>
-            <section className="bg-muted/30">
-                <div className="text-center mb-16">
-                <h2 className="text-5xl md:text-6xl font-medium">You Might Also Like</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-                {recommendedProperties.map((prop) => (
-                    <PropertyCard key={prop.id} property={prop} />
-                ))}
-                </div>
-                <div className="text-center mt-16">
-                    <Button asChild size="lg">
-                        <Link href="/properties">View All Properties</Link>
-                    </Button>
-                </div>
-            </section>
-        </AnimateOnScroll>
       </div>
       
       <FaqAccordion propertyName={property.title} faqs={faqData} />

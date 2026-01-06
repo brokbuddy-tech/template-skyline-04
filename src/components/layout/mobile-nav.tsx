@@ -36,6 +36,7 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
           'fixed inset-0 z-40 bg-white dark:bg-black transition-opacity duration-300 ease-in-out',
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
+        style={{ transform: 'translateZ(0)' }}
       >
         <div className="container mx-auto flex flex-col justify-between h-full py-20 overflow-y-auto">
           <nav className="flex flex-col text-left mt-8 w-full">

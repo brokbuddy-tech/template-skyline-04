@@ -6,6 +6,8 @@ import { Footer } from '@/components/layout/footer';
 import { ClientLayout } from '@/components/layout/client-layout';
 import { ThemeProvider } from '@/components/theme-provider';
 import { CurrencyProvider } from '@/context/currency-context';
+import { MobileNav } from '@/components/layout/mobile-nav';
+import { navConfig } from '@/lib/nav-config';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -40,6 +42,9 @@ export default function RootLayout({
         >
           <CurrencyProvider>
             <ClientLayout>
+              <div className="lg:hidden fixed top-4 right-4 z-50">
+                <MobileNav navLinks={navConfig} />
+              </div>
               <Header />
               <main className="min-h-screen">{children}</main>
               <Footer />

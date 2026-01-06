@@ -109,25 +109,25 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
           <div className="col-span-12 lg:col-span-8">
             {/* Section A: Header & Developer Info */}
             <div className="mb-12">
-              <h1 className="text-4xl font-bold text-[#1E1E2C] mb-2">
+              <h1 className="text-4xl font-bold text-foreground mb-2">
                 Launch Price 1.9M AED*
               </h1>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 *Prices and availability subject to change without notice.
               </p>
 
-              <div className="mt-6 bg-gray-50 rounded-xl p-4 flex items-center justify-between border border-gray-100">
+              <div className="mt-6 bg-muted rounded-xl p-4 flex items-center justify-between border">
                 <div className="flex items-center gap-4">
-                  <div className="bg-white p-2 rounded-md border border-gray-200">
+                  <div className="bg-background p-2 rounded-md border">
                     <EmaarLogo className="w-16 h-auto" />
                   </div>
                   <div>
-                    <p className="font-semibold text-[#1E1E2C]">
+                    <p className="font-semibold text-foreground">
                       Emaar Properties
                     </p>
                     <Link
                       href="#"
-                      className="text-xs text-blue-600 hover:underline"
+                      className="text-xs text-accent hover:underline"
                     >
                       View developer details
                     </Link>
@@ -138,61 +138,61 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
 
             {/* Section B: Key Information Grid */}
             <div className="mb-12">
-              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">
+              <h2 className="text-xl font-bold text-foreground mb-6">
                 Key information
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4">
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">
                     Delivery Date
                   </p>
-                  <p className="text-base text-[#1E1E2C] font-semibold mt-1">
+                  <p className="text-base text-foreground font-semibold mt-1">
                     July 2029
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">
                     Sale Starts
                   </p>
-                  <p className="text-base text-[#1E1E2C] font-semibold mt-1">
+                  <p className="text-base text-foreground font-semibold mt-1">
                     June 10, 2025
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">
                     Location
                   </p>
-                  <p className="text-base text-blue-600 font-semibold mt-1 hover:underline cursor-pointer">
+                  <p className="text-base text-accent font-semibold mt-1 hover:underline cursor-pointer">
                     Dubai, Dubai Creek Harbour...
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">
                     Payment Plan
                   </p>
-                  <p className="text-base text-[#1E1E2C] font-semibold mt-1">
+                  <p className="text-base text-foreground font-semibold mt-1">
                     10/70/20
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">
                     Buildings
                   </p>
-                  <p className="text-base text-[#1E1E2C] font-semibold mt-1">
+                  <p className="text-base text-foreground font-semibold mt-1">
                     1
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">
                     Property Types
                   </p>
-                  <p className="text-base text-[#1E1E2C] font-semibold mt-1">
+                  <p className="text-base text-foreground font-semibold mt-1">
                     Apartment, Townhouse
                   </p>
                 </div>
                 <div>
                   <div className="flex items-center gap-1">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">
                       Govt Fee
                     </p>
                     <TooltipProvider>
@@ -206,13 +206,13 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <p className="text-base text-[#1E1E2C] font-semibold mt-1">
+                  <p className="text-base text-foreground font-semibold mt-1">
                     4%
                   </p>
                 </div>
                 <div>
                   <div className="flex items-center gap-1">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">
                       Ownership
                     </p>
                     <TooltipProvider>
@@ -226,7 +226,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  <p className="text-base text-[#1E1E2C] font-semibold mt-1">
+                  <p className="text-base text-foreground font-semibold mt-1">
                     Freehold
                   </p>
                 </div>
@@ -235,42 +235,42 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
 
             {/* Section C: Payment Plan Visualization */}
             <div className="mb-12">
-              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">
+              <h2 className="text-xl font-bold text-foreground mb-6">
                 Payment plan
               </h2>
               <div className="flex flex-col md:flex-row items-center gap-4">
-                <div className="bg-gray-50 rounded-xl p-6 flex-1 text-center border border-gray-100 min-w-[140px] w-full">
-                  <p className="text-3xl font-bold text-[#1E1E2C]">10%</p>
-                  <p className="text-sm font-semibold text-[#1E1E2C] mt-1">
+                <div className="bg-muted rounded-xl p-6 flex-1 text-center border min-w-[140px] w-full">
+                  <p className="text-3xl font-bold text-foreground">10%</p>
+                  <p className="text-sm font-semibold text-foreground mt-1">
                     Down payment
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">At sales launch</p>
+                  <p className="text-xs text-muted-foreground mt-1">At sales launch</p>
                 </div>
-                <ChevronRight className="text-gray-300 hidden md:block" />
-                <div className="bg-gray-50 rounded-xl p-6 flex-1 text-center border border-gray-100 min-w-[140px] w-full">
-                  <p className="text-3xl font-bold text-[#1E1E2C]">70%</p>
-                  <p className="text-sm font-semibold text-[#1E1E2C] mt-1">
+                <ChevronRight className="text-muted-foreground hidden md:block" />
+                <div className="bg-muted rounded-xl p-6 flex-1 text-center border min-w-[140px] w-full">
+                  <p className="text-3xl font-bold text-foreground">70%</p>
+                  <p className="text-sm font-semibold text-foreground mt-1">
                     During construction
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">7 Installments</p>
+                  <p className="text-xs text-muted-foreground mt-1">7 Installments</p>
                 </div>
-                <ChevronRight className="text-gray-300 hidden md:block" />
-                <div className="bg-gray-50 rounded-xl p-6 flex-1 text-center border border-gray-100 min-w-[140px] w-full">
-                  <p className="text-3xl font-bold text-[#1E1E2C]">20%</p>
-                  <p className="text-sm font-semibold text-[#1E1E2C] mt-1">
+                <ChevronRight className="text-muted-foreground hidden md:block" />
+                <div className="bg-muted rounded-xl p-6 flex-1 text-center border min-w-[140px] w-full">
+                  <p className="text-3xl font-bold text-foreground">20%</p>
+                  <p className="text-sm font-semibold text-foreground mt-1">
                     On handover
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">July 2029</p>
+                  <p className="text-xs text-muted-foreground mt-1">July 2029</p>
                 </div>
               </div>
             </div>
 
             {/* Section D: Project Timeline */}
             <div className="mb-12">
-              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">
+              <h2 className="text-xl font-bold text-foreground mb-6">
                 Project timeline
               </h2>
-              <div className="bg-[#F8FAFC] rounded-2xl p-8">
+              <div className="bg-muted rounded-2xl p-8 border">
                 <div className="relative">
                   {timelineSteps.map((step, index) => (
                     <div
@@ -281,30 +281,30 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                         <div
                           className={`w-5 h-5 rounded-full flex items-center justify-center ${
                             step.completed
-                              ? 'bg-blue-600'
-                              : 'bg-white border-2 border-gray-300'
+                              ? 'bg-accent'
+                              : 'bg-background border-2'
                           }`}
                         >
                           {step.completed && (
-                            <Check className="w-3 h-3 text-white" />
+                            <Check className="w-3 h-3 text-accent-foreground" />
                           )}
                         </div>
                         {index < timelineSteps.length - 1 && (
                           <div
                             className={`absolute left-1/2 -translate-x-1/2 h-full w-0.5 ${
                               step.completed
-                                ? 'bg-blue-600'
-                                : 'border-l-2 border-dashed border-gray-300'
+                                ? 'bg-accent'
+                                : 'border-l-2 border-dashed'
                             }`}
                             style={{ top: '1.25rem' }}
                           />
                         )}
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1E1E2C]">
+                        <p className="font-semibold text-foreground">
                           {step.label}
                         </p>
-                        <p className="text-sm text-gray-500">{step.date}</p>
+                        <p className="text-sm text-muted-foreground">{step.date}</p>
                       </div>
                     </div>
                   ))}
@@ -338,8 +338,8 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
 
             {/* Description Section */}
             <div className="mb-12">
-                <h2 className="text-xl font-bold text-[#1E1E2C] mb-4">About This Project</h2>
-                <div className="text-muted-foreground space-y-4 line-clamp-3">
+                <h2 className="text-xl font-bold text-foreground mb-4">About This Project</h2>
+                <div className="prose dark:prose-invert max-w-none line-clamp-3">
                   <PropertyDescriptionDisplay description={property.description} />
                 </div>
                 <Dialog>
@@ -361,12 +361,12 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
 
             {/* Amenities Section */}
             <div className="mb-12">
-              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Amenities</h2>
+              <h2 className="text-xl font-bold text-foreground mb-6">Amenities</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {property.amenities.map(amenity => {
                       const Icon = amenityIcons[amenity];
                       return (
-                          <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2 border-gray-200 bg-gray-50">
+                          <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2 border bg-muted">
                               {Icon && <Icon className="w-4 h-4 text-accent" />}
                               <span>{amenity}</span>
                           </Badge>
@@ -379,9 +379,9 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
 
             {/* Masterplan Section */}
             <div className="mb-12">
-              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Masterplan</h2>
+              <h2 className="text-xl font-bold text-foreground mb-6">Masterplan</h2>
               {masterplanImage && (
-                <div className="rounded-xl overflow-hidden border border-gray-100">
+                <div className="rounded-xl overflow-hidden border">
                   <Image
                     src={masterplanImage.imageUrl}
                     alt={masterplanImage.description}
@@ -398,7 +398,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
 
             {/* Location Map Section */}
             <div className="mb-12">
-                <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Location</h2>
+                <h2 className="text-xl font-bold text-foreground mb-6">Location</h2>
                 <LocationMap />
             </div>
 
@@ -406,11 +406,11 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
 
             {/* Nearby Places Section */}
             <div className="mb-12">
-              <h2 className="text-xl font-bold text-[#1E1E2C] mb-6">Nearby Places</h2>
+              <h2 className="text-xl font-bold text-foreground mb-6">Nearby Places</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {nearbyPlaces.map((place) => (
-                  <Card key={place.name} className="flex items-center gap-4 p-4 bg-gray-50 border-gray-100">
-                      <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <Card key={place.name} className="flex items-center gap-4 p-4 bg-muted border">
+                      <div className="bg-background p-3 rounded-lg border">
                           <MapPin className="w-5 h-5 text-accent" />
                       </div>
                       <div>
@@ -428,14 +428,14 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
             <Separator className="my-12" />
             
             {/* Our Offices Section */}
-            <section className="py-16 px-6 bg-gray-50 rounded-xl">
+            <section className="py-16 px-6 bg-muted rounded-xl border">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="text-3xl md:text-4xl font-headline font-bold text-black mb-12">Our offices</h2>
+                    <h2 className="text-3xl md:text-4xl font-headline font-bold text-foreground mb-12">Our offices</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-8">
                         {offices.map((office) => (
                             <div key={office.name}>
-                                <h3 className="text-base font-semibold text-gray-900 mb-2">{office.name}</h3>
-                                <p className="text-sm text-gray-500 leading-relaxed max-w-[250px]">{office.address}</p>
+                                <h3 className="text-base font-semibold text-foreground mb-2">{office.name}</h3>
+                                <p className="text-sm text-muted-foreground leading-relaxed max-w-[250px]">{office.address}</p>
                             </div>
                         ))}
                     </div>
@@ -447,8 +447,8 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
           {/* Right Column */}
           <div className="col-span-12 lg:col-span-4">
             <div className="sticky top-24">
-              <div className="bg-white shadow-xl rounded-2xl p-6 border border-gray-100">
-                <h3 className="text-xl font-bold text-[#1E1E2C] mb-4">
+              <div className="bg-white dark:bg-muted shadow-xl rounded-2xl p-6 border">
+                <h3 className="text-xl font-bold text-foreground mb-4">
                   Interested in Lyvia?
                 </h3>
                 <form className="space-y-4">
@@ -456,10 +456,10 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                   <Input placeholder="Phone" type="tel" />
                   <Input placeholder="Email" type="email" />
                   <ToggleGroup type="single" defaultValue="end-user" className="w-full">
-                    <ToggleGroupItem value="investor" className="w-full">I am an Investor</ToggleGroupItem>
-                    <ToggleGroupItem value="end-user" className="w-full">I am an End User</ToggleGroupItem>
+                    <ToggleGroupItem value="investor" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background">I am an Investor</ToggleGroupItem>
+                    <ToggleGroupItem value="end-user" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background">I am an End User</ToggleGroupItem>
                   </ToggleGroup>
-                  <Button className="w-full bg-[#1E1E2C] hover:bg-[#1E1E2C]/90 text-white">
+                  <Button className="w-full bg-foreground hover:bg-foreground/90 text-background">
                     Register Interest
                   </Button>
                   <Button variant="outline" className="w-full">
@@ -483,4 +483,5 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
     
 
     
+
 

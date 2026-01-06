@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Inter, Manrope } from 'next/font/google';
 import './globals.css';
@@ -20,7 +21,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'Monks Estate Pro',
+  title: 'SkyLines',
   description: 'Minimalist editorial real estate website.',
 };
 

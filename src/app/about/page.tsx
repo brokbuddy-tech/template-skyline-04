@@ -83,7 +83,7 @@ export default function AboutPage() {
             style={{ opacity: Math.max(0, opacity) }}
           >
             <h1 className="text-5xl md:text-8xl font-bold font-sans">
-              We are Monks Estate.
+              We are SkyLines.
             </h1>
             <p className="mt-4 text-lg md:text-2xl text-balance">
               Building dreams into <span className="text-accent">stunning real estate</span>.
@@ -104,7 +104,7 @@ export default function AboutPage() {
                 <AnimateOnScroll delay={100}>
                     <div className="space-y-6 text-base md:text-lg text-muted-foreground">
                         <p>
-                            At Monks Estate, our mission is to redefine the real estate experience through a commitment to minimalist design, unparalleled service, and a deep understanding of our clients' desires. We believe a home is more than just a property; it's a sanctuary, a canvas for life's moments, and a reflection of one's aspirations.
+                            At SkyLines, our mission is to redefine the real estate experience through a commitment to minimalist design, unparalleled service, and a deep understanding of our clients' desires. We believe a home is more than just a property; it's a sanctuary, a canvas for life's moments, and a reflection of one's aspirations.
                         </p>
                         <p>
                             We meticulously curate and craft properties that are not only aesthetically pleasing but also functional and timeless. By focusing on quality over quantity, we ensure that every home we represent is a masterpiece of architecture and design, ready to inspire its new inhabitants.
@@ -161,7 +161,7 @@ export default function AboutPage() {
                     </p>
                 </AnimateOnScroll>
                 <AnimateOnScroll delay={300}>
-                    <p className="text-base md:text-lg font-semibold">Alex Monks, Founder</p>
+                    <p className="text-base md:text-lg font-semibold">Alex Sky, Founder</p>
                 </AnimateOnScroll>
             </div>
         </div>
@@ -194,5 +194,3 @@ export default function AboutPage() {
     </div>
   );
 }
-
-    

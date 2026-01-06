@@ -1,3 +1,4 @@
+
 'use client';
 
 import { AnimateOnScroll } from '@/components/animate-on-scroll';
@@ -53,7 +54,7 @@ export default function ContactPage() {
               <AnimateOnScroll>
                 <h2 className="text-3xl md:text-4xl font-bold font-body">Contact Details</h2>
                 <div className="mt-4 space-y-3 text-muted-foreground text-base">
-                  <p><strong>Email:</strong> hello@monksestate.com</p>
+                  <p><strong>Email:</strong> hello@skylines.com</p>
                   <p><strong>Phone:</strong> +1 (234) 567-8900</p>
                   <p><strong>Address:</strong> 123 Luxury Lane, Beverly Hills, CA 90210</p>
                 </div>

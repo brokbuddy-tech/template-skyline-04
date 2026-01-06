@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 
 export function Logo({ className }: { className?: string }) {
@@ -47,7 +48,7 @@ export function Logo({ className }: { className?: string }) {
                 />
             </svg>
             <span className="text-xl font-sans text-gray-900 dark:text-white">
-                <span className="font-bold">Monks</span><span className="font-normal">Estate</span>
+                <span className="font-bold">Sky</span><span className="font-normal">Lines</span>
             </span>
         </div>
     );

@@ -135,7 +135,7 @@ export function AIChatbot() {
             }}
           >
             <div className="flex justify-between items-center p-4 border-b border-gray-200" style={{ borderColor: '#EAEAEA' }}>
-              <h2 className="font-headline text-xl font-semibold text-black">Monks AI</h2>
+              <h2 className="font-headline text-xl font-semibold text-black">SkyLines AI</h2>
               <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
                 <X className="h-5 w-5 text-gray-500"/>
               </Button>

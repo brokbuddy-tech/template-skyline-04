@@ -42,11 +42,11 @@ export default function SellPage() {
           <div className="lg:pr-8">
             <AnimateOnScroll>
               <h1 className="text-4xl md:text-6xl font-headline font-bold text-foreground mb-6 text-balance">
-                List Your Property with Monks Estate
+                List Your Property with SkyLines
               </h1>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Knowing your property's true value is the smartest place to start when considering a sale. At Monks Estate, we combine cutting-edge data with our team's deep market expertise to provide you with an accurate, obligation-free valuation.
+                  Knowing your property's true value is the smartest place to start when considering a sale. At SkyLines, we combine cutting-edge data with our team's deep market expertise to provide you with an accurate, obligation-free valuation.
                 </p>
                 <p>
                   Our process is quick, straightforward, and designed to give you the clarity you need to make informed decisions. Let us show you what your property is worth today.
@@ -134,7 +134,7 @@ export default function SellPage() {
           <AnimateOnScroll className="text-center">
             <h2 className="text-4xl md:text-5xl font-headline font-bold text-foreground">Why Sell With Us?</h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto text-balance">
-              At Monks Estate, selling your property is more than a transaction—it's a partnership. We dedicate ourselves to achieving your goals with personalized service and unparalleled market expertise.
+              At SkyLines, selling your property is more than a transaction—it's a partnership. We dedicate ourselves to achieving your goals with personalized service and unparalleled market expertise.
             </p>
           </AnimateOnScroll>
           <AnimateOnScroll delay={200}>

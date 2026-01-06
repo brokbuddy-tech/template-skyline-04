@@ -2,17 +2,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import { properties } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import type { Property } from '@/lib/types';
 import { PropertyCard } from '@/components/shared/property-card';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const filterOptions = ['Townhouse', 'Apartment', 'Villa', 'Office Space', 'Hotel Apartment', 'Duplex', 'Penthouse', 'Retail'];
 
 export default function OffPlanPage() {
   const [activeFilter, setActiveFilter] = useState('Apartment');
   
+  const headerImage = PlaceHolderImages.find((img) => img.id === 'cta-background');
   const offPlanProperties = properties.filter((p) => p.status === 'Off-plan');
 
   const filteredProperties = offPlanProperties.filter(property => 
@@ -21,14 +23,25 @@ export default function OffPlanPage() {
 
   return (
     <div className="bg-gray-50 dark:bg-black min-h-screen">
-      <div className="container mx-auto max-w-7xl px-6 py-12">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-[#1E1E2C] dark:text-white">
+      <section className="relative py-24 md:py-32 bg-background text-white">
+        {headerImage && (
+            <Image 
+                src={headerImage.imageUrl}
+                alt={headerImage.description}
+                fill
+                className="object-cover"
+                data-ai-hint={headerImage.imageHint}
+            />
+        )}
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="container mx-auto text-center relative z-10">
+          <h1 className="text-6xl md:text-7xl font-headline font-medium">
             Off Plan Projects for Buy
           </h1>
-        </header>
+        </div>
+      </section>
 
+      <div className="container mx-auto max-w-7xl px-6 py-12">
         {/* Filter Bar */}
         <div className="mb-8">
           <div className="relative">

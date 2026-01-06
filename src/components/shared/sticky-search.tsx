@@ -5,151 +5,53 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
-  ChevronDown,
   Search,
   SlidersHorizontal,
-  Plus,
 } from 'lucide-react';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AdvancedSearchModal } from '../shared/advanced-search-modal';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
-import Link from 'next/link';
-
-const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas'];
-const bedOptions = ['Studio', '1', '2', '3', '4+'];
-const bathOptions = ['1', '2', '3', '4+'];
 
 export function StickySearch() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [transactionType, setTransactionType] = useState('Buy');
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const type = searchParams.get('type');
-    if (type === 'rent') {
-      setTransactionType('Rent');
-    } else {
-      setTransactionType('Buy');
-    }
-  }, [searchParams]);
-
-  const handleTransactionTypeChange = (value: string) => {
-    if (value) {
-        setTransactionType(value);
-        const newPath = value === 'Rent' ? '/properties?type=rent' : '/properties?type=buy';
-        router.push(newPath);
-    }
-  };
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100); 
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="sticky top-[80px] z-30 w-full bg-background/95 backdrop-blur-sm py-4 border-b">
+    <div className={cn(
+      "sticky top-[80px] z-30 w-full bg-background/95 backdrop-blur-sm transition-all duration-300",
+      isScrolled ? 'py-2 border-b' : 'py-4'
+    )}>
       <Dialog>
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-3">
-            {/* Part A: Location Input */}
-            <div className="bg-white dark:bg-black rounded-full pl-4 md:pl-6 pr-2 py-2 shadow-sm flex items-center flex-1 w-full min-w-0">
+          <div className="flex flex-row items-center gap-3">
+            {/* Search Bar */}
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Community or Building..."
-                className="bg-transparent flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 min-w-0 text-sm"
+                placeholder="Search Dubai..."
+                className="bg-white dark:bg-black w-full h-14 rounded-full pl-12 pr-4 shadow-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-accent"
               />
-              <button className="w-8 h-8 md:w-10 md:h-10 bg-accent rounded-full flex items-center justify-center text-white hover:bg-accent/90 transition-all cursor-pointer flex-shrink-0">
-                <Plus size={20} />
-              </button>
             </div>
-
-            {/* Part B: Quick Filters */}
-            <div className="grid grid-cols-2 md:flex md:flex-row gap-3 w-full md:w-auto">
-              <ToggleGroup
-                type="single"
-                value={transactionType}
-                onValueChange={handleTransactionTypeChange}
-                className="bg-white dark:bg-black rounded-full p-1 shadow-sm border gap-0 col-span-2"
-              >
-                <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none w-full">
-                    Buy
-                </ToggleGroupItem>
-                <ToggleGroupItem value="Rent" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none w-full">
-                    Rent
-                </ToggleGroupItem>
-              </ToggleGroup>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 h-10 md:h-auto flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
-                  >
-                    Type <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {propertyTypes.map((type) => (
-                    <DropdownMenuItem key={type}>{type}</DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 h-10 md:h-auto flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
-                  >
-                    Beds <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {bedOptions.map((beds) => (
-                    <DropdownMenuItem key={beds}>{beds}</DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 h-10 md:h-auto flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
-                  >
-                    Bath <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {bathOptions.map((baths) => (
-                    <DropdownMenuItem key={baths}>{baths}</DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            {/* Part C: Actions */}
-            <div className="flex items-center gap-3 w-full md:w-auto justify-center">
-              <Button
-                size="icon"
-                className="w-12 h-12 md:w-14 md:h-14 bg-accent rounded-full text-white shadow-md hover:scale-105 active:scale-95 transition-transform"
-                aria-label="Search"
-              >
-                <Search className="w-5 h-5 md:w-6 md:h-6" />
-              </Button>
-              <DialogTrigger asChild>
-                <Button
+            
+            {/* Filter Trigger */}
+            <DialogTrigger asChild>
+               <Button
                   size="icon"
                   variant="secondary"
-                  className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-black rounded-full text-accent shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  className="w-14 h-14 bg-white dark:bg-black rounded-full text-accent shadow-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition flex-shrink-0"
                   aria-label="Advanced Filters"
                 >
-                  <SlidersHorizontal className="w-5 h-5 md:w-6 md:h-6" />
+                  <SlidersHorizontal className="w-6 h-6" />
                 </Button>
-              </DialogTrigger>
-            </div>
+            </DialogTrigger>
           </div>
         </div>
         <AdvancedSearchModal />

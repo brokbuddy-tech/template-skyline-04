@@ -27,7 +27,7 @@ export function HeroSearch() {
     
     // Mobile button styles
     const mobileButtonClasses = cn(
-      'rounded-full uppercase font-bold text-sm px-6 py-2 shadow-md transition-colors duration-200 whitespace-nowrap',
+      'rounded-full uppercase font-bold text-xs px-4 py-2 shadow-md transition-colors duration-200 whitespace-nowrap',
       isActive
         ? 'bg-[#1E1E2C] text-white'
         : 'bg-white text-black'
@@ -81,7 +81,7 @@ export function HeroSearch() {
 
   return (
     <Dialog>
-      <div className="w-full max-w-5xl mx-auto md:p-4 z-20">
+      <div className="w-full max-w-sm md:max-w-5xl mx-auto md:p-4 z-20">
         {/* Container for both mobile and desktop layouts */}
         <div className="flex flex-col md:flex-col gap-3 w-full px-4 md:px-0">
           
@@ -144,9 +144,9 @@ export function HeroSearch() {
             {/* Row 2: Property Type Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className="w-full bg-white dark:bg-black rounded-full h-[60px] flex items-center px-6 shadow-lg">
-                  <span className="text-black dark:text-white font-medium">{selectedType}</span>
-                  <ChevronDown className="w-5 h-5 text-accent ml-auto" />
+                <div className="w-full bg-white dark:bg-black rounded-full h-14 flex items-center px-4 shadow-lg">
+                  <span className="text-black dark:text-white font-medium text-sm truncate">{selectedType}</span>
+                  <ChevronDown className="w-5 h-5 text-accent ml-auto flex-shrink-0" />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[calc(100vw-2rem)]">
@@ -163,18 +163,18 @@ export function HeroSearch() {
             </DropdownMenu>
 
             {/* Row 3: Search Input & Actions */}
-            <div className="w-full bg-white dark:bg-black rounded-full h-[60px] flex items-center pl-6 pr-2 shadow-lg">
+            <div className="w-full bg-white dark:bg-black rounded-full h-14 flex items-center pl-4 pr-2 shadow-lg">
               <input
                 type="text"
                 placeholder="Community or Building..."
-                className="flex-1 outline-none text-gray-600 dark:text-gray-300 placeholder-gray-400 bg-transparent"
+                className="flex-1 outline-none text-gray-600 dark:text-gray-300 placeholder-gray-400 bg-transparent min-w-0 text-sm"
               />
-              <Button size="icon" className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white ml-2 flex-shrink-0">
-                  <Search className="w-5 h-5" />
+              <Button size="icon" className="w-9 h-9 bg-accent rounded-full flex items-center justify-center text-white ml-2 flex-shrink-0">
+                  <Search className="w-4 h-4" />
               </Button>
               <DialogTrigger asChild>
-                <Button size="icon" variant="ghost" className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-accent ml-2 flex-shrink-0">
-                    <SlidersHorizontal className="w-5 h-5" />
+                <Button size="icon" variant="ghost" className="w-9 h-9 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-accent ml-2 flex-shrink-0">
+                    <SlidersHorizontal className="w-4 h-4" />
                 </Button>
               </DialogTrigger>
             </div>

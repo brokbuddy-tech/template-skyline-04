@@ -54,13 +54,13 @@ export function StickySearch() {
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-3">
             {/* Part A: Location Input */}
-            <div className="bg-white dark:bg-black rounded-full pl-6 pr-2 py-2 shadow-sm flex items-center flex-1 w-full min-w-0">
+            <div className="bg-white dark:bg-black rounded-full pl-4 md:pl-6 pr-2 py-2 shadow-sm flex items-center flex-1 w-full min-w-0">
               <input
                 type="text"
                 placeholder="Community or Building..."
-                className="bg-transparent flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 min-w-0"
+                className="bg-transparent flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 min-w-0 text-sm"
               />
-              <button className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-white hover:bg-accent/90 transition-all cursor-pointer flex-shrink-0">
+              <button className="w-8 h-8 md:w-10 md:h-10 bg-accent rounded-full flex items-center justify-center text-white hover:bg-accent/90 transition-all cursor-pointer flex-shrink-0">
                 <Plus size={20} />
               </button>
             </div>
@@ -73,10 +73,10 @@ export function StickySearch() {
                 onValueChange={handleTransactionTypeChange}
                 className="bg-white dark:bg-black rounded-full p-1 shadow-sm border gap-0"
               >
-                <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-6 py-2 text-sm border-none">
+                <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none">
                     Buy
                 </ToggleGroupItem>
-                <ToggleGroupItem value="Rent" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-6 py-2 text-sm border-none">
+                <ToggleGroupItem value="Rent" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none">
                     Rent
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -85,7 +85,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
                   >
                     Type <ChevronDown size={16} />
                   </Button>
@@ -101,7 +101,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
                   >
                     Beds <ChevronDown size={16} />
                   </Button>
@@ -116,7 +116,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
                   >
                     Bath <ChevronDown size={16} />
                   </Button>
@@ -133,19 +133,19 @@ export function StickySearch() {
             <div className="flex items-center gap-3 w-full md:w-auto justify-center">
               <Button
                 size="icon"
-                className="w-14 h-14 bg-accent rounded-full text-white shadow-md hover:scale-105 transition-transform"
+                className="w-12 h-12 md:w-14 md:h-14 bg-accent rounded-full text-white shadow-md hover:scale-105 transition-transform"
                 aria-label="Search"
               >
-                <Search size={24} />
+                <Search className="w-5 h-5 md:w-6 md:h-6" />
               </Button>
               <DialogTrigger asChild>
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="w-14 h-14 bg-white dark:bg-black rounded-full text-accent shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  className="w-12 h-12 md:w-14 md:h-14 bg-white dark:bg-black rounded-full text-accent shadow-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                   aria-label="Advanced Filters"
                 >
-                  <SlidersHorizontal size={24} />
+                  <SlidersHorizontal className="w-5 h-5 md:w-6 md:h-6" />
                 </Button>
               </DialogTrigger>
             </div>

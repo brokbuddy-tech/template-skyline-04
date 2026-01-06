@@ -4,8 +4,8 @@
 import Image from "next/image"
 import { PlaceHolderImages } from "@/lib/placeholder-images"
 import { Button } from "../ui/button"
-import { Phone, MessageSquare, Link as LinkIcon, Instagram, Facebook, Twitter, Linkedin, FileDown } from "lucide-react"
-import { Dialog, DialogTrigger } from "../ui/dialog"
+import { Phone, MessageSquare, Link as LinkIcon, Instagram, Facebook, Twitter, Linkedin } from "lucide-react"
+import { Dialog } from "../ui/dialog"
 import { DownloadBrochureModal } from "./download-brochure-modal"
 
 export function AgentSidebar() {
@@ -45,11 +45,6 @@ export function AgentSidebar() {
               <Button size="lg" variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
                   <MessageSquare className="mr-2 h-4 w-4"/> Message
               </Button>
-              <DialogTrigger asChild>
-                <Button size="lg" variant="outline" className="w-full">
-                    <FileDown className="mr-2 h-4 w-4"/> Download Brochure
-                </Button>
-              </DialogTrigger>
           </div>
           
           <div className="mt-6 text-center">

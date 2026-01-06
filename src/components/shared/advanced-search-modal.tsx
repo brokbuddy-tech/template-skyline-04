@@ -16,6 +16,7 @@ import { Separator } from '../ui/separator';
 import { useState, useMemo, useContext } from 'react';
 import { properties } from '@/lib/data';
 import { CurrencyContext } from '@/context/currency-context';
+import { cn } from '@/lib/utils';
 
 const allAmenities = [
   'Pool',
@@ -27,7 +28,7 @@ const allAmenities = [
 ];
 
 export function AdvancedSearchModal() {
-  const { formatPrice, convertFromUSD } = useContext(CurrencyContext);
+  const { currency, formatPrice, convertFromUSD } = useContext(CurrencyContext);
 
   const { minPrice, maxPrice } = useMemo(() => {
     const prices = properties.map(p => convertFromUSD(p.price));
@@ -86,8 +87,14 @@ export function AdvancedSearchModal() {
     }
   };
 
+  const formattedPrice = (value: number) => {
+    const rate = useContext(CurrencyContext).rates[currency] || 1;
+    const price = value / rate;
+    return formatPrice(price, true);
+  }
+
   return (
-    <DialogContent className="sm:max-w-2xl bg-background text-foreground border-foreground/20">
+    <DialogContent className="sm:max-w-md bg-background text-foreground border-foreground/20">
       <DialogHeader>
         <DialogTitle className="font-headline text-3xl font-medium">Advanced Search</DialogTitle>
       </DialogHeader>
@@ -123,8 +130,7 @@ export function AdvancedSearchModal() {
           <div className="flex justify-between items-end">
             <Label>Price Range</Label>
             <span className='text-sm font-medium'>
-              {formatPrice(priceRange[0] / (useContext(CurrencyContext).rates[useContext(CurrencyContext).currency] || 1), true)} - 
-              {formatPrice(priceRange[1] / (useContext(CurrencyContext).rates[useContext(CurrencyContext).currency] || 1), true)}{priceRange[1] === maxPrice ? '+' : ''}
+                {formattedPrice(priceRange[0])} - {formattedPrice(priceRange[1])}{priceRange[1] === maxPrice ? '+' : ''}
             </span>
           </div>
           <Slider

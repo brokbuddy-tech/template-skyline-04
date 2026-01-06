@@ -1,3 +1,4 @@
+
 'use client'
 
 import Image from "next/image"
@@ -35,7 +36,7 @@ export function AgentSidebar() {
         </div>
         
         <div className="mt-6 space-y-3">
-            <Button size="lg" className="w-full">
+            <Button size="lg" className="w-full bg-[#ff3223] hover:bg-[#ff3223]/90">
                 <Phone className="mr-2 h-4 w-4"/> Call Agent
             </Button>
             <Button size="lg" variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">

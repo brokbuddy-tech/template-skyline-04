@@ -27,7 +27,7 @@ export function HeroSearch() {
     
     // Mobile button styles
     const mobileButtonClasses = cn(
-      'rounded-full uppercase font-bold text-xs px-4 py-2 shadow-md transition-colors duration-200 whitespace-nowrap',
+      'rounded-full uppercase font-bold text-xs px-3 py-2 shadow-md transition-colors duration-200 whitespace-nowrap',
       isActive
         ? 'bg-[#1E1E2C] text-white'
         : 'bg-white text-black'
@@ -140,7 +140,7 @@ export function HeroSearch() {
           </div>
           
           {/* Mobile Search Rows */}
-          <div className="md:hidden flex flex-col gap-3 w-full">
+          <div className="md:hidden flex flex-col gap-3 w-full max-w-[calc(100vw-2rem)] mx-auto">
             {/* Row 2: Property Type Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

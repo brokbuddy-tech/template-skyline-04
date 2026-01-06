@@ -58,7 +58,7 @@ export function AgentSidebar() {
         <div className="bg-[#004d40] p-6 text-white text-center">
             <h3 className="text-lg font-bold">Register Your Interest</h3>
             <p className="text-sm mt-2 mb-4">For more information or to view the full brochure, fill out the form.</p>
-            <Button variant="outline" className="w-full uppercase border-white text-green-500 hover:bg-white hover:text-[#004d40]">
+            <Button variant="outline" className="w-full uppercase border-white text-black hover:bg-white hover:text-[#004d40]">
                 Register Interest
             </Button>
         </div>

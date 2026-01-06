@@ -282,8 +282,6 @@ export default function PropertyDetailPage() {
         <AgentSidebar />
       </div>
 
-      <FaqAccordion propertyName={property.title} faqs={faqData} />
-
       {/* Recommendations */}
       <AnimateOnScroll>
         <section className="bg-muted/30">
@@ -304,6 +302,8 @@ export default function PropertyDetailPage() {
             </div>
         </section>
       </AnimateOnScroll>
+      
+      <FaqAccordion propertyName={property.title} faqs={faqData} />
     </div>
   );
 }

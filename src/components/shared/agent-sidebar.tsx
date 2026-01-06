@@ -13,47 +13,55 @@ export function AgentSidebar() {
     { name: 'Copy Link', icon: LinkIcon },
     { name: 'WhatsApp', icon: MessageSquare },
     { name: 'Facebook', icon: Facebook },
-    { name: 'Instagram', icon: Instagram },
     { name: 'X', icon: Twitter },
     { name: 'LinkedIn', icon: Linkedin },
   ]
 
   return (
-    <div className="border rounded-lg p-6">
-      <div className="flex flex-col items-center text-center">
-          {agentImage && (
-              <Image 
-                  src={agentImage.imageUrl}
-                  alt="Agent"
-                  width={120}
-                  height={120}
-                  className="rounded-full object-cover mb-4"
-              />
-          )}
-          <h3 className="text-xl font-bold">Alex Monks</h3>
-          <p className="text-muted-foreground">Lead Agent</p>
-      </div>
-      
-      <div className="mt-6 space-y-3">
-          <Button size="lg" className="w-full bg-[#ff3223] hover:bg-[#ff3223]/90">
-              <Phone className="mr-2 h-4 w-4"/> Call Agent
-          </Button>
-          <Button size="lg" variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-              <MessageSquare className="mr-2 h-4 w-4"/> Message
-          </Button>
-      </div>
-      
-      <div className="mt-6 text-center">
-          <p className="text-sm font-medium mb-3">Share this property</p>
-          <div className="flex justify-center gap-3">
-              {socialLinks.map(social => (
-                   <Button key={social.name} variant="outline" size="icon" className="h-10 w-10">
-                      <social.icon className="h-4 w-4" />
-                      <span className="sr-only">{social.name}</span>
-                  </Button>
-              ))}
-          </div>
-      </div>
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-cream-100 p-6">
+            <div className="flex flex-col items-center text-center">
+                {agentImage && (
+                    <Image 
+                        src={agentImage.imageUrl}
+                        alt="Agent"
+                        width={120}
+                        height={120}
+                        className="rounded-full object-cover mb-4 border-4 border-white shadow-md"
+                        data-ai-hint="professional agent portrait"
+                    />
+                )}
+                <h3 className="text-xl font-bold uppercase tracking-wider">SAIF REHAM</h3>
+            </div>
+            
+            <div className="mt-6 grid grid-cols-2 gap-3">
+                <Button size="lg" className="w-full bg-[#004d40] hover:bg-[#00382e] text-white">
+                    <Phone className="mr-2 h-4 w-4"/> PHONE
+                </Button>
+                <Button size="lg" className="w-full bg-[#004d40] hover:bg-[#00382e] text-white">
+                    <MessageSquare className="mr-2 h-4 w-4"/> WHATSAPP
+                </Button>
+            </div>
+            
+            <div className="mt-8 text-center">
+                <p className="text-sm uppercase font-semibold tracking-wider mb-3">Share this property</p>
+                <div className="flex justify-center gap-3">
+                    {socialLinks.map(social => (
+                        <Button key={social.name} variant="default" size="icon" className="h-10 w-10 rounded-full bg-[#004d40] hover:bg-[#00382e] text-white">
+                            <social.icon className="h-4 w-4" />
+                            <span className="sr-only">{social.name}</span>
+                        </Button>
+                    ))}
+                </div>
+            </div>
+        </div>
+        <div className="bg-[#004d40] p-6 text-white text-center">
+            <h3 className="text-lg font-bold">Register Your Interest</h3>
+            <p className="text-sm mt-2 mb-4">For more information or to view the full brochure, fill out the form.</p>
+            <Button variant="outline" className="w-full uppercase border-white text-white hover:bg-white hover:text-[#004d40]">
+                Register Interest
+            </Button>
+        </div>
     </div>
   )
 }

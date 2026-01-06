@@ -39,7 +39,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
           )}
 
           {isOffPlan && property.handoverDate ? (
-            <div className="absolute top-4 left-4 z-10 rounded-md bg-stone-900/75 px-3 py-1 text-white text-xs font-medium backdrop-blur-sm">
+            <div className="absolute top-4 left-4 z-10 rounded-md bg-black/30 backdrop-blur-md px-3 py-1 text-white text-xs font-medium border border-white/20">
               Handover {property.handoverDate}
             </div>
           ) : (

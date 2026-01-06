@@ -164,8 +164,8 @@ export default function PropertyDetailPage() {
       </AnimateOnScroll>
 
       <div className="container mx-auto">
-        <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8">
-            <div className="w-full">
+        <div className="lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
+            <div className="lg:col-span-8 w-full">
                 <section className="pt-8 px-0">
                     <AnimateOnScroll>
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
@@ -291,39 +291,42 @@ export default function PropertyDetailPage() {
                         </>
                     )}
                 </section>
+
                 {/* Agent Sidebar for Mobile */}
                 <div className="lg:hidden container mx-auto mt-12 px-8">
                     <AgentSidebar />
                 </div>
-                {/* Recommendations */}
-                <AnimateOnScroll>
-                    <section className="bg-muted/30">
-                        <div className="text-center mb-16">
-                        <h2 className="text-5xl md:text-6xl font-medium">You Might Also Like</h2>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-                        {recommendedProperties.map((prop) => (
-                            <PropertyCard key={prop.id} property={prop} />
-                        ))}
-                        </div>
-                        <div className="text-center mt-16">
-                            <Button asChild size="lg">
-                                <Link href="/properties">View All Properties</Link>
-                            </Button>
-                        </div>
-                    </section>
-                </AnimateOnScroll>
             </div>
             
             {/* Right Column (Agent Sidebar) */}
-            <div className="hidden lg:block relative">
+            <div className="hidden lg:block lg:col-span-4 relative">
                 <div className="lg:sticky lg:top-24">
                     <AgentSidebar />
                 </div>
             </div>
         </div>
-
       </div>
+      
+      {/* Recommendations */}
+      <AnimateOnScroll>
+          <section className="bg-muted/30">
+              <div className="container mx-auto">
+                <div className="text-center mb-16">
+                <h2 className="text-5xl md:text-6xl font-medium">You Might Also Like</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+                {recommendedProperties.map((prop) => (
+                    <PropertyCard key={prop.id} property={prop} />
+                ))}
+                </div>
+                <div className="text-center mt-16">
+                    <Button asChild size="lg">
+                        <Link href="/properties">View All Properties</Link>
+                    </Button>
+                </div>
+              </div>
+          </section>
+      </AnimateOnScroll>
       
       <FaqAccordion propertyName={property.title} faqs={faqData} />
     </div>

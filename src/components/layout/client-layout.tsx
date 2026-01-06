@@ -1,17 +1,19 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { SplashScreen } from "@/components/splash-screen";
-import { PageTransition } from "@/components/page-transition";
 import { CustomCursor } from "@/components/custom-cursor";
 import { ThemeSwitch } from "../shared/theme-switch";
 import { AIChatbot } from "../shared/ai-chatbot";
 import { Toaster } from "../ui/toaster";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -50,9 +52,9 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       {isLoading ? (
         <SplashScreen isLoading={isLoading} />
       ) : (
-        <PageTransition>
+        <div key={pathname}>
           {children}
-        </PageTransition>
+        </div>
       )}
       <div className="fixed bottom-8 right-8 z-50 flex flex-col items-center gap-4">
         <AIChatbot />

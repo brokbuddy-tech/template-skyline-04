@@ -104,7 +104,7 @@ export const navConfig: NavConfig = [
         links: [
             { label: 'Asset Management', href: '/services/asset-management' },
             { label: 'Holiday Homes', href: '/services/holiday-homes' },
-            { label: 'List Your Property', href: '/services/list-your-property' },
+            { label: 'List Your Property', href: '/sell' },
             { label: 'Property Valuation', href: '/services/property-valuation' },
         ]
       },

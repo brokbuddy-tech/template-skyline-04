@@ -25,6 +25,7 @@ import { OffPlanPropertyPage } from '@/components/shared/off-plan-property-page'
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
 import { UpfrontCostModal } from '@/components/shared/upfront-cost-modal';
 import { Card } from '@/components/ui/card';
+import { FaqAccordion } from '@/components/shared/faq-accordion';
 
 const propertyTypeIcons: { [key: string]: React.ElementType } = {
   'House': Building,
@@ -33,6 +34,21 @@ const propertyTypeIcons: { [key: string]: React.ElementType } = {
   'Land': LandPlot,
   'Default': Building
 };
+
+const faqData = [
+  {
+    question: "What are the payment terms for this property?",
+    answer: "Standard payment terms are 4 cheques. However, 1-2 cheque payments may attract a lower annual rent negotiation."
+  },
+  {
+    question: "Is this property pet-friendly?",
+    answer: "Yes, the building management allows pets, subject to standard community guidelines."
+  },
+  {
+    question: "Are utility bills included in the rent?",
+    answer: "No, the tenant is responsible for DEWA (Water & Electricity) and Internet. The Chiller (AC) is included in the service charges paid by the landlord."
+  }
+];
 
 export default function PropertyDetailPage() {
   const params = useParams();
@@ -254,7 +270,9 @@ export default function PropertyDetailPage() {
           
           {/* Right Column (Agent Sidebar) */}
           <div className="hidden lg:block relative">
-             <AgentSidebar />
+             <div className="lg:sticky lg:top-24">
+               <AgentSidebar />
+             </div>
           </div>
         </div>
       </section>
@@ -264,6 +282,7 @@ export default function PropertyDetailPage() {
         <AgentSidebar />
       </div>
 
+      <FaqAccordion propertyName={property.title} faqs={faqData} />
 
       {/* Recommendations */}
       <AnimateOnScroll>

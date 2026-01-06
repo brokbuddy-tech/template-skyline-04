@@ -24,6 +24,7 @@ export type Property = {
   developerLogo?: 'Emaar' | 'Nakheel';
   category?: string;
   nearby?: { name: string; time: string }[];
+  handoverDate?: string;
 };
 
 export type Service = {

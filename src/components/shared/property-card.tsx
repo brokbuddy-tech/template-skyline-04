@@ -21,6 +21,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
   const { formatPrice } = useContext(CurrencyContext);
 
   const isForSale = property.transactionType === 'Sale';
+  const isOffPlan = property.status === 'Off-plan';
 
   return (
     <div className="group" data-hoverable="true">
@@ -37,14 +38,21 @@ export function PropertyCard({ property }: PropertyCardProps) {
             />
           )}
 
-          <div
-            className={cn(
-              'absolute top-4 left-4 z-10 rounded-[4px] px-3 py-1 text-white text-[10px] font-bold uppercase tracking-wider',
-              isForSale ? 'bg-rose-600' : 'bg-emerald-500'
-            )}
-          >
-            {isForSale ? 'For Sale' : 'For Rent'}
-          </div>
+          {isOffPlan && property.handoverDate ? (
+            <div className="absolute top-4 left-4 z-10 rounded-md bg-stone-900/75 px-3 py-1 text-white text-xs font-medium">
+              Handover {property.handoverDate}
+            </div>
+          ) : (
+            <div
+              className={cn(
+                'absolute top-4 left-4 z-10 rounded-[4px] px-3 py-1 text-white text-[10px] font-bold uppercase tracking-wider',
+                isForSale ? 'bg-rose-600' : 'bg-emerald-500'
+              )}
+            >
+              {isForSale ? 'For Sale' : 'For Rent'}
+            </div>
+          )}
+
 
           {property.featured && (
             <Badge className="absolute top-4 right-4 bg-accent text-accent-foreground rounded-full flex items-center gap-1 border-none">

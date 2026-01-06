@@ -88,8 +88,8 @@ export function StickySearch() {
               onValueChange={handleTransactionTypeChange}
               className="p-1 bg-gray-100/80 dark:bg-gray-800/80 rounded-full ml-2"
             >
-              <ToggleGroupItem value="buy" className="px-4 py-2 text-sm rounded-full data-[state=on]:bg-white dark:data-[state=on]:bg-black data-[state=on]:shadow-sm">Buy</ToggleGroupItem>
-              <ToggleGroupItem value="rent" className="px-4 py-2 text-sm rounded-full data-[state=on]:bg-white dark:data-[state=on]:bg-black data-[state=on]:shadow-sm">Rent</ToggleGroupItem>
+              <ToggleGroupItem value="buy" className="px-4 py-2 text-sm rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground data-[state=on]:shadow-sm">Buy</ToggleGroupItem>
+              <ToggleGroupItem value="rent" className="px-4 py-2 text-sm rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground data-[state=on]:shadow-sm">Rent</ToggleGroupItem>
             </ToggleGroup>
             
             <input

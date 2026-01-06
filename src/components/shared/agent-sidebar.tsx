@@ -35,10 +35,10 @@ export function AgentSidebar() {
             </div>
             
             <div className="mt-6 grid grid-cols-2 gap-3">
-                <Button size="lg" className="w-full bg-[#fdfbf5] hover:bg-[#e0e0ca] text-black">
+                <Button size="lg" className="w-full bg-[#f0ede5] hover:bg-[#e0e0ca] text-black">
                     <Phone className="mr-2 h-4 w-4"/> PHONE
                 </Button>
-                <Button size="lg" className="w-full bg-[#fdfbf5] hover:bg-[#e0e0ca] text-black">
+                <Button size="lg" className="w-full bg-[#f0ede5] hover:bg-[#e0e0ca] text-black">
                     <MessageSquare className="mr-2 h-4 w-4"/> WHATSAPP
                 </Button>
             </div>
@@ -47,7 +47,7 @@ export function AgentSidebar() {
                 <p className="text-sm uppercase font-semibold tracking-wider mb-3">Share this property</p>
                 <div className="flex justify-center gap-3">
                     {socialLinks.map(social => (
-                        <Button key={social.name} variant="default" size="icon" className="h-10 w-10 rounded-full bg-[#fdfbf5] hover:bg-[#e0e0ca] text-black">
+                        <Button key={social.name} variant="default" size="icon" className="h-10 w-10 rounded-full bg-[#f0ede5] hover:bg-[#e0e0ca] text-black">
                             <social.icon className="h-4 w-4" />
                             <span className="sr-only">{social.name}</span>
                         </Button>

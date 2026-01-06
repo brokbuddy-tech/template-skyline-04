@@ -455,7 +455,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                   <Input placeholder="Name" />
                   <Input placeholder="Phone" type="tel" />
                   <Input placeholder="Email" type="email" />
-                  <ToggleGroup type="single" defaultValue="end-user" className="w-full">
+                  <ToggleGroup type="single" defaultValue="end-user" className="w-full border rounded-md">
                     <ToggleGroupItem value="investor" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background dark:data-[state=on]:bg-white dark:data-[state=on]:text-black">I am an Investor</ToggleGroupItem>
                     <ToggleGroupItem value="end-user" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background dark:data-[state=on]:bg-white dark:data-[state=on]:text-black">I am an End User</ToggleGroupItem>
                   </ToggleGroup>
@@ -483,6 +483,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
     
 
     
+
 
 
 

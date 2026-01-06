@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useContext } from 'react';
@@ -8,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
-import { BedDouble, Bath, Square, MapPin, Building, LandPlot, HandHelping, Banknote, ShieldCheck, Clock } from "lucide-react";
+import { BedDouble, Bath, Square, MapPin, Building, LandPlot, HandHelping, Banknote, ShieldCheck, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,9 @@ export default function PropertyDetailPage() {
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const { formatPrice } = useContext(CurrencyContext);
 
+  const propertyImages = property ? property.images.map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean) : [];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const currentUrl = window.location.href;
@@ -54,24 +58,54 @@ export default function PropertyDetailPage() {
     return <OffPlanPropertyPage property={property} />;
   }
 
-  const propertyImages = property.images.map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean);
   const recommendedProperties = properties.filter(p => p.id !== property.id).slice(0, 2);
   const PropertyTypeIcon = propertyTypeIcons[property.type] || propertyTypeIcons['Default'];
   const isForRent = property.transactionType === 'Rent';
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % propertyImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + propertyImages.length) % propertyImages.length);
+  };
 
 
   return (
     <div className="bg-background">
       <AnimateOnScroll>
         <section className="py-0 px-0 md:px-8 md:py-16">
-          <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 grid-rows-2 gap-4 h-[60vh]">
+          {/* Mobile Carousel */}
+          <div className="md:hidden relative h-[60vh]">
+            {propertyImages.length > 0 && (
+              <Image
+                src={propertyImages[currentImageIndex]!.imageUrl}
+                alt={`${property.title} image ${currentImageIndex + 1}`}
+                fill
+                className="object-cover"
+                data-ai-hint={propertyImages[currentImageIndex]!.imageHint}
+              />
+            )}
+            {propertyImages.length > 1 && (
+              <>
+                <Button size="icon" variant="ghost" onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white">
+                  <ChevronLeft className="h-6 w-6" />
+                </Button>
+                <Button size="icon" variant="ghost" onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white">
+                  <ChevronRight className="h-6 w-6" />
+                </Button>
+              </>
+            )}
+          </div>
+          {/* Desktop Grid */}
+          <div className="container mx-auto hidden md:grid grid-cols-4 grid-rows-2 gap-4 h-[60vh]">
             {propertyImages.map((image, index) => {
               if (!image) return null;
               const isFirst = index === 0;
               return (
                 <div key={image.id} className={cn(
                   "overflow-hidden rounded-lg",
-                  isFirst ? "col-span-2 row-span-2" : "col-span-1 row-span-1 hidden md:block"
+                  isFirst ? "col-span-2 row-span-2" : "col-span-1 row-span-1"
                 )}>
                   <Image
                     src={image.imageUrl}

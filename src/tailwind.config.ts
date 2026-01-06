@@ -101,7 +101,7 @@ const config = {
         "line-reveal": "line-reveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards",
         "page-wipe-in": "page-wipe-in 400ms ease-in-out forwards",
         "page-wipe-out": "page-wipe-out 400ms ease-in-out forwards",
-        "infinite-scroll": "infinite-scroll 40s linear infinite",
+        "infinite-scroll": "infinite-scroll 25s linear infinite md:infinite-scroll 40s linear infinite",
         "fade-in": "fade-in 300ms ease-in-out forwards",
         "load-in": "load-in 2s linear forwards",
       },

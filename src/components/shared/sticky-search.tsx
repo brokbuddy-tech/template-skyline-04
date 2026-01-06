@@ -71,12 +71,12 @@ export function StickySearch() {
                 type="single"
                 value={transactionType}
                 onValueChange={handleTransactionTypeChange}
-                className="bg-white dark:bg-black rounded-full p-1 shadow-sm border gap-0"
+                className="bg-white dark:bg-black rounded-full p-1 shadow-sm border gap-0 col-span-2"
               >
-                <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none">
+                <ToggleGroupItem value="Buy" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none w-full">
                     Buy
                 </ToggleGroupItem>
-                <ToggleGroupItem value="Rent" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none">
+                <ToggleGroupItem value="Rent" className="rounded-full data-[state=on]:bg-accent data-[state=on]:text-accent-foreground px-4 md:px-6 py-1 md:py-2 text-sm border-none w-full">
                     Rent
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -85,7 +85,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 h-10 md:h-auto flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
                   >
                     Type <ChevronDown size={16} />
                   </Button>
@@ -101,7 +101,7 @@ export function StickySearch() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 h-10 md:h-auto flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
                   >
                     Beds <ChevronDown size={16} />
                   </Button>
@@ -112,11 +112,12 @@ export function StickySearch() {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+              
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline-light"
-                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 md:py-3 flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
+                    className="bg-white dark:bg-black rounded-full px-4 md:px-6 py-2 h-10 md:h-auto flex items-center gap-2 text-gray-800 dark:text-gray-200 font-medium cursor-pointer transition shadow-sm w-full justify-between text-sm"
                   >
                     Bath <ChevronDown size={16} />
                   </Button>
@@ -133,7 +134,7 @@ export function StickySearch() {
             <div className="flex items-center gap-3 w-full md:w-auto justify-center">
               <Button
                 size="icon"
-                className="w-12 h-12 md:w-14 md:h-14 bg-accent rounded-full text-white shadow-md hover:scale-105 transition-transform"
+                className="w-12 h-12 md:w-14 md:h-14 bg-accent rounded-full text-white shadow-md hover:scale-105 active:scale-95 transition-transform"
                 aria-label="Search"
               >
                 <Search className="w-5 h-5 md:w-6 md:h-6" />

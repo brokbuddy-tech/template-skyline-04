@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +17,7 @@ import { Separator } from '../ui/separator';
 import { useState, useMemo, useContext } from 'react';
 import { properties } from '@/lib/data';
 import { CurrencyContext } from '@/context/currency-context';
-import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
 
 const allAmenities = [
   'Pool',
@@ -36,7 +37,6 @@ export function AdvancedSearchModal() {
     const roundToNearest = (num: number, nearest: number) => {
         return Math.ceil(num / nearest) * nearest;
     }
-    // Adjust rounding based on magnitude for better steps in other currencies
     const roundingFactor = max > 500000 ? 50000 : 10000;
     return {
         minPrice: 0,
@@ -49,7 +49,6 @@ export function AdvancedSearchModal() {
   const [baths, setBaths] = useState('');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
 
-  // Update price range when currency changes
   useMemo(() => {
     setPriceRange([minPrice, maxPrice]);
   }, [minPrice, maxPrice]);
@@ -94,12 +93,16 @@ export function AdvancedSearchModal() {
   }
 
   return (
-    <DialogContent className="sm:max-w-md bg-background text-foreground border-foreground/20">
-      <DialogHeader>
-        <DialogTitle className="font-headline text-3xl font-medium">Advanced Search</DialogTitle>
+    <DialogContent className="p-0 sm:max-w-md bg-background text-foreground border-foreground/20 flex flex-col max-h-[90vh] sm:h-auto">
+      <DialogHeader className='p-4 border-b'>
+        <DialogTitle className="font-headline text-xl font-medium">Advanced Search</DialogTitle>
+        <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </DialogClose>
       </DialogHeader>
-      <div className="grid gap-6 py-4">
-        
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-6">
         <div>
           <Label htmlFor="ai-search" className="text-base font-bold">AI-Powered Search</Label>
           <p className='text-sm text-muted-foreground mb-2'>Describe your perfect stay...</p>
@@ -162,7 +165,8 @@ export function AdvancedSearchModal() {
           </div>
         </div>
       </div>
-      <DialogFooter className='sm:justify-between'>
+      
+      <DialogFooter className='p-4 border-t sm:justify-between'>
           <Button type="button" variant="link" className="text-accent" onClick={handleClearAll}>Clear All</Button>
           <Button type="submit" size="lg">Apply Filters</Button>
       </DialogFooter>

@@ -20,7 +20,7 @@ export function HeroSection() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slideImages.length);
-    }, 2500);
+    }, 3000);
 
     return () => clearInterval(timer);
   }, []);
@@ -40,7 +40,7 @@ export function HeroSection() {
                     alt={image.description}
                     fill
                     className={cn(
-                        "object-cover transition-transform duration-[2500ms] ease-linear",
+                        "object-cover transition-transform duration-[3000ms] ease-linear",
                         index === currentSlide ? "scale-100" : "scale-110"
                     )}
                     priority={index === 0}

@@ -1,3 +1,4 @@
+
 import { properties } from '@/lib/data';
 import { AnimateOnScroll } from '../animate-on-scroll';
 import { Button } from '../ui/button';
@@ -19,7 +20,7 @@ export function LatestProjects() {
             <Button
               asChild
               variant="outline"
-              className="hidden md:flex rounded-full bg-gray-100 hover:bg-gray-200"
+              className="hidden md:flex rounded-full bg-gray-100 hover:bg-gray-200 dark:text-black"
             >
               <Link href="/off-plan">
                 VIEW ALL PROJECTS

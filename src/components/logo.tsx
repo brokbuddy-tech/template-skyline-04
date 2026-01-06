@@ -12,32 +12,37 @@ export function Logo({ className }: { className?: string }) {
               className="fill-current text-accent"
             >
               <defs>
-                  <pattern id="grid" width="2" height="4" patternUnits="userSpaceOnUse">
-                      <path d="M 0 2 H 2" stroke="white" strokeWidth="0.5"/>
-                  </pattern>
-                  <style>
+                  <linearGradient id="skylineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#00BFFF', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#000080', stopOpacity: 1 }} />
+                  </linearGradient>
+                   <style>
                     {`
                       @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
                     `}
                   </style>
               </defs>
               
-              <text fontFamily="Montserrat, sans-serif" fontSize="18" fontWeight="bold" fill="currentColor" y="30">
-                <tspan x="0">S</tspan>
-                <tspan x="12" y="20" fontSize="24">K</tspan>
-                <tspan x="28" y="10" fontSize="36">Y</tspan>
-                <tspan x="42" y="15" fontSize="30">L</tspan>
-                <tspan x="54" y="5" fontSize="42">I</tspan>
-                <tspan x="62" y="18" fontSize="26">N</tspan>
-                <tspan x="78">E</tspan>
-                <tspan x="90">S</tspan>
+              {/* Icon */}
+              <g transform="translate(10, 5)">
+                  <rect x="0" y="10" width="4" height="10" fill="url(#skylineGradient)" />
+                  <rect x="6" y="5" width="4" height="15" fill="url(#skylineGradient)" />
+                  <rect x="12" y="0" width="4" height="20" fill="url(#skylineGradient)" />
+                  <rect x="18" y="8" width="4" height="12" fill="url(#skylineGradient)" />
+                  <rect x="24" y="12" width="4" height="8" fill="url(#skylineGradient)" />
+              </g>
+
+              {/* Text */}
+              <text 
+                x="40" 
+                y="27" 
+                fontFamily="Montserrat, sans-serif" 
+                fontSize="18" 
+                fontWeight="bold" 
+                fill="hsl(var(--foreground))"
+              >
+                SKYLINES
               </text>
-              
-              {/* Skylines effect */}
-              <rect x="28" y="0" width="3" height="10" fill="currentColor" />
-              <rect x="42" y="0" width="3" height="15" fill="currentColor" />
-              <rect x="54" y="0" width="3" height="30" fill="url(#grid)" />
-              <rect x="62" y="0" width="3" height="18" fill="url(#grid)" />
             </svg>
         </div>
     );

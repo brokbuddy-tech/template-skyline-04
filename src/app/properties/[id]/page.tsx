@@ -21,6 +21,8 @@ import { ReadMore } from '@/components/shared/read-more';
 import { AgentSidebar } from '@/components/shared/agent-sidebar';
 import { LocationMap } from '@/components/shared/location-map';
 import { OffPlanPropertyPage } from '@/components/shared/off-plan-property-page';
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
+import { UpfrontCostModal } from '@/components/shared/upfront-cost-modal';
 
 const propertyTypeIcons: { [key: string]: React.ElementType } = {
   'House': Building,
@@ -54,6 +56,8 @@ export default function PropertyDetailPage() {
   const propertyImages = property.images.map(id => PlaceHolderImages.find(img => img.id === id)).filter(Boolean);
   const recommendedProperties = properties.filter(p => p.id !== property.id).slice(0, 2);
   const PropertyTypeIcon = propertyTypeIcons[property.type] || propertyTypeIcons['Default'];
+  const isForRent = property.transactionType === 'Rent';
+
 
   return (
     <div className="bg-background">
@@ -97,6 +101,16 @@ export default function PropertyDetailPage() {
                 </div>
                 <div className="text-right flex-shrink-0 pl-4">
                   <span className="text-3xl md:text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
+                  {isForRent && (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="link" className="text-sm p-0 h-auto text-muted-foreground hover:text-accent">
+                          See upfront cost
+                        </Button>
+                      </DialogTrigger>
+                      <UpfrontCostModal annualRent={property.price} />
+                    </Dialog>
+                  )}
                 </div>
               </div>
             </AnimateOnScroll>
@@ -159,12 +173,15 @@ export default function PropertyDetailPage() {
               </div>
             </AnimateOnScroll>
 
-            <Separator className="my-12"/>
-
-            {/* Mortgage Calculator */}
-            <AnimateOnScroll>
-                <MortgageCalculator propertyPrice={property.price}/>
-            </AnimateOnScroll>
+            {!isForRent && (
+              <>
+                <Separator className="my-12"/>
+                {/* Mortgage Calculator */}
+                <AnimateOnScroll>
+                    <MortgageCalculator propertyPrice={property.price}/>
+                </AnimateOnScroll>
+              </>
+            )}
 
             <Separator className="my-12"/>
             

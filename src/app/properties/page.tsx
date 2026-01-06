@@ -49,7 +49,7 @@ export default function PropertiesPage() {
             />
         )}
         <div className="absolute inset-0 bg-black/50"></div>
-        <div className="container mx-auto text-center relative z-10">
+        <div className="container mx-auto text-right md:text-center relative z-10">
           <h1 className="text-6xl md:text-7xl font-headline font-medium">{title}</h1>
         </div>
       </section>

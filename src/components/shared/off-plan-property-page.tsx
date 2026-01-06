@@ -119,7 +119,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
               <div className="mt-6 bg-muted rounded-xl p-4 flex items-center justify-between border">
                 <div className="flex items-center gap-4">
                   <div className="bg-background p-2 rounded-md border">
-                    <EmaarLogo className="w-16 h-auto" />
+                    <EmaarLogo className="w-16 h-auto text-foreground" />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">
@@ -455,7 +455,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                   <Input placeholder="Name" />
                   <Input placeholder="Phone" type="tel" />
                   <Input placeholder="Email" type="email" />
-                  <ToggleGroup type="single" defaultValue="end-user" className="w-full border rounded-md">
+                  <ToggleGroup type="single" defaultValue="end-user" className="w-full border rounded-md dark:border-white">
                     <ToggleGroupItem value="investor" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background dark:data-[state=on]:bg-white dark:data-[state=on]:text-black">I am an Investor</ToggleGroupItem>
                     <ToggleGroupItem value="end-user" className="w-full data-[state=on]:bg-foreground data-[state=on]:text-background dark:data-[state=on]:bg-white dark:data-[state=on]:text-black">I am an End User</ToggleGroupItem>
                   </ToggleGroup>
@@ -479,12 +479,3 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
     </div>
   );
 }
-
-    
-
-    
-
-
-
-
-

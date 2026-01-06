@@ -21,7 +21,7 @@ export function CurrencySwitcher() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="text-sm font-medium transition-colors hover:bg-transparent hover:text-accent focus-visible:ring-0 focus-visible:ring-offset-0 p-0 h-auto mr-[20px]"
+          className="text-sm font-medium transition-colors hover:bg-transparent hover:text-accent focus-visible:ring-0 focus-visible:ring-offset-0 p-0 h-auto mr-[25px]"
         >
           {currency.toUpperCase()}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

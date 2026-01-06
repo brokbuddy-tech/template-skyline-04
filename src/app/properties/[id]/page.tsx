@@ -93,9 +93,9 @@ export default function PropertyDetailPage() {
           {/* Left Column */}
           <div className="w-full">
             <AnimateOnScroll>
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h1 className="text-4xl md:text-5xl font-headline font-medium">{property.title}</h1>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                <div className='mb-2 sm:mb-0'>
+                  <h1 className="text-3xl md:text-5xl font-headline font-medium">{property.title}</h1>
                    {isForRent && (
                     <Dialog>
                       <DialogTrigger asChild>
@@ -107,8 +107,8 @@ export default function PropertyDetailPage() {
                     </Dialog>
                   )}
                 </div>
-                <div className="text-right flex-shrink-0 pl-4">
-                  <span className="text-3xl md:text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
+                <div className="sm:text-right flex-shrink-0 sm:pl-4">
+                  <span className="text-2xl md:text-4xl font-bold text-accent convert-price" data-usd-price={property.price}>{formatPrice(property.price)}</span>
                 </div>
               </div>
             </AnimateOnScroll>
@@ -116,11 +116,11 @@ export default function PropertyDetailPage() {
             <AnimateOnScroll delay={100}>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-md border-y py-4 mb-8">
                   <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-muted-foreground" /> <span> {property.location}</span></div>
-                  <Separator orientation="vertical" className="h-5" />
+                  <Separator orientation="vertical" className="h-5 hidden sm:block" />
                   <div className="flex items-center gap-2"><BedDouble className="w-5 h-5 text-muted-foreground" /> <span>{property.bedrooms} Beds</span></div>
                   <Separator orientation="vertical" className="h-5" />
                   <div className="flex items-center gap-2"><Bath className="w-5 h-5 text-muted-foreground" /> <span>{property.bathrooms} Baths</span></div>
-                  <Separator orientation="vertical" className="h-5" />
+                  <Separator orientation="vertical" className="h-5 hidden sm:block" />
                   <div className="flex items-center gap-2"><Square className="w-5 h-5 text-muted-foreground" /> <span>{property.sqft.toLocaleString()} sqft</span></div>
                   <Separator orientation="vertical" className="h-5" />
                   <div className="flex items-center gap-2"><PropertyTypeIcon className="w-5 h-5 text-muted-foreground" /> <span>{property.type}</span></div>

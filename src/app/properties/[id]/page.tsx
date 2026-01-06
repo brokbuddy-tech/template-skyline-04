@@ -35,19 +35,42 @@ const propertyTypeIcons: { [key: string]: React.ElementType } = {
   'Default': Building
 };
 
-const faqData = [
-  {
-    question: "What are the payment terms for this property?",
-    answer: "Standard payment terms are 4 cheques. However, 1-2 cheque payments may attract a lower annual rent negotiation."
-  },
-  {
-    question: "Is this property pet-friendly?",
-    answer: "Yes, the building management allows pets, subject to standard community guidelines."
-  },
-  {
-    question: "Are utility bills included in the rent?",
-    answer: "No, the tenant is responsible for DEWA (Water & Electricity) and Internet. The Chiller (AC) is included in the service charges paid by the landlord."
-  }
+const rentFaqs = [
+    {
+        question: "What documents are typically required to rent a property?",
+        answer: "Generally, individual tenants need to provide a copy of their Passport, Residence Visa, and Emirates ID. Corporate tenants typically need to provide trade licenses and authorized signatory details."
+    },
+    {
+        question: "Who is responsible for utility registration?",
+        answer: "The tenant is usually responsible for setting up and paying for utilities (such as water, electricity, and internet) unless explicitly stated otherwise in the tenancy contract."
+    },
+    {
+        question: "What is the standard security deposit amount?",
+        answer: "For unfurnished properties, the standard security deposit is typically 5% of the annual rent. For furnished properties, it is usually 10%. This is refundable at the end of the tenancy, subject to inspection."
+    },
+    {
+        question: "How does the tenancy contract renewal process work?",
+        answer: "Renewals typically happen annually. Both parties must comply with local rental regulations regarding rent increases and notice periods (usually 90 days before contract expiry) for any changes to terms."
+    }
+];
+
+const saleFaqs = [
+    {
+        question: "What is the difference between Freehold and Leasehold?",
+        answer: "Freehold grants you full ownership of the property and the land it stands on in perpetuity. Leasehold grants you the right to use the property for a fixed period (usually 99 years) but you do not own the land."
+    },
+    {
+        question: "What are the upfront purchase costs involved?",
+        answer: "Buyers should budget for the purchase price plus approximately 6-7% in fees. This includes the Land Department transfer fee (4%), Trustee fees, Agency fees (usually 2%), and potential NOC fees from the developer."
+    },
+    {
+        question: "Can non-residents obtain a mortgage?",
+        answer: "Yes, non-residents can apply for mortgages, though the loan-to-value (LTV) ratio is typically lower (often capped at 50-60%) compared to residents, and interest rates may vary."
+    },
+    {
+        question: "What is an 'Off-Plan' property?",
+        answer: "Off-plan refers to a property that is currently under construction or in the planning phase. These are often sold with payment plans and can offer capital appreciation potential by the time the project is completed."
+    }
 ];
 
 export default function PropertyDetailPage() {
@@ -77,6 +100,8 @@ export default function PropertyDetailPage() {
   const recommendedProperties = properties.filter(p => p.id !== property.id).slice(0, 2);
   const PropertyTypeIcon = propertyTypeIcons[property.type] || propertyTypeIcons['Default'];
   const isForRent = property.transactionType === 'Rent';
+  
+  const faqData = isForRent ? rentFaqs : saleFaqs;
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % propertyImages.length);

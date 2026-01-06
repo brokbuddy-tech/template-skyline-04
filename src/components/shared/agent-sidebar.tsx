@@ -19,7 +19,7 @@ export function AgentSidebar() {
   ]
 
   return (
-    <div className="lg:sticky lg:top-24">
+    <div className="lg:absolute lg:top-0 lg:w-full">
       <div className="border rounded-lg p-6">
         <div className="flex flex-col items-center text-center">
             {agentImage && (

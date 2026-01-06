@@ -162,7 +162,7 @@ export default function PropertyDetailPage() {
                     <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5"/> <strong>RERA Permit:</strong> {property.reraPermit || 'N/A'}</li>
                   </ul>
                 </div>
-                <div className="text-center w-full sm:w-auto">
+                <div className="text-center w-full flex flex-col items-center sm:w-auto sm:items-end">
                     <p className="text-sm font-bold mb-2">DLD Permit</p>
                     {qrCodeUrl ? (
                         <Image src={qrCodeUrl} alt="DLD Permit QR Code" width={100} height={100} />

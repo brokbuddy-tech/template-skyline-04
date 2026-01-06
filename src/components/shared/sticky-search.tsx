@@ -17,6 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas', 'Offices'];
 const completionStatus = ['Any', 'Ready', 'Off-plan'];
@@ -25,7 +27,10 @@ export function StickySearch() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedType, setSelectedType] = useState('Property Type');
   const [selectedStatus, setSelectedStatus] = useState('Completion Status');
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [transactionType, setTransactionType] = useState(searchParams.get('type') || 'buy');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,6 +39,16 @@ export function StickySearch() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleTransactionTypeChange = (value: string) => {
+    if (value) {
+      setTransactionType(value);
+      const params = new URLSearchParams(searchParams);
+      params.set('type', value);
+      router.push(`${pathname}?${params.toString()}`);
+    }
+  };
+
 
   return (
     <div className={cn(
@@ -67,10 +82,20 @@ export function StickySearch() {
 
           {/* Desktop Search Bar */}
           <div className="hidden md:flex bg-white dark:bg-black rounded-full p-2 shadow-lg items-center gap-2 border w-full">
+            <ToggleGroup 
+              type="single" 
+              value={transactionType} 
+              onValueChange={handleTransactionTypeChange}
+              className="p-1 bg-gray-100/80 dark:bg-gray-800/80 rounded-full ml-2"
+            >
+              <ToggleGroupItem value="buy" className="px-4 py-2 text-sm rounded-full data-[state=on]:bg-white dark:data-[state=on]:bg-black data-[state=on]:shadow-sm">Buy</ToggleGroupItem>
+              <ToggleGroupItem value="rent" className="px-4 py-2 text-sm rounded-full data-[state=on]:bg-white dark:data-[state=on]:bg-black data-[state=on]:shadow-sm">Rent</ToggleGroupItem>
+            </ToggleGroup>
+            
             <input
               type="text"
               placeholder="Enter keywords..."
-              className="bg-gray-100/80 dark:bg-gray-800/80 rounded-full px-6 py-4 flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 w-full focus:ring-2 focus:ring-accent"
+              className="bg-transparent rounded-full px-6 py-4 flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 w-full focus:ring-0 border-0"
             />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

@@ -156,7 +156,7 @@ function normalizeImageUrl(image?: PublicListingImage | null): string | null {
 
   const storageUrl = buildStorageImageUrl(image.gcsPath);
   const originalUrl = isProxiedPublicImageUrl(image.url)
-    ? storageUrl || normalizeAssetUrl(image.url)
+    ? normalizeAssetUrl(image.url) || storageUrl
     : normalizeAssetUrl(image.url) || storageUrl;
   const isReady = image.status?.toUpperCase() === 'READY';
   const preferredUrl = isReady

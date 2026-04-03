@@ -492,6 +492,7 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
                   latitude={property.latitude}
                   longitude={property.longitude}
                   locationLabel={property.location}
+                  addressLabel={property.mapAddress}
                 />
               </div>
 

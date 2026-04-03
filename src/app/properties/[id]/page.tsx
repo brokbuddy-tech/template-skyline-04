@@ -16,7 +16,18 @@ export default async function PropertyDetailPage({
     getSiteConfig(),
   ]);
 
-  const resolvedProperty = property || fallbackProperties.find(item => item.id === id) || null;
+  const feedProperty = allPropertiesResponse.properties.find(item => item.id === id) || null;
+  const resolvedProperty = property
+    ? {
+        ...feedProperty,
+        ...property,
+        images: property.images.length > 0 ? property.images : feedProperty?.images || [],
+        latitude: property.latitude ?? feedProperty?.latitude ?? null,
+        longitude: property.longitude ?? feedProperty?.longitude ?? null,
+        mapAddress: property.mapAddress || feedProperty?.mapAddress,
+      }
+    : feedProperty || fallbackProperties.find(item => item.id === id) || null;
+
   if (!resolvedProperty) {
     notFound();
   }

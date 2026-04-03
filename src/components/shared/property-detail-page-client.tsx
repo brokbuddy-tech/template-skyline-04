@@ -253,7 +253,12 @@ export function PropertyDetailPageClient({
 
               <AnimateOnScroll>
                 <h2 className="text-3xl font-headline mb-6">Location</h2>
-                <LocationMap latitude={property.latitude} longitude={property.longitude} locationLabel={property.location} />
+                <LocationMap
+                  latitude={property.latitude}
+                  longitude={property.longitude}
+                  locationLabel={property.location}
+                  addressLabel={property.mapAddress}
+                />
               </AnimateOnScroll>
 
               {property.nearby && property.nearby.length > 0 && (

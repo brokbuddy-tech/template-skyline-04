@@ -24,6 +24,7 @@ export type Property = {
   id: string;
   title: string;
   location: string;
+  mapAddress?: string;
   price: number;
   currency?: string;
   bedrooms: number;

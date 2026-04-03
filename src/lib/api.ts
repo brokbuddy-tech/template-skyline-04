@@ -40,10 +40,15 @@ export type PaginatedProperties = {
 };
 
 type PublicListingImage = {
+  id?: string | null;
   url?: string | null;
   cdnUrl?: string | null;
   mediumUrl?: string | null;
   thumbnailUrl?: string | null;
+  gcsPath?: string | null;
+  format?: string | null;
+  category?: string | null;
+  order?: number | null;
   status?: string | null;
   isHero?: boolean | null;
 };
@@ -72,6 +77,10 @@ type PublicListing = Record<string, any> & {
   paymentPlanData?: Record<string, any> | null;
   latitude?: number | null;
   longitude?: number | null;
+  lat?: number | string | null;
+  lng?: number | string | null;
+  streetAddress?: string | null;
+  address?: string | null;
 };
 
 function getPublicApiBase() {
@@ -95,14 +104,63 @@ function normalizeNumber(value: unknown): number {
   return 0;
 }
 
+function normalizeCoordinate(...values: unknown[]): number | null {
+  for (const value of values) {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value === 'string') {
+      const parsed = Number.parseFloat(value);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+  }
+
+  return null;
+}
+
+function buildStorageImageUrl(gcsPath?: string | null): string | null {
+  if (!gcsPath) return null;
+  return `https://storage.googleapis.com/brokbuddy-listing-images/${gcsPath.replace(/^\/+/, '')}`;
+}
+
+function isRenderableImage(image?: PublicListingImage | null): boolean {
+  if (!image) return false;
+
+  const format = (image.format || '').toLowerCase();
+  const category = (image.category || '').toUpperCase();
+
+  if (category === 'TITLE_DEED') return false;
+  if (format === 'application/pdf' || format.endsWith('pdf')) return false;
+
+  return true;
+}
+
 function normalizeImageUrl(image?: PublicListingImage | null): string | null {
-  if (!image) return null;
-  return image.cdnUrl || image.mediumUrl || image.thumbnailUrl || image.url || null;
+  if (!image || !isRenderableImage(image)) return null;
+
+  const originalUrl = buildStorageImageUrl(image.gcsPath);
+  const isReady = image.status?.toUpperCase() === 'READY';
+  const preferredUrl = isReady
+    ? image.mediumUrl || image.cdnUrl || image.thumbnailUrl || originalUrl || image.url
+    : originalUrl || image.url || image.mediumUrl || image.thumbnailUrl || image.cdnUrl;
+
+  return preferredUrl?.trim() || null;
 }
 
 function normalizeImages(images?: PublicListingImage[] | null): string[] {
   if (!images?.length) return [];
-  return images.map(normalizeImageUrl).filter((image): image is string => Boolean(image));
+  return [...images]
+    .filter(isRenderableImage)
+    .sort((left, right) => {
+      const heroDelta = Number(Boolean(right.isHero)) - Number(Boolean(left.isHero));
+      if (heroDelta !== 0) return heroDelta;
+
+      const orderDelta =
+        (left.order ?? Number.MAX_SAFE_INTEGER) - (right.order ?? Number.MAX_SAFE_INTEGER);
+      if (orderDelta !== 0) return orderDelta;
+
+      return String(left.id || '').localeCompare(String(right.id || ''));
+    })
+    .map(normalizeImageUrl)
+    .filter((image): image is string => Boolean(image));
 }
 
 function pickDeveloperLogo(developerName?: string | null) {
@@ -173,6 +231,7 @@ function mapListingToProperty(listing: PublicListing): Property {
     id: listing.id,
     title: listing.title?.trim() || 'Untitled Property',
     location: normalizeLocation(listing),
+    mapAddress: listing.streetAddress?.trim() || listing.address?.trim() || undefined,
     price: normalizeNumber(listing.price),
     currency: listing.currency || 'AED',
     bedrooms: normalizeNumber(listing.bedrooms),
@@ -195,8 +254,8 @@ function mapListingToProperty(listing: PublicListing): Property {
     category: listing.category || undefined,
     nearby: Array.isArray(listing.nearby) ? listing.nearby : [],
     handoverDate: normalizeHandoverDate(listing),
-    latitude: listing.latitude ?? null,
-    longitude: listing.longitude ?? null,
+    latitude: normalizeCoordinate(listing.latitude, listing.lat),
+    longitude: normalizeCoordinate(listing.longitude, listing.lng),
     paymentPlanData: listing.paymentPlanData || null,
     constructionTimelineData: listing.constructionTimelineData || null,
     organizationName,

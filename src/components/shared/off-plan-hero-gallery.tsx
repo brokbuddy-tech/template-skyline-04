@@ -2,16 +2,22 @@
 'use client';
 
 import Image from 'next/image';
-import { Camera, MapPin, Play, Video } from 'lucide-react';
+import { Camera, MapPin, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Property } from '@/lib/types';
 import { resolveImage } from '@/lib/property-media';
 
 interface OffPlanHeroGalleryProps {
   property: Property;
+  badgeText?: string;
+  mapHref?: string;
 }
 
-export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
+export function OffPlanHeroGallery({
+  property,
+  badgeText,
+  mapHref = '#property-location',
+}: OffPlanHeroGalleryProps) {
   const images = [
     property.images[0] || 'prop-1-1',
     property.images[1] || 'prop-1-2',
@@ -20,6 +26,9 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
   ].map((id) => resolveImage(id));
   
   const [mainImage, lifestyleImage, amenityImage, bedroomImage] = images;
+  const galleryBadge = badgeText || (property.status === 'Off-plan' ? 'Artist Impression' : 'Property Gallery');
+  const extraPhotoCount = Math.max((property.images?.length || 0) - 4, 0);
+  const photoCountLabel = extraPhotoCount > 0 ? `+ ${extraPhotoCount} Photos` : 'View Gallery';
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-6">
@@ -41,7 +50,7 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
             </>
           )}
           <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider">
-            Artist Impression
+            {galleryBadge}
           </div>
           <div className="absolute bottom-4 right-4 flex gap-3">
             <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black">
@@ -50,8 +59,14 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
             <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black">
               <Play size={16} /> <span className="ml-2">Watch Video</span>
             </Button>
-            <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black">
-              <MapPin size={16} /> <span className="ml-2">Show on Map</span>
+            <Button
+              asChild
+              variant="outline-light"
+              className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black"
+            >
+              <a href={mapHref}>
+                <MapPin size={16} /> <span className="ml-2">Show on Map</span>
+              </a>
             </Button>
           </div>
         </div>
@@ -97,7 +112,7 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
             />
           )}
           <div className="absolute inset-0 bg-black/60 hover:bg-black/70 transition-colors flex items-center justify-center">
-            <p className="text-white font-bold text-lg">+ 12 Photos</p>
+            <p className="text-white font-bold text-lg">{photoCountLabel}</p>
           </div>
         </div>
       </div>

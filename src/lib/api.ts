@@ -136,11 +136,11 @@ function isRenderableImage(image?: PublicListingImage | null): boolean {
 function normalizeImageUrl(image?: PublicListingImage | null): string | null {
   if (!image || !isRenderableImage(image)) return null;
 
-  const originalUrl = buildStorageImageUrl(image.gcsPath);
+  const originalUrl = image.url?.trim() || buildStorageImageUrl(image.gcsPath);
   const isReady = image.status?.toUpperCase() === 'READY';
   const preferredUrl = isReady
-    ? image.mediumUrl || image.cdnUrl || image.thumbnailUrl || originalUrl || image.url
-    : originalUrl || image.url || image.mediumUrl || image.thumbnailUrl || image.cdnUrl;
+    ? image.mediumUrl || image.cdnUrl || image.thumbnailUrl || originalUrl
+    : originalUrl || image.mediumUrl || image.thumbnailUrl || image.cdnUrl;
 
   return preferredUrl?.trim() || null;
 }

@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BedDouble, Bath, Square, MapPin, Building, LandPlot, HandHelping, Banknote, ShieldCheck, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { BedDouble, Bath, Square, MapPin, Building, LandPlot, HandHelping, Banknote, ShieldCheck, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
@@ -16,12 +16,11 @@ import { ReadMore } from '@/components/shared/read-more';
 import { AgentSidebar } from '@/components/shared/agent-sidebar';
 import { LocationMap } from '@/components/shared/location-map';
 import { LiveOffPlanPropertyPage } from '@/components/shared/live-off-plan-property-page';
+import { OffPlanHeroGallery } from '@/components/shared/off-plan-hero-gallery';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { UpfrontCostModal } from '@/components/shared/upfront-cost-modal';
 import { Card } from '@/components/ui/card';
 import { FaqAccordion } from '@/components/shared/faq-accordion';
-import { cn } from '@/lib/utils';
-import { resolveImage } from '@/lib/property-media';
 import type { Property, PropertyAgent } from '@/lib/types';
 
 const propertyTypeIcons: Record<string, React.ElementType> = {
@@ -80,7 +79,6 @@ export function PropertyDetailPageClient({
   recommendedProperties: Property[];
   fallbackAgent?: PropertyAgent;
 }) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const { formatPrice } = useContext(CurrencyContext);
 
@@ -93,11 +91,6 @@ export function PropertyDetailPageClient({
     return <LiveOffPlanPropertyPage property={property} />;
   }
 
-  const propertyImages = property.images
-    .map(image => resolveImage(image))
-    .filter(
-      (image): image is NonNullable<ReturnType<typeof resolveImage>> => Boolean(image)
-    );
   const PropertyTypeIcon = propertyTypeIcons[property.type] || propertyTypeIcons.Default;
   const isForRent = property.transactionType === 'Rent';
   const faqData = isForRent ? rentFaqs : saleFaqs;
@@ -106,51 +99,7 @@ export function PropertyDetailPageClient({
   return (
     <div className="bg-background">
       <AnimateOnScroll>
-        <section className="py-0 px-0 md:px-8 md:py-16">
-          <div className="md:hidden relative h-[60vh]">
-            {propertyImages.length > 0 && (
-              <Image
-                src={propertyImages[currentImageIndex]!.src}
-                alt={`${property.title} image ${currentImageIndex + 1}`}
-                fill
-                className="object-cover"
-                data-ai-hint={propertyImages[currentImageIndex]!.hint}
-                unoptimized={propertyImages[currentImageIndex]!.unoptimized}
-              />
-            )}
-            {propertyImages.length > 1 && (
-              <>
-                <Button size="icon" variant="ghost" onClick={() => setCurrentImageIndex(previous => (previous - 1 + propertyImages.length) % propertyImages.length)} className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white">
-                  <ChevronLeft className="h-6 w-6" />
-                </Button>
-                <Button size="icon" variant="ghost" onClick={() => setCurrentImageIndex(previous => (previous + 1) % propertyImages.length)} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 text-white hover:bg-black/50 hover:text-white">
-                  <ChevronRight className="h-6 w-6" />
-                </Button>
-              </>
-            )}
-          </div>
-          <div className="container mx-auto hidden md:grid grid-cols-4 grid-rows-2 gap-4 h-[60vh]">
-            {propertyImages.map((image, index) => {
-              const isFirst = index === 0;
-              return (
-                <div
-                  key={`${image.src}-${index}`}
-                  className={cn('overflow-hidden rounded-lg', isFirst ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1')}
-                >
-                  <Image
-                    src={image.src}
-                    alt={`${property.title} image ${index + 1}`}
-                    width={isFirst ? 1200 : 600}
-                    height={isFirst ? 1200 : 600}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                    data-ai-hint={image.hint}
-                    unoptimized={image.unoptimized}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </section>
+        <OffPlanHeroGallery property={property} badgeText="Property Gallery" mapHref="#property-location" />
       </AnimateOnScroll>
 
       <div className="container mx-auto px-4 sm:px-8">
@@ -252,13 +201,15 @@ export function PropertyDetailPageClient({
               <Separator className="my-12" />
 
               <AnimateOnScroll>
-                <h2 className="text-3xl font-headline mb-6">Location</h2>
-                <LocationMap
-                  latitude={property.latitude}
-                  longitude={property.longitude}
-                  locationLabel={property.location}
-                  addressLabel={property.mapAddress}
-                />
+                <section id="property-location">
+                  <h2 className="text-3xl font-headline mb-6">Location</h2>
+                  <LocationMap
+                    latitude={property.latitude}
+                    longitude={property.longitude}
+                    locationLabel={property.location}
+                    addressLabel={property.mapAddress}
+                  />
+                </section>
               </AnimateOnScroll>
 
               {property.nearby && property.nearby.length > 0 && (

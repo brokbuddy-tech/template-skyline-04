@@ -1,9 +1,6 @@
 import type { Property, PropertyAgent, SiteAgent, SiteConfig, Testimonial } from './types';
+import { PUBLIC_API_BASE_URLS, shouldRetryApiRequest } from './api-base';
 
-const RAW_API_BASE_URL =
-  (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL as string | undefined) || 'http://localhost:4000/api').replace(/\/$/, '');
-
-const SERVER_PUBLIC_API_BASE = `${RAW_API_BASE_URL}/public`;
 const CLIENT_PUBLIC_API_BASE = '/api/public';
 
 export const ORG_SLUG =
@@ -83,8 +80,8 @@ type PublicListing = Record<string, any> & {
   address?: string | null;
 };
 
-function getPublicApiBase() {
-  return typeof window === 'undefined' ? SERVER_PUBLIC_API_BASE : CLIENT_PUBLIC_API_BASE;
+function getPublicApiBases() {
+  return typeof window === 'undefined' ? PUBLIC_API_BASE_URLS : [CLIENT_PUBLIC_API_BASE];
 }
 
 function normalizeTransactionType(value?: string | null): 'Sale' | 'Rent' {
@@ -276,15 +273,6 @@ async function fetchJson<T>(
     init?: RequestInit;
   } = {}
 ): Promise<T> {
-  const url = new URL(`${getPublicApiBase()}${path}`, typeof window === 'undefined' ? 'http://localhost' : window.location.origin);
-
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      if (value === undefined || value === null || value === '') return;
-      url.searchParams.set(key, String(value));
-    });
-  }
-
   const requestInit: RequestInit = {
     ...init,
     headers: {
@@ -297,12 +285,45 @@ async function fetchJson<T>(
     (requestInit as RequestInit & { next?: { revalidate: number } }).next = { revalidate };
   }
 
-  const response = await fetch(url.toString(), requestInit);
-  if (!response.ok) {
-    throw new Error(`Request failed for ${url.pathname}: ${response.status}`);
+  const publicApiBases = getPublicApiBases();
+  let lastError: Error | null = null;
+
+  for (const [index, publicApiBase] of publicApiBases.entries()) {
+    const url = new URL(
+      `${publicApiBase}${path}`,
+      typeof window === 'undefined' ? 'http://localhost' : window.location.origin
+    );
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value === undefined || value === null || value === '') return;
+        url.searchParams.set(key, String(value));
+      });
+    }
+
+    try {
+      const response = await fetch(url.toString(), requestInit);
+      if (!response.ok) {
+        const error = new Error(`Request failed for ${url.pathname}: ${response.status}`);
+        if (index < publicApiBases.length - 1 && shouldRetryApiRequest(response.status)) {
+          lastError = error;
+          continue;
+        }
+
+        throw error;
+      }
+
+      return response.json() as Promise<T>;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+
+      if (index === publicApiBases.length - 1) {
+        throw lastError;
+      }
+    }
   }
 
-  return response.json() as Promise<T>;
+  throw lastError ?? new Error(`Request failed for ${path}`);
 }
 
 export function toSocialUrl(platform: 'instagram' | 'linkedin' | 'twitter' | 'website' | 'whatsapp', value?: string | null) {

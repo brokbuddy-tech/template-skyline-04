@@ -118,6 +118,27 @@ function buildStorageImageUrl(gcsPath?: string | null): string | null {
   return `https://storage.googleapis.com/brokbuddy-listing-images/${gcsPath.replace(/^\/+/, '')}`;
 }
 
+function normalizeAssetUrl(value?: string | null): string | null {
+  const normalized = value?.trim();
+  if (!normalized) return null;
+  if (!normalized.startsWith('/')) return normalized;
+
+  const publicApiBase = PUBLIC_API_BASE_URLS[0];
+  if (!publicApiBase) return normalized;
+
+  const apiOrigin = publicApiBase.replace(/\/api\/public$/i, '');
+
+  try {
+    return new URL(normalized, apiOrigin).toString();
+  } catch {
+    return normalized;
+  }
+}
+
+function isProxiedPublicImageUrl(value?: string | null): boolean {
+  return /^\/api\/public\/images\/[^/]+\/view/i.test(value?.trim() || '');
+}
+
 function isRenderableImage(image?: PublicListingImage | null): boolean {
   if (!image) return false;
 
@@ -133,11 +154,20 @@ function isRenderableImage(image?: PublicListingImage | null): boolean {
 function normalizeImageUrl(image?: PublicListingImage | null): string | null {
   if (!image || !isRenderableImage(image)) return null;
 
-  const originalUrl = image.url?.trim() || buildStorageImageUrl(image.gcsPath);
+  const storageUrl = buildStorageImageUrl(image.gcsPath);
+  const originalUrl = isProxiedPublicImageUrl(image.url)
+    ? storageUrl || normalizeAssetUrl(image.url)
+    : normalizeAssetUrl(image.url) || storageUrl;
   const isReady = image.status?.toUpperCase() === 'READY';
   const preferredUrl = isReady
-    ? image.mediumUrl || image.cdnUrl || image.thumbnailUrl || originalUrl
-    : originalUrl || image.mediumUrl || image.thumbnailUrl || image.cdnUrl;
+    ? normalizeAssetUrl(image.mediumUrl) ||
+      normalizeAssetUrl(image.cdnUrl) ||
+      normalizeAssetUrl(image.thumbnailUrl) ||
+      originalUrl
+    : originalUrl ||
+      normalizeAssetUrl(image.mediumUrl) ||
+      normalizeAssetUrl(image.thumbnailUrl) ||
+      normalizeAssetUrl(image.cdnUrl);
 
   return preferredUrl?.trim() || null;
 }

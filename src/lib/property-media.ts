@@ -24,10 +24,12 @@ export function resolveImage(source?: string | null, fallbackId = 'prop-1-1'): R
     };
   }
 
+  const resolvedSource = normalizedSource || placeholder!.imageUrl;
+
   return {
-    src: normalizedSource || placeholder!.imageUrl,
+    src: resolvedSource,
     alt: 'Property image',
     hint: 'property',
-    unoptimized: /^https?:\/\//i.test(normalizedSource || ''),
+    unoptimized: /^https?:\/\//i.test(resolvedSource) || /^\/api\//i.test(resolvedSource),
   };
 }

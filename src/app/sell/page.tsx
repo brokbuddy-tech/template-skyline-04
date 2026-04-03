@@ -1,13 +1,17 @@
 
 'use client';
 
+import { useEffect, useState, type FormEvent } from 'react';
 import { AnimateOnScroll } from '@/components/animate-on-scroll';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useOrgInquiry } from '@/hooks/use-org-inquiry';
+import { getSiteConfig } from '@/lib/api';
+import type { SiteConfig } from '@/lib/types';
 import { MapPin, Users, CalendarClock } from 'lucide-react';
-import { Award, Handshake, Search, TrendingUp } from 'lucide-react';
+import { Award, Handshake, TrendingUp } from 'lucide-react';
 
 const features = [
   {
@@ -32,7 +36,72 @@ const features = [
   }
 ];
 
+function getFormValue(formData: FormData, key: string) {
+  return String(formData.get(key) || '').trim();
+}
+
 export default function SellPage() {
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const [offeringType, setOfferingType] = useState('sale');
+  const { isSubmitting, submitInquiry } = useOrgInquiry();
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadConfig() {
+      const config = await getSiteConfig();
+      if (active) setSiteConfig(config);
+    }
+
+    void loadConfig();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const displayName =
+    siteConfig?.branding?.displayName || siteConfig?.organization.name || 'SkyLines';
+  const agentsCount = siteConfig?.stats?.activeAgents || 300;
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const firstName = getFormValue(formData, 'firstName');
+    const lastName = getFormValue(formData, 'lastName');
+    const address = getFormValue(formData, 'address');
+    const preferredDate = getFormValue(formData, 'preferredDate');
+    const preferredTime = getFormValue(formData, 'preferredTime');
+
+    const result = await submitInquiry(
+      {
+        name: `${firstName} ${lastName}`.trim(),
+        email: getFormValue(formData, 'email'),
+        phone: getFormValue(formData, 'phone'),
+        propertyType: offeringType,
+        message: [
+          `Valuation request for a property listed ${offeringType === 'rent' ? 'for rent' : 'for sale'}.`,
+          address ? `Address: ${address}.` : null,
+          preferredDate ? `Preferred date: ${preferredDate}.` : null,
+          preferredTime ? `Preferred time: ${preferredTime}.` : null,
+        ]
+          .filter(Boolean)
+          .join(' '),
+      },
+      {
+        successTitle: 'Valuation request sent',
+        successDescription: 'Our team will contact you to confirm the next steps.',
+      }
+    );
+
+    if (result.ok) {
+      form.reset();
+      setOfferingType('sale');
+    }
+  }
+
   return (
     <div className="bg-background">
       {/* Section 1: The Valuation Hero */}
@@ -42,11 +111,11 @@ export default function SellPage() {
           <div className="lg:pr-8">
             <AnimateOnScroll>
               <h1 className="text-4xl md:text-6xl font-headline font-bold text-foreground mb-6 text-balance">
-                List Your Property with SkyLines
+                List Your Property with {displayName}
               </h1>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Knowing your property's true value is the smartest place to start when considering a sale. At SkyLines, we combine cutting-edge data with our team's deep market expertise to provide you with an accurate, obligation-free valuation.
+                  Knowing your property's true value is the smartest place to start when considering a sale. At {displayName}, we combine market data with local expertise to provide an accurate, obligation-free valuation.
                 </p>
                 <p>
                   Our process is quick, straightforward, and designed to give you the clarity you need to make informed decisions. Let us show you what your property is worth today.
@@ -61,7 +130,7 @@ export default function SellPage() {
                 </div>
                 <div className="flex flex-col items-center sm:items-start gap-2">
                   <Users className="w-8 h-8 text-accent" />
-                  <p className="font-bold">300+ Community Experts</p>
+                  <p className="font-bold">{agentsCount}+ Community Experts</p>
                 </div>
                 <div className="flex flex-col items-center sm:items-start gap-2">
                   <CalendarClock className="w-8 h-8 text-accent" />
@@ -73,29 +142,29 @@ export default function SellPage() {
 
           {/* Column B: The Valuation Form */}
           <AnimateOnScroll delay={200}>
-            <form className="bg-white dark:bg-muted p-8 rounded-xl shadow-xl border border-border">
+            <form className="bg-white dark:bg-muted p-8 rounded-xl shadow-xl border border-border" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 gap-6">
                 <div>
                     <Label htmlFor="first-name">First Name</Label>
-                    <Input id="first-name" type="text" placeholder="John" />
+                    <Input id="first-name" name="firstName" type="text" placeholder="John" required />
                 </div>
                 <div>
                     <Label htmlFor="last-name">Last Name</Label>
-                    <Input id="last-name" type="text" placeholder="Doe"/>
+                    <Input id="last-name" name="lastName" type="text" placeholder="Doe" required />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="john.doe@example.com" />
+                        <Input id="email" name="email" type="email" placeholder="john.doe@example.com" required />
                     </div>
                     <div>
                         <Label htmlFor="phone">Phone Number</Label>
-                        <Input id="phone" type="tel" placeholder="+1 234 567 8900" />
+                        <Input id="phone" name="phone" type="tel" placeholder="+971 50 123 4567" />
                     </div>
                 </div>
                  <div>
                     <Label htmlFor="offering-type">Offering Type</Label>
-                     <Select>
+                     <Select value={offeringType} onValueChange={setOfferingType}>
                         <SelectTrigger id="offering-type">
                             <SelectValue placeholder="Select offering type" />
                         </SelectTrigger>
@@ -107,20 +176,20 @@ export default function SellPage() {
                 </div>
                 <div>
                     <Label htmlFor="address">Property Address</Label>
-                    <Input id="address" type="text" placeholder="123 Luxury Lane, Beverly Hills, CA"/>
+                    <Input id="address" name="address" type="text" placeholder="Dubai Marina, Palm Jumeirah, Downtown..." />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <Label htmlFor="date">Preferred Date</Label>
-                        <Input id="date" type="date" />
+                        <Input id="date" name="preferredDate" type="date" />
                     </div>
                     <div>
                         <Label htmlFor="time">Preferred Time</Label>
-                        <Input id="time" type="time" />
+                        <Input id="time" name="preferredTime" type="time" />
                     </div>
                 </div>
-                <Button type="submit" size="lg" className="w-full uppercase tracking-wide font-bold">
-                  Book Your Valuation
+                <Button type="submit" size="lg" className="w-full uppercase tracking-wide font-bold" disabled={isSubmitting}>
+                  {isSubmitting ? 'Sending Request...' : 'Book Your Valuation'}
                 </Button>
               </div>
             </form>

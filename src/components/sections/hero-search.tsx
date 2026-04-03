@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronDown, Search, SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -13,14 +13,45 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AdvancedSearchModal } from '../shared/advanced-search-modal';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const searchTabs = ['Buy', 'Rent', 'Sell', 'Manage'];
-const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas', 'Offices'];
+const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
 
-export function HeroSearch() {
+export function HeroSearch({ categories = [] }: { categories?: string[] }) {
   const [activeTab, setActiveTab] = useState('Buy');
-  const [selectedType, setSelectedType] = useState('Choose Property Type');
+  const [selectedType, setSelectedType] = useState('');
+  const [query, setQuery] = useState('');
+  const router = useRouter();
+  const propertyTypes = useMemo(
+    () => (categories.length > 0 ? categories : fallbackPropertyTypes),
+    [categories]
+  );
+
+  const handleSearch = () => {
+    if (activeTab === 'Sell') {
+      router.push('/sell');
+      return;
+    }
+
+    if (activeTab === 'Manage') {
+      router.push('/contact');
+      return;
+    }
+
+    const params = new URLSearchParams();
+    params.set('type', activeTab === 'Rent' ? 'rent' : 'buy');
+
+    if (selectedType) {
+      params.set('category', selectedType);
+    }
+
+    if (query.trim()) {
+      params.set('q', query.trim());
+    }
+
+    router.push(`/properties?${params.toString()}`);
+  };
 
   const renderTab = (tab: string) => {
     const isActive = activeTab === tab;
@@ -55,26 +86,10 @@ export function HeroSearch() {
     );
 
     const buttonWrapper = (
-      <button onClick={() => setActiveTab(tab)} className="md:border-0 md:bg-transparent md:p-0">
+      <button onClick={() => setActiveTab(tab)} className="md:border-0 md:bg-transparent md:p-0" type="button">
         {buttonContent}
       </button>
     );
-
-    if (tab === 'Buy') {
-        return (
-            <Link key={tab} href="/properties?type=buy" passHref legacyBehavior>
-                {buttonWrapper}
-            </Link>
-        )
-    }
-
-    if (tab === 'Rent') {
-        return (
-            <Link key={tab} href="/properties?type=rent" passHref legacyBehavior>
-                {buttonWrapper}
-            </Link>
-        )
-    }
 
     return <div key={tab}>{buttonWrapper}</div>;
   }
@@ -95,7 +110,7 @@ export function HeroSearch() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="bg-gray-100/80 dark:bg-gray-800/80 rounded-full px-6 py-4 flex items-center justify-between min-w-[220px] w-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                  <span className="text-gray-700 dark:text-gray-200 truncate">{selectedType}</span>
+                  <span className="text-gray-700 dark:text-gray-200 truncate">{selectedType || 'Choose Property Type'}</span>
                   <ChevronDown className="w-5 h-5 text-accent ml-2" />
                 </div>
               </DropdownMenuTrigger>
@@ -115,6 +130,11 @@ export function HeroSearch() {
             <input
               type="text"
               placeholder="Community or Building..."
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') handleSearch();
+              }}
               className="bg-gray-100/80 dark:bg-gray-800/80 rounded-full px-6 py-4 flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 w-full"
             />
 
@@ -123,6 +143,7 @@ export function HeroSearch() {
                 size="icon"
                 className="w-14 h-14 bg-accent rounded-full text-white shadow-lg hover:scale-105 transition"
                 aria-label="Search"
+                onClick={handleSearch}
               >
                 <Search className="w-6 h-6" />
               </Button>
@@ -182,7 +203,7 @@ export function HeroSearch() {
 
         </div>
       </div>
-      <AdvancedSearchModal />
+      <AdvancedSearchModal amenities={[]} />
     </Dialog>
   );
 }

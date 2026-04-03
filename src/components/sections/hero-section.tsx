@@ -14,7 +14,7 @@ const slideImages = [
 ].filter(Boolean) as (typeof PlaceHolderImages)[0][];
 
 
-export function HeroSection() {
+export function HeroSection({ categories = [] }: { categories?: string[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function HeroSection() {
               Transforming Spaces, <br /> Realizing <span className="text-[#ff3223]">Dreams.</span>
             </h1>
           </div>
-          <HeroSearch />
+          <HeroSearch categories={categories} />
         </div>
     </div>
   );

@@ -4,15 +4,15 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { MessageCircle, Send, X, Bot, User } from 'lucide-react';
+import { Send, X, Bot, User } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { intelligentAIPropertySearch } from '@/ai/flows/intelligent-ai-property-search';
-import { properties } from '@/lib/data';
+import { getProperties } from '@/lib/api';
+import { resolveImage } from '@/lib/property-media';
+import { getSmartPropertyMatches } from '@/lib/search';
 import { Property } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { MetaballLoader } from './metaball-loader';
 
 interface Message {
@@ -27,8 +27,26 @@ export function AIChatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [catalog, setCatalog] = useState<Property[]>([]);
+  const [isCatalogLoading, setIsCatalogLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const chatPopupRef = useRef<HTMLDivElement>(null);
+
+  async function loadCatalog() {
+    if (catalog.length > 0 || isCatalogLoading) return catalog;
+
+    setIsCatalogLoading(true);
+    try {
+      const response = await getProperties({ limit: 200 });
+      setCatalog(response.properties);
+      return response.properties;
+    } catch (error) {
+      console.error('Unable to load chatbot catalog', error);
+      return [];
+    } finally {
+      setIsCatalogLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -41,6 +59,11 @@ export function AIChatbot() {
       ]);
     }
   }, [isOpen, messages.length]);
+
+  useEffect(() => {
+    if (!isOpen || catalog.length > 0) return;
+    void loadCatalog();
+  }, [isOpen, catalog.length]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -68,11 +91,12 @@ export function AIChatbot() {
   }, [isOpen]);
 
   const handleSendMessage = async () => {
-    if (inputValue.trim() === '') return;
+    const query = inputValue.trim();
+    if (!query) return;
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
-      text: inputValue,
+      text: query,
       sender: 'user',
     };
     setMessages((prev) => [...prev, userMessage]);
@@ -80,12 +104,16 @@ export function AIChatbot() {
     setIsLoading(true);
 
     try {
-      const result = await intelligentAIPropertySearch({ query: inputValue });
-      const foundProperties = properties.filter((p) => result.propertyIds.includes(p.id));
+      const availableProperties = catalog.length > 0 ? catalog : await loadCatalog();
+      const foundProperties = getSmartPropertyMatches(availableProperties, query, 4);
 
-      let botResponseText = `I found ${foundProperties.length} properties that match your request:`;
-      if (foundProperties.length === 0) {
-        botResponseText = "Sorry, I couldn't find any properties matching your request. Please try again with different criteria.";
+      let botResponseText = `I found ${foundProperties.length} properties that match your request.`;
+      if (availableProperties.length === 0) {
+        botResponseText = "I'm still syncing live listings right now. Please try again in a moment.";
+      } else if (foundProperties.length === 0) {
+        botResponseText = "Sorry, I couldn't find a close match. Try adding a location, budget, or whether you want to buy, rent, or explore off-plan homes.";
+      } else if (foundProperties.length === 1) {
+        botResponseText = `I found 1 property that looks like a strong match for "${query}".`;
       }
 
       const botMessage: Message = {
@@ -182,7 +210,7 @@ export function AIChatbot() {
                     )}
                   </div>
                 ))}
-                {isLoading && (
+                {(isLoading || isCatalogLoading) && (
                    <div className="flex items-start gap-3 justify-start">
                       <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border border-black">
                         <Bot className="w-5 h-5 text-black" />
@@ -204,12 +232,17 @@ export function AIChatbot() {
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !isLoading) {
+                      e.preventDefault();
+                      void handleSendMessage();
+                    }
+                  }}
                   placeholder="Ask me anything..."
                   className="flex-1 rounded-full border-accent focus-visible:ring-accent"
                   disabled={isLoading}
                 />
-                <Button onClick={handleSendMessage} disabled={isLoading} className="rounded-full w-10 h-10 p-0">
+                <Button onClick={() => void handleSendMessage()} disabled={isLoading} className="rounded-full w-10 h-10 p-0">
                   <Send className="w-5 h-5"/>
                 </Button>
               </div>
@@ -223,7 +256,7 @@ export function AIChatbot() {
 
 
 function PropertyCardInChat({ property }: { property: Property }) {
-  const image = PlaceHolderImages.find((img) => img.id === property.images[0]);
+  const image = resolveImage(property.images[0]);
 
   return (
     <div className="w-48 flex-shrink-0">
@@ -231,16 +264,21 @@ function PropertyCardInChat({ property }: { property: Property }) {
         <div className="bg-white rounded-lg overflow-hidden">
           {image && (
             <Image
-              src={image.imageUrl}
+              src={image.src}
               alt={property.title}
               width={200}
               height={150}
               className="w-full h-24 object-cover"
+              data-ai-hint={image.hint}
+              unoptimized={image.unoptimized}
             />
           )}
           <div className="p-2">
             <h3 className="font-headline text-sm font-semibold truncate text-black">{property.title}</h3>
             <p className="text-xs text-gray-500 truncate">{property.location}</p>
+            <p className="mt-1 text-xs font-medium text-accent">
+              {(property.currency || 'AED').toUpperCase()} {property.price.toLocaleString()}
+            </p>
             <p className="text-xs text-accent mt-2 group-hover:underline">
               View Details →
             </p>

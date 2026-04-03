@@ -2,15 +2,16 @@
 'use client';
 
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { testimonials } from '@/lib/data';
+import { testimonials as fallbackTestimonials } from '@/lib/data';
 import { AnimateOnScroll } from '../animate-on-scroll';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from '../ui/card';
+import type { Testimonial } from '@/lib/types';
+import { resolveImage } from '@/lib/property-media';
 
-const TestimonialCard = ({ testimonial }: { testimonial: (typeof testimonials)[0] }) => {
-    const image = PlaceHolderImages.find(img => img.id === testimonial.image);
+const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
+    const image = resolveImage(testimonial.image || 'testimonial-1', 'testimonial-1');
 
     return (
         <Card className="w-full max-w-sm flex-shrink-0 bg-gray-50 dark:bg-muted/50 border-gray-200/80 dark:border-border/50">
@@ -19,12 +20,13 @@ const TestimonialCard = ({ testimonial }: { testimonial: (typeof testimonials)[0
                 <div className="flex items-center gap-4">
                     {image && (
                         <Image
-                            src={image.imageUrl}
+                            src={image.src}
                             alt={testimonial.author}
                             width={48}
                             height={48}
                             className="w-12 h-12 rounded-full object-cover"
-                            data-ai-hint={image.imageHint}
+                            data-ai-hint={image.hint}
+                            unoptimized={image.unoptimized}
                         />
                     )}
                     <div>
@@ -48,8 +50,9 @@ const TestimonialCard = ({ testimonial }: { testimonial: (typeof testimonials)[0
 };
 
 
-export function TestimonialsSection() {
-    const duplicatedTestimonials = [...testimonials, ...testimonials];
+export function TestimonialsSection({ testimonials = fallbackTestimonials }: { testimonials?: Testimonial[] }) {
+    const data = testimonials.length > 0 ? testimonials : fallbackTestimonials;
+    const duplicatedTestimonials = [...data, ...data];
 
   return (
     <section className="bg-background">

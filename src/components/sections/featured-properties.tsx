@@ -1,10 +1,10 @@
-import { properties } from "@/lib/data";
 import { PropertyCard } from "../shared/property-card";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { AnimateOnScroll } from "../animate-on-scroll";
+import type { Property } from "@/lib/types";
 
-export function FeaturedProperties() {
+export function FeaturedProperties({ properties }: { properties: Property[] }) {
   const featuredProperties = properties.slice(0, 3);
 
   return (

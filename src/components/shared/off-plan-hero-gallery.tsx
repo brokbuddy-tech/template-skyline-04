@@ -4,8 +4,8 @@
 import Image from 'next/image';
 import { Camera, MapPin, Play, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Property } from '@/lib/types';
+import { resolveImage } from '@/lib/property-media';
 
 interface OffPlanHeroGalleryProps {
   property: Property;
@@ -17,7 +17,7 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
     property.images[1] || 'prop-1-2',
     property.images[2] || 'prop-1-3',
     property.images[3] || 'prop-4-1',
-  ].map((id) => PlaceHolderImages.find((img) => img.id === id));
+  ].map((id) => resolveImage(id));
   
   const [mainImage, lifestyleImage, amenityImage, bedroomImage] = images;
 
@@ -30,11 +30,12 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
           {mainImage && (
             <>
               <Image
-                src={mainImage.imageUrl}
-                alt={mainImage.description}
+                src={mainImage.src}
+                alt={mainImage.alt}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform"
-                data-ai-hint={mainImage.imageHint}
+                data-ai-hint={mainImage.hint}
+                unoptimized={mainImage.unoptimized}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </>
@@ -59,11 +60,12 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
         <div className="col-span-2 row-span-1 rounded-tr-2xl overflow-hidden relative cursor-pointer group">
           {lifestyleImage && (
             <Image
-              src={lifestyleImage.imageUrl}
-              alt={lifestyleImage.description}
+              src={lifestyleImage.src}
+              alt={lifestyleImage.alt}
               fill
               className="object-cover group-hover:scale-105 transition-transform"
-              data-ai-hint={lifestyleImage.imageHint}
+              data-ai-hint={lifestyleImage.hint}
+              unoptimized={lifestyleImage.unoptimized}
             />
           )}
         </div>
@@ -72,11 +74,12 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
         <div className="col-span-1 row-span-1 overflow-hidden relative cursor-pointer group">
           {amenityImage && (
             <Image
-              src={amenityImage.imageUrl}
-              alt={amenityImage.description}
+              src={amenityImage.src}
+              alt={amenityImage.alt}
               fill
               className="object-cover group-hover:scale-105 transition-transform"
-              data-ai-hint={amenityImage.imageHint}
+              data-ai-hint={amenityImage.hint}
+              unoptimized={amenityImage.unoptimized}
             />
           )}
         </div>
@@ -85,11 +88,12 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
         <div className="col-span-1 row-span-1 rounded-br-2xl overflow-hidden relative cursor-pointer group">
           {bedroomImage && (
             <Image
-              src={bedroomImage.imageUrl}
-              alt={bedroomImage.description}
+              src={bedroomImage.src}
+              alt={bedroomImage.alt}
               fill
               className="object-cover group-hover:scale-105 transition-transform"
-              data-ai-hint={bedroomImage.imageHint}
+              data-ai-hint={bedroomImage.hint}
+              unoptimized={bedroomImage.unoptimized}
             />
           )}
           <div className="absolute inset-0 bg-black/60 hover:bg-black/70 transition-colors flex items-center justify-center">
@@ -103,11 +107,12 @@ export function OffPlanHeroGallery({ property }: OffPlanHeroGalleryProps) {
         {images.map((image, index) => image && (
           <div key={index} className="w-[90vw] h-full flex-shrink-0 rounded-xl overflow-hidden relative snap-center">
             <Image
-              src={image.imageUrl}
-              alt={image.description}
+              src={image.src}
+              alt={image.alt}
               fill
               className="object-cover"
-              data-ai-hint={image.imageHint}
+              data-ai-hint={image.hint}
+              unoptimized={image.unoptimized}
             />
           </div>
         ))}

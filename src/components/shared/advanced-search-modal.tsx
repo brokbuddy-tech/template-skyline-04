@@ -13,11 +13,11 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '../ui/separator';
-import { useState, useMemo, useContext } from 'react';
-import { properties } from '@/lib/data';
+import { useContext, useMemo, useState } from 'react';
 import { CurrencyContext } from '@/context/currency-context';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const allAmenities = [
+const fallbackAmenities = [
   'Pool',
   'Private Gym',
   'Ocean View',
@@ -26,30 +26,22 @@ const allAmenities = [
   'Smart Home',
 ];
 
-export function AdvancedSearchModal() {
-  const { currency, formatPrice, convertFromUSD } = useContext(CurrencyContext);
-
-  const { minPrice, maxPrice } = useMemo(() => {
-    const prices = properties.map(p => convertFromUSD(p.price));
-    const max = Math.max(...prices);
-    const roundToNearest = (num: number, nearest: number) => {
-        return Math.ceil(num / nearest) * nearest;
-    }
-    const roundingFactor = max > 500000 ? 50000 : 10000;
-    return {
-        minPrice: 0,
-        maxPrice: roundToNearest(max, roundingFactor)
-    };
-  }, [convertFromUSD]);
+export function AdvancedSearchModal({ amenities = fallbackAmenities }: { amenities?: string[] }) {
+  const { formatPrice } = useContext(CurrencyContext);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const minPrice = 0;
+  const maxPrice = 50000000;
   
-  const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
-  const [beds, setBeds] = useState('');
-  const [baths, setBaths] = useState('');
+  const [aiQuery, setAiQuery] = useState(searchParams.get('q') || '');
+  const [priceRange, setPriceRange] = useState([
+    Number(searchParams.get('minPrice') || minPrice),
+    Number(searchParams.get('maxPrice') || maxPrice),
+  ]);
+  const [beds, setBeds] = useState(searchParams.get('bedrooms') || '');
+  const [baths, setBaths] = useState(searchParams.get('bathrooms') || '');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-
-  useMemo(() => {
-    setPriceRange([minPrice, maxPrice]);
-  }, [minPrice, maxPrice]);
 
   const handleAmenityChange = (amenity: string) => {
     setSelectedAmenities(prev => 
@@ -60,10 +52,12 @@ export function AdvancedSearchModal() {
   };
   
   const handleClearAll = () => {
+    setAiQuery('');
     setPriceRange([minPrice, maxPrice]);
     setBeds('');
     setBaths('');
     setSelectedAmenities([]);
+    router.push(pathname === '/properties' ? '/properties' : '/properties');
   };
 
   const handleNumericChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,11 +78,37 @@ export function AdvancedSearchModal() {
     }
   };
 
-  const formattedPrice = (value: number) => {
-    const rate = useContext(CurrencyContext).rates[currency] || 1;
-    const price = value / rate;
-    return formatPrice(price, true);
-  }
+  const formattedPrice = (value: number) => formatPrice(value, true);
+
+  const applyFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    const destination = pathname === '/properties' ? pathname : '/properties';
+
+    if (aiQuery.trim()) params.set('q', aiQuery.trim());
+    else params.delete('q');
+
+    if (beds) params.set('bedrooms', beds);
+    else params.delete('bedrooms');
+
+    if (baths) params.set('bathrooms', baths);
+    else params.delete('bathrooms');
+
+    if (priceRange[0] > minPrice) params.set('minPrice', String(priceRange[0]));
+    else params.delete('minPrice');
+
+    if (priceRange[1] < maxPrice) params.set('maxPrice', String(priceRange[1]));
+    else params.delete('maxPrice');
+
+    if (selectedAmenities.length > 0) params.set('amenities', selectedAmenities.join(','));
+    else params.delete('amenities');
+
+    router.push(`${destination}?${params.toString()}`);
+  };
+
+  const visibleAmenities = useMemo(
+    () => (amenities.length > 0 ? amenities.slice(0, 9) : fallbackAmenities),
+    [amenities]
+  );
 
   return (
     <DialogContent className="p-0 sm:max-w-md bg-background text-foreground border-foreground/20 flex flex-col max-h-[90vh] sm:h-auto">
@@ -101,8 +121,14 @@ export function AdvancedSearchModal() {
           <Label htmlFor="ai-search" className="text-base font-bold">AI-Powered Search</Label>
           <p className='text-sm text-muted-foreground mb-2'>Describe your perfect stay...</p>
           <div className='flex gap-2'>
-            <Input id="ai-search" placeholder="e.g., 'a 3-bedroom house in Malibu with an ocean view'" className="mt-0 rounded-full border-accent focus-visible:ring-accent" />
-            <Button type="submit" className='rounded-full'>Let's Go AI</Button>
+            <Input
+              id="ai-search"
+              value={aiQuery}
+              onChange={(event) => setAiQuery(event.target.value)}
+              placeholder="e.g., 'a 3-bedroom apartment in Dubai Marina with a pool'"
+              className="mt-0 rounded-full border-accent focus-visible:ring-accent"
+            />
+            <Button type="button" className='rounded-full' onClick={applyFilters}>Let's Go AI</Button>
           </div>
         </div>
 
@@ -143,7 +169,7 @@ export function AdvancedSearchModal() {
         <div className="space-y-4">
           <Label>Amenities</Label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {allAmenities.map((amenity) => (
+            {visibleAmenities.map((amenity) => (
               <div key={amenity} className="flex items-center space-x-2">
                 <Checkbox 
                   id={amenity}
@@ -162,7 +188,7 @@ export function AdvancedSearchModal() {
       
       <DialogFooter className='p-4 border-t sm:justify-between'>
           <Button type="button" variant="link" className="text-accent" onClick={handleClearAll}>Clear All</Button>
-          <Button type="submit" size="lg">Apply Filters</Button>
+          <Button type="button" size="lg" onClick={applyFilters}>Apply Filters</Button>
       </DialogFooter>
     </DialogContent>
   );

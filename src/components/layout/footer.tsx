@@ -1,9 +1,11 @@
-
 import Link from 'next/link';
+import { getSiteConfig, toSocialUrl } from '@/lib/api';
 import { AnimateOnScroll } from '../animate-on-scroll';
-import { ThemeSwitch } from '../shared/theme-switch';
 
-export function Footer() {
+export async function Footer() {
+  const siteConfig = await getSiteConfig();
+  const displayName =
+    siteConfig.branding?.displayName || siteConfig.organization.name || 'SkyLines';
   const navLinks = [
     { href: '/properties?type=buy', label: 'Buy' },
     { href: '/about', label: 'About Us' },
@@ -12,11 +14,11 @@ export function Footer() {
   ];
 
   const socialLinks = [
-    { href: '#', label: 'Instagram' },
-    { href: '#', label: 'X (Twitter)' },
-    { href: '#', label: 'LinkedIn' },
-    { href: '#', label: 'Facebook' },
-  ];
+    { href: toSocialUrl('instagram', siteConfig.branding?.instagram), label: 'Instagram' },
+    { href: toSocialUrl('twitter', siteConfig.branding?.twitter), label: 'X (Twitter)' },
+    { href: toSocialUrl('linkedin', siteConfig.branding?.linkedin), label: 'LinkedIn' },
+    { href: toSocialUrl('whatsapp', siteConfig.branding?.whatsapp), label: 'WhatsApp' },
+  ].filter((link): link is { href: string; label: string } => Boolean(link.href));
 
   return (
     <footer id="main-footer" className="relative min-h-screen w-full bg-primary text-primary-foreground dark:bg-accent dark:text-accent-foreground flex flex-col justify-between p-8 sm:p-16">
@@ -54,7 +56,7 @@ export function Footer() {
                 <ul className="space-y-2">
                   {socialLinks.map((link) => (
                     <li key={link.label}>
-                      <a href={link.href} className="text-lg hover:underline">
+                      <a href={link.href} className="text-lg hover:underline" target="_blank" rel="noreferrer">
                         {link.label}
                       </a>
                     </li>
@@ -67,7 +69,7 @@ export function Footer() {
       </div>
       <AnimateOnScroll className="space-y-8">
         <div className="flex justify-between items-center text-sm font-body">
-          <p className="text-white dark:text-accent-foreground">&copy; 2025 SkyLines. All Rights Reserved.</p>
+          <p className="text-white dark:text-accent-foreground">&copy; {new Date().getFullYear()} {displayName}. All Rights Reserved.</p>
         </div>
       </AnimateOnScroll>
     </footer>

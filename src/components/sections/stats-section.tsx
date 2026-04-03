@@ -3,16 +3,16 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { CountUp } from '../shared/count-up';
 import { AnimateOnScroll } from '../animate-on-scroll';
-import { properties } from '@/lib/data';
+import type { SiteStats } from '@/lib/types';
 
-const stats = [
-  { value: properties.length, suffix: '+', label: 'Modern Properties' },
-  { value: 98, suffix: '%', label: 'Client Satisfaction' },
-  { value: 12, suffix: '+', label: 'Years of Experience' },
-  { value: 5, suffix: '+', label: 'Awards Won' },
-];
+export function StatsSection({ stats }: { stats?: SiteStats }) {
+  const cards = [
+    { value: stats?.totalListings ?? 0, suffix: '+', label: 'Modern Properties' },
+    { value: 98, suffix: '%', label: 'Client Satisfaction' },
+    { value: 12, suffix: '+', label: 'Years of Experience' },
+    { value: 5, suffix: '+', label: 'Awards & Recognition' },
+  ];
 
-export function StatsSection() {
   return (
     <section className="bg-background">
       <div className="container mx-auto">
@@ -34,9 +34,9 @@ export function StatsSection() {
             </AnimateOnScroll>
           </div>
           <div className="lg:col-span-3">
-             <AnimateOnScroll delay={200}>
+            <AnimateOnScroll delay={200}>
               <div className="grid grid-cols-2 gap-4 md:gap-8">
-                {stats.map((stat, index) => (
+                {cards.map((stat, index) => (
                   <Card key={index} className="bg-accent/10 dark:bg-transparent p-4 md:p-8 rounded-lg text-center">
                     <h3 className="text-4xl sm:text-5xl md:text-7xl font-bold font-headline text-accent">
                       <CountUp end={stat.value} duration={2} />
@@ -54,4 +54,4 @@ export function StatsSection() {
   );
 }
 
-    
+

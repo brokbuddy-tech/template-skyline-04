@@ -452,7 +452,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
           </div>
         </div>
       </div>
-      <DownloadBrochureModal />
+      <DownloadBrochureModal property={property} />
     </Dialog>
   );
 }

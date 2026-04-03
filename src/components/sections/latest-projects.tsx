@@ -1,12 +1,11 @@
-
-import { properties } from '@/lib/data';
 import { AnimateOnScroll } from '../animate-on-scroll';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import { OffPlanCard } from '../shared/off-plan-card';
 import { ArrowRight } from 'lucide-react';
+import type { Property } from '@/lib/types';
 
-export function LatestProjects() {
+export function LatestProjects({ properties }: { properties: Property[] }) {
   const offPlanProperties = properties.filter((p) => p.status === 'Off-plan');
 
   return (

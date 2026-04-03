@@ -123,7 +123,7 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                                 <Label htmlFor="interest-rate">Interest Rate (%)</Label>
                                 <Input id="interest-rate" type="number" value={interestRate} onChange={e => setInterestRate(parseFloat(e.target.value))} step="0.1" />
                                 <Button variant="link" size="sm" className="p-0 h-auto text-accent" onClick={handleGetSuggestion} disabled={isSuggesting}>
-                                {isSuggesting ? 'Getting suggestion...' : 'Get AI Suggested Rate'}
+                                {isSuggesting ? 'Getting suggestion...' : 'Get Suggested Rate'}
                                 </Button>
                                 {aiSuggestion && (
                                     <p className="text-sm text-muted-foreground mt-1">{aiSuggestion.explanation}</p>
@@ -151,7 +151,7 @@ export function MortgageCalculator({ propertyPrice }: MortgageCalculatorProps) {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
-                                            data={chartData}
+                                            data={chartData || []}
                                             cx="50%"
                                             cy="50%"
                                             labelLine={false}

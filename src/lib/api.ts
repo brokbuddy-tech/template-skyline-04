@@ -1,0 +1,387 @@
+import type { Property, PropertyAgent, SiteAgent, SiteConfig, Testimonial } from './types';
+
+const RAW_API_BASE_URL =
+  (((globalThis as any).process?.env?.NEXT_PUBLIC_API_URL as string | undefined) || 'http://localhost:4000/api').replace(/\/$/, '');
+
+const SERVER_PUBLIC_API_BASE = `${RAW_API_BASE_URL}/public`;
+const CLIENT_PUBLIC_API_BASE = '/api/public';
+
+export const ORG_SLUG =
+  (((globalThis as any).process?.env?.NEXT_PUBLIC_ORG_SLUG as string | undefined) || 'skyline-realty').trim();
+
+const DEFAULT_SITE_CONFIG: SiteConfig = {
+  organization: {
+    name: 'Skyline Realty',
+    slug: ORG_SLUG,
+  },
+  categories: [],
+  amenities: [],
+  featuredAreas: [],
+  leadAgent: null,
+  branding: null,
+  stats: {
+    totalListings: 0,
+    readyListings: 0,
+    offPlanListings: 0,
+    activeAgents: 0,
+    awards: 0,
+    blogs: 0,
+    testimonials: 0,
+  },
+};
+
+export type GetPropertiesParams = Record<string, string | number | boolean | undefined | null>;
+
+export type PaginatedProperties = {
+  properties: Property[];
+  total: number;
+  page: number;
+  totalPages: number;
+};
+
+type PublicListingImage = {
+  url?: string | null;
+  cdnUrl?: string | null;
+  mediumUrl?: string | null;
+  thumbnailUrl?: string | null;
+  status?: string | null;
+  isHero?: boolean | null;
+};
+
+type PublicListing = Record<string, any> & {
+  id: string;
+  title?: string | null;
+  description?: string | null;
+  transactionType?: string | null;
+  propertyType?: string | null;
+  category?: string | null;
+  readiness?: string | null;
+  emirate?: string | null;
+  area?: string | null;
+  price?: number | string | null;
+  currency?: string | null;
+  bedrooms?: number | string | null;
+  bathrooms?: number | string | null;
+  builtUpArea?: number | string | null;
+  size?: number | string | null;
+  images?: PublicListingImage[];
+  broker?: Record<string, any> | null;
+  organization?: { name?: string | null; slug?: string | null } | null;
+  developerName?: string | null;
+  constructionTimelineData?: Record<string, any> | null;
+  paymentPlanData?: Record<string, any> | null;
+  latitude?: number | null;
+  longitude?: number | null;
+};
+
+function getPublicApiBase() {
+  return typeof window === 'undefined' ? SERVER_PUBLIC_API_BASE : CLIENT_PUBLIC_API_BASE;
+}
+
+function normalizeTransactionType(value?: string | null): 'Sale' | 'Rent' {
+  return value?.toUpperCase() === 'RENT' ? 'Rent' : 'Sale';
+}
+
+function normalizeStatus(value?: string | null): 'Off-plan' | 'Ready' {
+  return value?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready';
+}
+
+function normalizeNumber(value: unknown): number {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  if (typeof value === 'string') {
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+  return 0;
+}
+
+function normalizeImageUrl(image?: PublicListingImage | null): string | null {
+  if (!image) return null;
+  return image.cdnUrl || image.mediumUrl || image.thumbnailUrl || image.url || null;
+}
+
+function normalizeImages(images?: PublicListingImage[] | null): string[] {
+  if (!images?.length) return [];
+  return images.map(normalizeImageUrl).filter((image): image is string => Boolean(image));
+}
+
+function pickDeveloperLogo(developerName?: string | null) {
+  const normalized = developerName?.trim().toLowerCase();
+  if (!normalized) return undefined;
+  if (normalized.includes('emaar')) return 'Emaar';
+  if (normalized.includes('nakheel')) return 'Nakheel';
+  return undefined;
+}
+
+function normalizeLocation(listing: PublicListing) {
+  return [listing.area, listing.emirate].filter(Boolean).join(', ') || listing.location || 'Dubai';
+}
+
+function normalizeReferenceId(listing: PublicListing) {
+  return listing.listingCode || listing.referenceId || undefined;
+}
+
+function normalizePermitNumber(listing: PublicListing) {
+  return listing.trakheesiPermitNumber || listing.permitNumber || listing.trakheesi || undefined;
+}
+
+function normalizeReraNumber(listing: PublicListing) {
+  return listing.reraNumber || listing.reraPermit || undefined;
+}
+
+function normalizeHandoverDate(listing: PublicListing) {
+  const expectedCompletion =
+    listing.constructionTimelineData?.expected_completion ||
+    listing.constructionTimelineData?.expectedCompletion ||
+    listing.handoverDate;
+  if (typeof expectedCompletion === 'string' && expectedCompletion.trim()) {
+    return expectedCompletion;
+  }
+  return undefined;
+}
+
+function mapAgent(agent?: Record<string, any> | null, organizationName?: string): PropertyAgent | undefined {
+  if (!agent) return undefined;
+  return {
+    id: agent.id,
+    name: `${agent.firstName || ''} ${agent.lastName || ''}`.trim() || agent.brokerProfile?.displayName || 'Skyline Agent',
+    title: agent.brokerProfile?.tagline || 'Real Estate Advisor',
+    avatarUrl: agent.avatar || null,
+    phone: agent.brokerProfile?.publicPhone || agent.phone || null,
+    email: agent.brokerProfile?.publicEmail || agent.email || null,
+    whatsapp: agent.brokerProfile?.whatsapp || agent.phone || null,
+    company: organizationName,
+    licenseNumber: agent.licenseNumber || null,
+    slug: agent.brokerProfile?.slug || null,
+    instagram: agent.brokerProfile?.instagram || null,
+    linkedin: agent.brokerProfile?.linkedin || null,
+    twitter: agent.brokerProfile?.twitter || null,
+  };
+}
+
+function mapListingToProperty(listing: PublicListing): Property {
+  const images = normalizeImages(listing.images);
+  const organizationName = listing.organization?.name || 'Skyline Realty';
+  const sqft = normalizeNumber(listing.builtUpArea) || normalizeNumber(listing.size) || normalizeNumber(listing.areaSqFt);
+  const amenities = Array.isArray(listing.amenities)
+    ? listing.amenities.filter(Boolean)
+    : Array.isArray(listing.fields?.amenities)
+      ? listing.fields.amenities.filter(Boolean)
+      : [];
+
+  return {
+    id: listing.id,
+    title: listing.title?.trim() || 'Untitled Property',
+    location: normalizeLocation(listing),
+    price: normalizeNumber(listing.price),
+    currency: listing.currency || 'AED',
+    bedrooms: normalizeNumber(listing.bedrooms),
+    bathrooms: normalizeNumber(listing.bathrooms),
+    sqft,
+    type: listing.category || listing.type || listing.propertyType || 'Property',
+    amenities,
+    images,
+    description: listing.description?.trim() || 'More details available on request.',
+    referenceId: normalizeReferenceId(listing),
+    trakheesi: normalizePermitNumber(listing),
+    reraPermit: normalizeReraNumber(listing),
+    dldPermitLink: listing.dldPermitLink || null,
+    status: normalizeStatus(listing.readiness),
+    transactionType: normalizeTransactionType(listing.transactionType),
+    photoCount: images.length,
+    tag: listing.propertyType === 'COMMERCIAL' ? 'Commercial' : 'Residential',
+    developerLogo: pickDeveloperLogo(listing.developerName),
+    developerName: listing.developerName || undefined,
+    category: listing.category || undefined,
+    nearby: Array.isArray(listing.nearby) ? listing.nearby : [],
+    handoverDate: normalizeHandoverDate(listing),
+    latitude: listing.latitude ?? null,
+    longitude: listing.longitude ?? null,
+    paymentPlanData: listing.paymentPlanData || null,
+    constructionTimelineData: listing.constructionTimelineData || null,
+    organizationName,
+    organizationSlug: listing.organization?.slug || ORG_SLUG,
+    agent: mapAgent(listing.broker, organizationName),
+  };
+}
+
+async function fetchJson<T>(
+  path: string,
+  {
+    params,
+    revalidate,
+    init,
+  }: {
+    params?: GetPropertiesParams;
+    revalidate?: number;
+    init?: RequestInit;
+  } = {}
+): Promise<T> {
+  const url = new URL(`${getPublicApiBase()}${path}`, typeof window === 'undefined' ? 'http://localhost' : window.location.origin);
+
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return;
+      url.searchParams.set(key, String(value));
+    });
+  }
+
+  const requestInit: RequestInit = {
+    ...init,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(init?.headers || {}),
+    },
+  };
+
+  if (typeof window === 'undefined' && revalidate) {
+    (requestInit as RequestInit & { next?: { revalidate: number } }).next = { revalidate };
+  }
+
+  const response = await fetch(url.toString(), requestInit);
+  if (!response.ok) {
+    throw new Error(`Request failed for ${url.pathname}: ${response.status}`);
+  }
+
+  return response.json() as Promise<T>;
+}
+
+export function toSocialUrl(platform: 'instagram' | 'linkedin' | 'twitter' | 'website' | 'whatsapp', value?: string | null) {
+  if (!value) return null;
+  if (/^https?:\/\//i.test(value)) return value;
+  if (platform === 'website') return `https://${value.replace(/^\/+/, '')}`;
+  if (platform === 'instagram') return `https://instagram.com/${value.replace(/^@/, '')}`;
+  if (platform === 'linkedin') return `https://linkedin.com/in/${value.replace(/^@/, '')}`;
+  if (platform === 'twitter') return `https://x.com/${value.replace(/^@/, '')}`;
+  if (platform === 'whatsapp') {
+    const phone = value.replace(/[^\d+]/g, '');
+    return phone ? `https://wa.me/${phone.replace('+', '')}` : null;
+  }
+  return value;
+}
+
+export async function getSiteConfig(): Promise<SiteConfig> {
+  try {
+    const config = await fetchJson<SiteConfig>(`/org/${ORG_SLUG}/config`, {
+      revalidate: 300,
+    });
+
+    return {
+      ...DEFAULT_SITE_CONFIG,
+      ...config,
+      organization: {
+        ...DEFAULT_SITE_CONFIG.organization,
+        ...(config.organization || {}),
+      },
+      categories: config.categories || [],
+      amenities: config.amenities || [],
+      featuredAreas: config.featuredAreas || [],
+      leadAgent: config.leadAgent || null,
+      branding: config.branding || null,
+      stats: {
+        ...DEFAULT_SITE_CONFIG.stats!,
+        ...(config.stats || {}),
+      },
+    };
+  } catch (error) {
+    console.error('Failed to fetch site config', error);
+    return DEFAULT_SITE_CONFIG;
+  }
+}
+
+export async function getProperties(params: GetPropertiesParams = {}): Promise<PaginatedProperties> {
+  try {
+    const data = await fetchJson<{ listings: PublicListing[]; total: number; page: number; totalPages: number }>(
+      `/org/${ORG_SLUG}/listings`,
+      {
+        params,
+        revalidate: 60,
+      }
+    );
+
+    return {
+      properties: (data.listings || []).map(mapListingToProperty),
+      total: data.total || 0,
+      page: data.page || 1,
+      totalPages: data.totalPages || 1,
+    };
+  } catch (error) {
+    console.error('Failed to fetch properties', error);
+    return {
+      properties: [],
+      total: 0,
+      page: 1,
+      totalPages: 1,
+    };
+  }
+}
+
+export async function getPropertyById(id: string): Promise<Property | null> {
+  try {
+    const data = await fetchJson<PublicListing>(`/listing/${id}`, {
+      revalidate: 60,
+    });
+    return mapListingToProperty(data);
+  } catch (error) {
+    console.error(`Failed to fetch property ${id}`, error);
+    return null;
+  }
+}
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    return await fetchJson<Testimonial[]>(`/org/${ORG_SLUG}/testimonials`, {
+      revalidate: 300,
+    });
+  } catch (error) {
+    console.error('Failed to fetch testimonials', error);
+    return [];
+  }
+}
+
+export async function getAgents(): Promise<SiteAgent[]> {
+  try {
+    const agents = await fetchJson<Record<string, any>[]>(`/org/${ORG_SLUG}/agents`, {
+      revalidate: 300,
+    });
+
+    return agents.map(agent => ({
+      id: agent.id,
+      name: agent.brokerProfile?.displayName || `${agent.firstName || ''} ${agent.lastName || ''}`.trim(),
+      email: agent.brokerProfile?.publicEmail || agent.email,
+      phone: agent.brokerProfile?.publicPhone || agent.phone,
+      whatsapp: agent.brokerProfile?.whatsapp || agent.phone,
+      avatar: agent.avatar || null,
+      licenseNumber: agent.licenseNumber || null,
+      slug: agent.brokerProfile?.slug || null,
+      tagline: agent.brokerProfile?.tagline || null,
+      bio: agent.brokerProfile?.bio || null,
+      instagram: agent.brokerProfile?.instagram || null,
+      linkedin: agent.brokerProfile?.linkedin || null,
+      twitter: agent.brokerProfile?.twitter || null,
+      specializations: agent.brokerProfile?.specializations || [],
+      languages: agent.brokerProfile?.languages || [],
+      yearsExperience: agent.brokerProfile?.yearsExperience ?? null,
+    }));
+  } catch (error) {
+    console.error('Failed to fetch agents', error);
+    return [];
+  }
+}
+
+export async function submitOrgInquiry(payload: {
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+  listingId?: string;
+  propertyType?: string;
+  budget?: number;
+}) {
+  return fetchJson<{ message: string; data: unknown }>(`/org/${ORG_SLUG}/inquiry`, {
+    init: {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    },
+  });
+}

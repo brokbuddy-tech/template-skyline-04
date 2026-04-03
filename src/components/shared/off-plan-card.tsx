@@ -2,12 +2,12 @@
 'use client';
 
 import type { Property } from '@/lib/types';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Building2, Clock } from 'lucide-react';
 import { EmaarLogo, NakheelLogo } from './developer-logos';
 import { Separator } from '../ui/separator';
+import { resolveImage } from '@/lib/property-media';
 
 const developerLogos = {
     'Emaar': EmaarLogo,
@@ -15,8 +15,8 @@ const developerLogos = {
 }
 
 export function OffPlanCard({ property }: { property: Property }) {
-  const image = PlaceHolderImages.find((img) => img.id === property.images[0]);
-  const DevLogo = property.developerLogo ? developerLogos[property.developerLogo] : null;
+  const image = resolveImage(property.images[0]);
+  const DevLogo = property.developerLogo ? developerLogos[property.developerLogo as keyof typeof developerLogos] : null;
 
   return (
     <div className="w-[320px] md:w-[380px] bg-white dark:bg-black rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 flex-shrink-0 group">
@@ -24,10 +24,12 @@ export function OffPlanCard({ property }: { property: Property }) {
         <div className="relative h-[250px]">
           {image && (
             <Image
-              src={image.imageUrl}
+              src={image.src}
               alt={property.title}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              data-ai-hint={image.hint}
+              unoptimized={image.unoptimized}
             />
           )}
           {/* Red Ribbon */}
@@ -55,11 +57,17 @@ export function OffPlanCard({ property }: { property: Property }) {
                     <DevLogo className="w-16 h-auto text-gray-500 dark:text-gray-400" />
                 </div>
             )}
+            {!DevLogo && property.developerName && (
+                <p className="flex items-center gap-2">
+                    <Building2 size={16} />
+                    <span>{property.developerName}</span>
+                </p>
+            )}
           </div>
           <Separator className="my-3" />
           <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <Clock size={16} />
-            <span>Handover in Q3 2029</span>
+            <span>{property.handoverDate ? `Handover ${property.handoverDate}` : 'Launch details available'}</span>
           </div>
         </div>
         <div className="bg-black text-white p-3 text-center font-bold">

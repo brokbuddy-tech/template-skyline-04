@@ -5,11 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useContext } from 'react';
 import type { Property } from '@/lib/types';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ArrowUpRight, BedDouble, Bath, Square, CheckCircle, Star } from 'lucide-react';
 import { CurrencyContext } from '@/context/currency-context';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
+import { resolveImage } from '@/lib/property-media';
 
 
 interface PropertyCardProps {
@@ -17,7 +17,7 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property }: PropertyCardProps) {
-  const image = PlaceHolderImages.find((img) => img.id === property.images[0]);
+  const image = resolveImage(property.images[0]);
   const { formatPrice } = useContext(CurrencyContext);
 
   const isForSale = property.transactionType === 'Sale';
@@ -29,12 +29,13 @@ export function PropertyCard({ property }: PropertyCardProps) {
         <div className="relative overflow-hidden rounded-lg">
           {image && (
             <Image
-              src={image.imageUrl}
+              src={image.src}
               alt={property.title}
               width={800}
               height={1000} // Adjusted for 4:5 aspect ratio
               className="w-full h-auto object-cover aspect-[4/5] transition-transform duration-500"
-              data-ai-hint={image.imageHint}
+              data-ai-hint={image.hint}
+              unoptimized={image.unoptimized}
             />
           )}
 

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Search,
@@ -20,17 +20,22 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
-const propertyTypes = ['Apartments', 'Townhouses', 'Penthouses', 'Villas', 'Offices'];
+const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
 const completionStatus = ['Any', 'Ready', 'Off-plan'];
 
-export function StickySearch() {
+export function StickySearch({ categories = [], amenities = [] }: { categories?: string[]; amenities?: string[] }) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [selectedType, setSelectedType] = useState('Property Type');
-  const [selectedStatus, setSelectedStatus] = useState('Completion Status');
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const [transactionType, setTransactionType] = useState(searchParams.get('type') || 'buy');
+  const [selectedType, setSelectedType] = useState(searchParams.get('category') || searchParams.get('propertyType') || '');
+  const [selectedStatus, setSelectedStatus] = useState(searchParams.get('readiness') || '');
+  const [query, setQuery] = useState(searchParams.get('q') || '');
+  const propertyTypes = useMemo(
+    () => (categories.length > 0 ? categories : fallbackPropertyTypes),
+    [categories]
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,13 +45,27 @@ export function StickySearch() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const pushSearch = (nextTransactionType = transactionType) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set('type', nextTransactionType);
+
+    if (query.trim()) params.set('q', query.trim());
+    else params.delete('q');
+
+    if (selectedType) params.set('category', selectedType);
+    else params.delete('category');
+
+    if (selectedStatus && selectedStatus !== 'Any') params.set('readiness', selectedStatus);
+    else params.delete('readiness');
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const handleTransactionTypeChange = (value: string) => {
-    if (value) {
-      setTransactionType(value);
-      const params = new URLSearchParams(searchParams);
-      params.set('type', value);
-      router.push(`${pathname}?${params.toString()}`);
-    }
+    if (!value) return;
+    setTransactionType(value);
+    pushSearch(value);
   };
 
 
@@ -64,12 +83,17 @@ export function StickySearch() {
               <input
                 type="text"
                 placeholder="Search Dubai..."
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') pushSearch();
+                }}
                 className="bg-white dark:bg-black w-full h-14 rounded-full pl-12 pr-4 shadow-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
             
             <DialogTrigger asChild>
-               <Button
+                <Button
                   size="icon"
                   variant="secondary"
                   className="w-14 h-14 bg-white dark:bg-black rounded-full text-accent shadow-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition flex-shrink-0"
@@ -95,12 +119,17 @@ export function StickySearch() {
             <input
               type="text"
               placeholder="Enter keywords..."
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') pushSearch();
+              }}
               className="bg-transparent rounded-full px-6 py-4 flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 w-full focus:ring-0 border-0"
             />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="bg-gray-100/80 dark:bg-gray-800/80 rounded-full px-4 py-4 flex items-center justify-between min-w-[180px] w-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                  <span className="text-gray-700 dark:text-gray-200 truncate text-sm">{selectedType}</span>
+                  <span className="text-gray-700 dark:text-gray-200 truncate text-sm">{selectedType || 'Property Type'}</span>
                   <ChevronDown className="w-4 h-4 text-accent ml-2" />
                 </div>
               </DropdownMenuTrigger>
@@ -120,7 +149,7 @@ export function StickySearch() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="bg-gray-100/80 dark:bg-gray-800/80 rounded-full px-4 py-4 flex items-center justify-between min-w-[180px] w-auto cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                  <span className="text-gray-700 dark:text-gray-200 truncate text-sm">{selectedStatus}</span>
+                  <span className="text-gray-700 dark:text-gray-200 truncate text-sm">{selectedStatus || 'Completion Status'}</span>
                   <ChevronDown className="w-4 h-4 text-accent ml-2" />
                 </div>
               </DropdownMenuTrigger>
@@ -151,6 +180,7 @@ export function StickySearch() {
               <Button
                 className="h-14 bg-accent rounded-full text-white shadow-lg hover:scale-105 transition px-6"
                 aria-label="Search"
+                onClick={() => pushSearch()}
               >
                 <Search className="w-5 h-5 mr-2" />
                  <span className='text-sm font-bold'>Find</span>
@@ -158,7 +188,7 @@ export function StickySearch() {
             </div>
           </div>
         </div>
-        <AdvancedSearchModal />
+        <AdvancedSearchModal amenities={amenities} />
       </Dialog>
     </div>
   );

@@ -1,17 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
-import { usePathname } from "next/navigation";
-import { SplashScreen } from "@/components/splash-screen";
-import { PageTransition } from "@/components/page-transition";
+import React, { useEffect, useState } from "react";
 import { CustomCursor } from "@/components/custom-cursor";
+import { SplashScreen } from "@/components/splash-screen";
 
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
-  const pathname = usePathname();
 
   useEffect(() => {
-    // Prevent splash screen on subsequent visits in the same session
     if (sessionStorage.getItem("splashShown")) {
       setIsLoading(false);
       return;
@@ -20,7 +16,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     const timer = setTimeout(() => {
       setIsLoading(false);
       sessionStorage.setItem("splashShown", "true");
-    }, 3000); // Splash screen duration
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -28,13 +24,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <CustomCursor />
-      {isLoading ? (
-        <SplashScreen />
-      ) : (
-        <PageTransition key={pathname}>
-          {children}
-        </PageTransition>
-      )}
+      {isLoading ? <SplashScreen isLoading={isLoading} /> : children}
     </>
   );
 }

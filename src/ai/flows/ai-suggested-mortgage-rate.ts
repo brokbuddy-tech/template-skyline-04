@@ -1,68 +1,64 @@
-'use server';
-/**
- * @fileOverview An AI agent that suggests a mortgage rate.
- *
- * - getAISuggestedMortgageRate - A function that returns an AI-suggested mortgage rate.
- * - AISuggestedMortgageRateInput - The input type for the getAISuggestedMortgageRate function.
- * - AISuggestedMortgageRateOutput - The return type for the getAISuggestedMortgageRate function.
- */
+export type AISuggestedMortgageRateInput = {
+  loanAmount: number;
+  loanTerm: number;
+  creditScore: number;
+  propertyType: string;
+  location: string;
+  downPaymentPercentage: number;
+};
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+export type AISuggestedMortgageRateOutput = {
+  suggestedRate: number;
+  explanation: string;
+};
 
-const AISuggestedMortgageRateInputSchema = z.object({
-  loanAmount: z.number().describe('The amount of the loan.'),
-  loanTerm: z.number().describe('The term of the loan in years.'),
-  creditScore: z.number().describe('The credit score of the borrower.'),
-  propertyType: z.string().describe('The type of property being purchased.'),
-  location: z.string().describe('The location of the property.'),
-  downPaymentPercentage: z
-    .number()
-    .describe('The percentage of the property value paid as a down payment.'),
-});
-export type AISuggestedMortgageRateInput = z.infer<typeof AISuggestedMortgageRateInputSchema>;
-
-const AISuggestedMortgageRateOutputSchema = z.object({
-  suggestedRate: z.number().describe('The AI-suggested mortgage rate.'),
-  explanation: z
-    .string()
-    .describe('An explanation of why this rate is suggested.'),
-});
-export type AISuggestedMortgageRateOutput = z.infer<typeof AISuggestedMortgageRateOutputSchema>;
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
 
 export async function getAISuggestedMortgageRate(
   input: AISuggestedMortgageRateInput
 ): Promise<AISuggestedMortgageRateOutput> {
-  return aiSuggestedMortgageRateFlow(input);
-}
+  const creditScore = clamp(input.creditScore, 300, 850);
+  const downPayment = clamp(input.downPaymentPercentage, 0, 100);
+  const loanTerm = clamp(input.loanTerm, 5, 35);
 
-const prompt = ai.definePrompt({
-  name: 'aiSuggestedMortgageRatePrompt',
-  input: {schema: AISuggestedMortgageRateInputSchema},
-  output: {schema: AISuggestedMortgageRateOutputSchema},
-  prompt: `You are an expert mortgage rate advisor. Based on the following information, suggest a reasonable mortgage rate.
+  let suggestedRate = 5.35;
 
-Loan Amount: {{{loanAmount}}}
-Loan Term (years): {{{loanTerm}}}
-Credit Score: {{{creditScore}}}
-Property Type: {{{propertyType}}}
-Location: {{{location}}}
-Down Payment Percentage: {{{downPaymentPercentage}}}
+  if (creditScore >= 780) suggestedRate -= 0.4;
+  else if (creditScore >= 740) suggestedRate -= 0.25;
+  else if (creditScore >= 700) suggestedRate -= 0.1;
+  else if (creditScore < 650) suggestedRate += 0.45;
+  else if (creditScore < 600) suggestedRate += 0.75;
 
-Provide a suggested mortgage rate and a brief explanation of why this rate is suggested. Be realistic and take into account current market conditions.
+  if (downPayment >= 35) suggestedRate -= 0.25;
+  else if (downPayment >= 25) suggestedRate -= 0.15;
+  else if (downPayment < 20) suggestedRate += 0.35;
 
-Format your response as a JSON object.
-`,
-});
+  if (loanTerm >= 30) suggestedRate += 0.2;
+  else if (loanTerm <= 15) suggestedRate -= 0.15;
 
-const aiSuggestedMortgageRateFlow = ai.defineFlow(
-  {
-    name: 'aiSuggestedMortgageRateFlow',
-    inputSchema: AISuggestedMortgageRateInputSchema,
-    outputSchema: AISuggestedMortgageRateOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+  if (/villa|house|townhouse/i.test(input.propertyType)) suggestedRate += 0.05;
+  if (/off[\s-]?plan|construction/i.test(input.propertyType)) suggestedRate += 0.2;
+  if (/dubai|abu dhabi|uae/i.test(input.location)) suggestedRate += 0.1;
+
+  const roundedRate = Number(clamp(suggestedRate, 3.25, 9.95).toFixed(2));
+  const explanationParts = [
+    `Estimated from a ${downPayment.toFixed(0)}% down payment`,
+    `a ${loanTerm}-year term`,
+    `and a credit score of ${creditScore}.`,
+  ];
+
+  if (roundedRate <= 5) {
+    explanationParts.push('Your inputs point to a strong borrowing profile, so the rate skews toward the lower end.');
+  } else if (roundedRate >= 6.25) {
+    explanationParts.push('The suggested rate is slightly higher because the profile carries more lender risk than average.');
+  } else {
+    explanationParts.push('The result lands near a typical market rate for a balanced borrower profile.');
   }
-);
+
+  return {
+    suggestedRate: roundedRate,
+    explanation: explanationParts.join(' '),
+  };
+}

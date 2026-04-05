@@ -36,6 +36,12 @@ export type PaginatedProperties = {
   totalPages: number;
 };
 
+export type AiPropertySearchResult = {
+  propertyIds: string[];
+  source: 'gemini' | 'fallback';
+  model: string | null;
+};
+
 type PublicListingImage = {
   id?: string | null;
   url?: string | null;
@@ -424,6 +430,39 @@ export async function getProperties(params: GetPropertiesParams = {}): Promise<P
       totalPages: 1,
     };
   }
+}
+
+function normalizeAiSearchTransactionType(value?: string) {
+  if (value === 'rent') return 'RENT';
+  if (value === 'buy') return 'SALE';
+  return undefined;
+}
+
+function normalizeAiSearchReadiness(value?: string) {
+  const normalized = value?.trim();
+  if (!normalized) return undefined;
+  return normalized.toUpperCase().replace(/[^A-Z]/g, '');
+}
+
+export async function searchPropertiesWithAI(payload: {
+  query: string;
+  transactionType?: string;
+  category?: string;
+  readiness?: string;
+  limit?: number;
+}): Promise<AiPropertySearchResult> {
+  return fetchJson<AiPropertySearchResult>(`/org/${ORG_SLUG}/ai-property-search`, {
+    init: {
+      method: 'POST',
+      body: JSON.stringify({
+        query: payload.query,
+        transactionType: normalizeAiSearchTransactionType(payload.transactionType),
+        category: payload.category,
+        readiness: normalizeAiSearchReadiness(payload.readiness),
+        limit: payload.limit,
+      }),
+    },
+  });
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {

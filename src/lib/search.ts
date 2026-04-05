@@ -56,6 +56,7 @@ export function getFiltersFromSearchParams(searchParams: SearchParamRecord): Pro
 export function filterProperties(properties: Property[], filters: PropertyFilterState): Property[] {
   const query = filters.q?.trim().toLowerCase();
   const selectedAmenities = (filters.amenities || []).map(item => item.toLowerCase());
+  const hasAiScopedIds = Boolean(filters.ids?.length);
 
   const filtered = properties.filter(property => {
     if (filters.ids?.length && !filters.ids.includes(property.id)) return false;
@@ -87,7 +88,7 @@ export function filterProperties(properties: Property[], filters: PropertyFilter
       if (!hasAllAmenities) return false;
     }
 
-    if (query) {
+    if (query && !hasAiScopedIds) {
       const haystack = [
         property.title,
         property.location,

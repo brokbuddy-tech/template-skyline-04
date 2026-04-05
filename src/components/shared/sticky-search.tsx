@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import {
   Search,
   SlidersHorizontal,
-  ChevronDown
+  ChevronDown,
+  Loader2,
 } from 'lucide-react';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AdvancedSearchModal } from '../shared/advanced-search-modal';
@@ -19,6 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { searchPropertiesWithAI } from '@/lib/api';
 
 const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
 const completionStatus = ['Any', 'Ready', 'Off-plan'];
@@ -32,6 +34,7 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
   const [selectedType, setSelectedType] = useState(searchParams.get('category') || searchParams.get('propertyType') || '');
   const [selectedStatus, setSelectedStatus] = useState(searchParams.get('readiness') || '');
   const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [isSearching, setIsSearching] = useState(false);
   const propertyTypes = useMemo(
     () => (categories.length > 0 ? categories : fallbackPropertyTypes),
     [categories]
@@ -45,13 +48,37 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const pushSearch = (nextTransactionType = transactionType) => {
+  const pushSearch = async (nextTransactionType = transactionType) => {
     const params = new URLSearchParams(searchParams.toString());
 
     params.set('type', nextTransactionType);
 
-    if (query.trim()) params.set('q', query.trim());
-    else params.delete('q');
+    if (query.trim()) {
+      params.set('q', query.trim());
+      setIsSearching(true);
+      try {
+        const result = await searchPropertiesWithAI({
+          query: query.trim(),
+          transactionType: nextTransactionType,
+          category: selectedType || undefined,
+          readiness: selectedStatus || undefined,
+          limit: 18,
+        });
+
+        if (result.propertyIds.length > 0) {
+          params.set('ids', result.propertyIds.join(','));
+        } else {
+          params.delete('ids');
+        }
+      } catch {
+        params.delete('ids');
+      } finally {
+        setIsSearching(false);
+      }
+    } else {
+      params.delete('q');
+      params.delete('ids');
+    }
 
     if (selectedType) params.set('category', selectedType);
     else params.delete('category');
@@ -65,7 +92,7 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
   const handleTransactionTypeChange = (value: string) => {
     if (!value) return;
     setTransactionType(value);
-    pushSearch(value);
+    void pushSearch(value);
   };
 
 
@@ -86,7 +113,7 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={(event) => {
-                  if (event.key === 'Enter') pushSearch();
+                  if (event.key === 'Enter') void pushSearch();
                 }}
                 className="bg-white dark:bg-black w-full h-14 rounded-full pl-12 pr-4 shadow-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-accent"
               />
@@ -122,7 +149,7 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === 'Enter') pushSearch();
+                if (event.key === 'Enter') void pushSearch();
               }}
               className="bg-transparent rounded-full px-6 py-4 flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 w-full focus:ring-0 border-0"
             />
@@ -180,9 +207,10 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
               <Button
                 className="h-14 bg-accent rounded-full text-white shadow-lg hover:scale-105 transition px-6"
                 aria-label="Search"
-                onClick={() => pushSearch()}
+                onClick={() => void pushSearch()}
+                disabled={isSearching}
               >
-                <Search className="w-5 h-5 mr-2" />
+                {isSearching ? <Loader2 className="w-5 h-5 mr-2 animate-spin" /> : <Search className="w-5 h-5 mr-2" />}
                  <span className='text-sm font-bold'>Find</span>
               </Button>
             </div>

@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Search, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, Loader2, Search, SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import {
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AdvancedSearchModal } from '../shared/advanced-search-modal';
 import { useRouter } from 'next/navigation';
+import { searchPropertiesWithAI } from '@/lib/api';
 
 const searchTabs = ['Buy', 'Rent', 'Sell', 'Manage'];
 const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
@@ -22,13 +23,14 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
   const [activeTab, setActiveTab] = useState('Buy');
   const [selectedType, setSelectedType] = useState('');
   const [query, setQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const router = useRouter();
   const propertyTypes = useMemo(
     () => (categories.length > 0 ? categories : fallbackPropertyTypes),
     [categories]
   );
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (activeTab === 'Sell') {
       router.push('/sell');
       return;
@@ -48,6 +50,27 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
 
     if (query.trim()) {
       params.set('q', query.trim());
+      setIsSearching(true);
+      try {
+        const result = await searchPropertiesWithAI({
+          query: query.trim(),
+          transactionType: activeTab === 'Rent' ? 'rent' : 'buy',
+          category: selectedType || undefined,
+          limit: 12,
+        });
+
+        if (result.propertyIds.length > 0) {
+          params.set('ids', result.propertyIds.join(','));
+        } else {
+          params.delete('ids');
+        }
+      } catch {
+        params.delete('ids');
+      } finally {
+        setIsSearching(false);
+      }
+    } else {
+      params.delete('ids');
     }
 
     router.push(`/properties?${params.toString()}`);
@@ -143,9 +166,10 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
                 size="icon"
                 className="w-14 h-14 bg-accent rounded-full text-white shadow-lg hover:scale-105 transition"
                 aria-label="Search"
-                onClick={handleSearch}
+                onClick={() => void handleSearch()}
+                disabled={isSearching}
               >
-                <Search className="w-6 h-6" />
+                {isSearching ? <Loader2 className="w-6 h-6 animate-spin" /> : <Search className="w-6 h-6" />}
               </Button>
               <DialogTrigger asChild>
                 <Button
@@ -188,10 +212,22 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
               <input
                 type="text"
                 placeholder="Community or Building..."
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    void handleSearch();
+                  }
+                }}
                 className="flex-1 outline-none text-gray-600 dark:text-gray-300 placeholder-gray-400 bg-transparent min-w-0 text-sm"
               />
-              <Button size="icon" className="w-9 h-9 bg-accent rounded-full flex items-center justify-center text-white ml-2 flex-shrink-0">
-                  <Search className="w-4 h-4" />
+              <Button
+                size="icon"
+                className="w-9 h-9 bg-accent rounded-full flex items-center justify-center text-white ml-2 flex-shrink-0"
+                onClick={() => void handleSearch()}
+                disabled={isSearching}
+              >
+                  {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
               </Button>
               <DialogTrigger asChild>
                 <Button size="icon" variant="ghost" className="w-9 h-9 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-accent ml-2 flex-shrink-0">

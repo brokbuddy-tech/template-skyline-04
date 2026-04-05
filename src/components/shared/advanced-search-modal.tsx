@@ -13,9 +13,10 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '../ui/separator';
-import { useContext, useMemo, useState } from 'react';
+import { type ChangeEvent, type Dispatch, type SetStateAction, useContext, useMemo, useState } from 'react';
 import { CurrencyContext } from '@/context/currency-context';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { searchPropertiesWithAI } from '@/lib/api';
 
 const fallbackAmenities = [
   'Pool',
@@ -42,6 +43,7 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
   const [beds, setBeds] = useState(searchParams.get('bedrooms') || '');
   const [baths, setBaths] = useState(searchParams.get('bathrooms') || '');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [isAiSearching, setIsAiSearching] = useState(false);
 
   const handleAmenityChange = (amenity: string) => {
     setSelectedAmenities(prev => 
@@ -60,7 +62,7 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
     router.push(pathname === '/properties' ? '/properties' : '/properties');
   };
 
-  const handleNumericChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNumericChange = (setter: Dispatch<SetStateAction<string>>) => (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === '') {
       setter('');
@@ -80,12 +82,36 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
 
   const formattedPrice = (value: number) => formatPrice(value, true);
 
-  const applyFilters = () => {
+  const applyFilters = async () => {
     const params = new URLSearchParams(searchParams.toString());
     const destination = pathname === '/properties' ? pathname : '/properties';
 
-    if (aiQuery.trim()) params.set('q', aiQuery.trim());
-    else params.delete('q');
+    if (aiQuery.trim()) {
+      params.set('q', aiQuery.trim());
+      setIsAiSearching(true);
+      try {
+        const result = await searchPropertiesWithAI({
+          query: aiQuery.trim(),
+          transactionType: searchParams.get('type') || undefined,
+          category: searchParams.get('category') || undefined,
+          readiness: searchParams.get('readiness') || undefined,
+          limit: 18,
+        });
+
+        if (result.propertyIds.length > 0) {
+          params.set('ids', result.propertyIds.join(','));
+        } else {
+          params.delete('ids');
+        }
+      } catch {
+        params.delete('ids');
+      } finally {
+        setIsAiSearching(false);
+      }
+    } else {
+      params.delete('q');
+      params.delete('ids');
+    }
 
     if (beds) params.set('bedrooms', beds);
     else params.delete('bedrooms');
@@ -128,7 +154,9 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
               placeholder="e.g., 'a 3-bedroom apartment in Dubai Marina with a pool'"
               className="mt-0 rounded-full border-accent focus-visible:ring-accent"
             />
-            <Button type="button" className='rounded-full' onClick={applyFilters}>Let's Go AI</Button>
+            <Button type="button" className='rounded-full' onClick={() => void applyFilters()} disabled={isAiSearching}>
+              {isAiSearching ? 'Searching...' : "Let's Go AI"}
+            </Button>
           </div>
         </div>
 
@@ -188,7 +216,7 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
       
       <DialogFooter className='p-4 border-t sm:justify-between'>
           <Button type="button" variant="link" className="text-accent" onClick={handleClearAll}>Clear All</Button>
-          <Button type="button" size="lg" onClick={applyFilters}>Apply Filters</Button>
+          <Button type="button" size="lg" onClick={() => void applyFilters()} disabled={isAiSearching}>Apply Filters</Button>
       </DialogFooter>
     </DialogContent>
   );

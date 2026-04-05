@@ -1,5 +1,6 @@
 import type { Property, PropertyAgent, SiteAgent, SiteConfig, Testimonial } from './types';
 import { PUBLIC_API_BASE_URLS, shouldRetryApiRequest } from './api-base';
+import { getSmartPropertyMatches } from './search';
 
 const CLIENT_PUBLIC_API_BASE = '/api/public';
 
@@ -85,6 +86,8 @@ type PublicListing = Record<string, any> & {
   streetAddress?: string | null;
   address?: string | null;
 };
+
+const LOCATION_FIELD_PATTERN = /(?:^|\.)(?:area|emirate|city|community|subcommunity|tower|building|street|address|location|district|neighbou?rhood|project|island|cluster)$/i;
 
 function getPublicApiBases() {
   return typeof window === 'undefined' ? PUBLIC_API_BASE_URLS : [CLIENT_PUBLIC_API_BASE];
@@ -208,6 +211,64 @@ function normalizeLocation(listing: PublicListing) {
   return [listing.area, listing.emirate].filter(Boolean).join(', ') || listing.location || 'Dubai';
 }
 
+function flattenPublicListingValues(value: unknown, bucket: string[] = []): string[] {
+  if (value === null || value === undefined) return bucket;
+
+  if (Array.isArray(value)) {
+    value.forEach(item => flattenPublicListingValues(item, bucket));
+    return bucket;
+  }
+
+  if (typeof value === 'object') {
+    Object.values(value as Record<string, unknown>).forEach(item => flattenPublicListingValues(item, bucket));
+    return bucket;
+  }
+
+  if (typeof value === 'string') {
+    const normalized = value.trim();
+    if (normalized) bucket.push(normalized);
+    return bucket;
+  }
+
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    bucket.push(String(value));
+  }
+
+  return bucket;
+}
+
+function collectPublicListingLocationValues(
+  value: unknown,
+  bucket: string[] = [],
+  parentKey = ''
+): string[] {
+  if (!value || typeof value !== 'object') return bucket;
+
+  Object.entries(value as Record<string, unknown>).forEach(([key, childValue]) => {
+    const nextKey = parentKey ? `${parentKey}.${key}` : key;
+
+    if (LOCATION_FIELD_PATTERN.test(nextKey)) {
+      flattenPublicListingValues(childValue, bucket);
+    }
+
+    if (childValue && typeof childValue === 'object') {
+      collectPublicListingLocationValues(childValue, bucket, nextKey);
+    }
+  });
+
+  return bucket;
+}
+
+function dedupeJoinedSearchValues(values: Array<string | null | undefined>) {
+  return Array.from(
+    new Set(
+      values
+        .map(value => value?.trim())
+        .filter((value): value is string => Boolean(value))
+    )
+  ).join(' ');
+}
+
 function normalizeReferenceId(listing: PublicListing) {
   return listing.listingCode || listing.referenceId || undefined;
 }
@@ -259,12 +320,23 @@ function mapListingToProperty(listing: PublicListing): Property {
     : Array.isArray(listing.fields?.amenities)
       ? listing.fields.amenities.filter(Boolean)
       : [];
+  const searchableText = dedupeJoinedSearchValues(flattenPublicListingValues(listing));
+  const searchableLocation = dedupeJoinedSearchValues([
+    listing.location,
+    listing.area,
+    listing.emirate,
+    listing.streetAddress,
+    listing.address,
+    ...collectPublicListingLocationValues(listing),
+  ]);
 
   return {
     id: listing.id,
     title: listing.title?.trim() || 'Untitled Property',
     location: normalizeLocation(listing),
     mapAddress: listing.streetAddress?.trim() || listing.address?.trim() || undefined,
+    searchableText: searchableText || undefined,
+    searchableLocation: searchableLocation || undefined,
     price: normalizeNumber(listing.price),
     currency: listing.currency || 'AED',
     bedrooms: normalizeNumber(listing.bedrooms),
@@ -444,6 +516,31 @@ function normalizeAiSearchReadiness(value?: string) {
   return normalized.toUpperCase().replace(/[^A-Z]/g, '');
 }
 
+async function fallbackAiPropertySearch(payload: {
+  query: string;
+  transactionType?: string;
+  category?: string;
+  readiness?: string;
+  limit?: number;
+}): Promise<AiPropertySearchResult> {
+  const normalizedTransactionType = normalizeAiSearchTransactionType(payload.transactionType);
+  const normalizedReadiness = normalizeAiSearchReadiness(payload.readiness);
+  const { properties } = await getProperties({
+    limit: Math.max(payload.limit || 12, 120),
+    transactionType: normalizedTransactionType,
+    category: payload.category,
+    readiness: normalizedReadiness,
+  });
+
+  const matches = getSmartPropertyMatches(properties, payload.query, payload.limit || 12);
+
+  return {
+    propertyIds: matches.map(property => property.id),
+    source: 'fallback',
+    model: null,
+  };
+}
+
 export async function searchPropertiesWithAI(payload: {
   query: string;
   transactionType?: string;
@@ -451,18 +548,33 @@ export async function searchPropertiesWithAI(payload: {
   readiness?: string;
   limit?: number;
 }): Promise<AiPropertySearchResult> {
-  return fetchJson<AiPropertySearchResult>(`/org/${ORG_SLUG}/ai-property-search`, {
-    init: {
-      method: 'POST',
-      body: JSON.stringify({
-        query: payload.query,
-        transactionType: normalizeAiSearchTransactionType(payload.transactionType),
-        category: payload.category,
-        readiness: normalizeAiSearchReadiness(payload.readiness),
-        limit: payload.limit,
-      }),
-    },
-  });
+  try {
+    const result = await fetchJson<AiPropertySearchResult>(`/org/${ORG_SLUG}/ai-property-search`, {
+      init: {
+        method: 'POST',
+        body: JSON.stringify({
+          query: payload.query,
+          transactionType: normalizeAiSearchTransactionType(payload.transactionType),
+          category: payload.category,
+          readiness: normalizeAiSearchReadiness(payload.readiness),
+          limit: payload.limit,
+        }),
+      },
+    });
+
+    if (result.source === 'fallback') {
+      const refinedFallback = await fallbackAiPropertySearch(payload);
+
+      if (refinedFallback.propertyIds.length > 0) {
+        return refinedFallback;
+      }
+    }
+
+    return result;
+  } catch (error) {
+    console.warn('AI property search failed, using template fallback search.', error);
+    return fallbackAiPropertySearch(payload);
+  }
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {

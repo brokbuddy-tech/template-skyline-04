@@ -25,6 +25,8 @@ export type Property = {
   title: string;
   location: string;
   mapAddress?: string;
+  searchableText?: string;
+  searchableLocation?: string;
   price: number;
   currency?: string;
   bedrooms: number;

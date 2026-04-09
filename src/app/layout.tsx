@@ -1,6 +1,7 @@
 
 import type { Metadata } from 'next';
 import { Inter, Manrope } from 'next/font/google';
+import 'leaflet/dist/leaflet.css';
 import './globals.css';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';

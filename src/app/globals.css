@@ -82,6 +82,64 @@
   }
 }
 
+.leaflet-property-map {
+  isolation: isolate;
+}
+
+.leaflet-property-map .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: hsl(var(--muted));
+  font-family: var(--font-inter), sans-serif;
+}
+
+.leaflet-property-map .leaflet-control-zoom a,
+.leaflet-property-map .leaflet-popup-content-wrapper,
+.leaflet-property-map .leaflet-popup-tip {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.leaflet-property-map .leaflet-control-zoom a {
+  border-color: hsl(var(--border));
+}
+
+.leaflet-property-map .leaflet-control-attribution {
+  background: hsl(var(--background) / 0.88);
+  color: hsl(var(--muted-foreground));
+}
+
+.leaflet-property-map .leaflet-control-attribution a {
+  color: hsl(var(--accent));
+}
+
+.leaflet-property-marker {
+  position: relative;
+  display: block;
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  border: 2px solid hsl(var(--background));
+  background: hsl(var(--accent));
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.24);
+}
+
+.leaflet-property-marker::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  height: 12px;
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, hsl(var(--accent)), transparent);
+}
+
+.leaflet-property-marker.is-active {
+  transform: scale(1.22);
+  background: hsl(var(--foreground));
+}
+
 /* Mobile Nav Checkbox */
 .hamburger {
   cursor: pointer;

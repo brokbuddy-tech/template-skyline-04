@@ -2,14 +2,13 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useContext } from 'react';
 import type { Property } from '@/lib/types';
 import { ArrowUpRight, BedDouble, Bath, Square, CheckCircle, Star } from 'lucide-react';
 import { CurrencyContext } from '@/context/currency-context';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
-import { resolveImage } from '@/lib/property-media';
+import { ProgressiveImage } from './progressive-image';
 
 
 interface PropertyCardProps {
@@ -17,7 +16,7 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property }: PropertyCardProps) {
-  const image = resolveImage(property.images[0]);
+  const image = property.media?.[0] || property.images[0];
   const { formatPrice } = useContext(CurrencyContext);
 
   const isForSale = property.transactionType === 'Sale';
@@ -26,16 +25,14 @@ export function PropertyCard({ property }: PropertyCardProps) {
   return (
     <div className="group" data-hoverable="true">
       <Link href={`/properties/${property.id}`} className="block">
-        <div className="relative overflow-hidden rounded-lg">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-muted/20">
           {image && (
-            <Image
-              src={image.src}
+            <ProgressiveImage
+              source={image}
               alt={property.title}
-              width={800}
-              height={1000} // Adjusted for 4:5 aspect ratio
-              className="w-full h-auto object-cover aspect-[4/5] transition-transform duration-500"
-              data-ai-hint={image.hint}
-              unoptimized={image.unoptimized}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              imageClassName="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           )}
 

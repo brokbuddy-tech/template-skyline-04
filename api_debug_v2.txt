@@ -1,0 +1,57 @@
+function mapListingToProperty(listing: PublicListing): Property {
+  const images = normalizeImages(listing.images);
+  const organizationName = listing.organization?.name || 'Skyline Realty';
+  const sqft = normalizeNumber(listing.builtUpArea) || normalizeNumber(listing.size) || normalizeNumber(listing.areaSqFt);
+  const amenities = Array.isArray(listing.amenities)
+    ? listing.amenities.filter(Boolean)
+    : Array.isArray(listing.fields?.amenities)
+      ? listing.fields.amenities.filter(Boolean)
+      : [];
+  const searchableText = dedupeJoinedSearchValues(flattenPublicListingValues(listing));
+  const searchableLocation = dedupeJoinedSearchValues([
+    listing.location,
+    listing.area,
+    listing.emirate,
+    listing.streetAddress,
+    listing.address,
+    ...collectPublicListingLocationValues(listing),
+  ]);
+
+  return {
+    id: listing.id,
+    title: listing.title?.trim() || 'Untitled Property',
+    location: normalizeLocation(listing),
+    mapAddress: listing.streetAddress?.trim() || listing.address?.trim() || undefined,
+    searchableText: searchableText || undefined,
+    searchableLocation: searchableLocation || undefined,
+    price: normalizeNumber(listing.price),
+    currency: listing.currency || 'AED',
+    bedrooms: normalizeNumber(listing.bedrooms),
+    bathrooms: normalizeNumber(listing.bathrooms),
+    sqft,
+    type: listing.category || listing.type || listing.propertyType || 'Property',
+    amenities,
+    images,
+    media,
+    description: listing.description?.trim() || 'More details available on request.',
+    referenceId: normalizeReferenceId(listing),
+    trakheesi: normalizePermitNumber(listing),
+    reraPermit: normalizeReraNumber(listing),
+    dldPermitLink: listing.dldPermitLink || null,
+    status: normalizeStatus(listing.readiness),
+    transactionType: normalizeTransactionType(listing.transactionType),
+    photoCount: images.length,
+    tag: listing.propertyType === 'COMMERCIAL' ? 'Commercial' : 'Residential',
+    developerLogo: pickDeveloperLogo(listing.developerName),
+    developerName: listing.developerName || undefined,
+    category: listing.category || undefined,
+    nearby: Array.isArray(listing.nearby) ? listing.nearby : [],
+    handoverDate: normalizeHandoverDate(listing),
+    latitude: normalizeCoordinate(listing.latitude, listing.lat),
+    longitude: normalizeCoordinate(listing.longitude, listing.lng),
+    paymentPlanData: listing.paymentPlanData || null,
+    constructionTimelineData: listing.constructionTimelineData || null,
+    organizationName,
+    organizationSlug: listing.organization?.slug || ORG_SLUG,
+    agent: mapAgent(listing.broker, organizationName),
+  };

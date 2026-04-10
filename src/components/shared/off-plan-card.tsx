@@ -2,12 +2,11 @@
 'use client';
 
 import type { Property } from '@/lib/types';
-import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Building2, Clock } from 'lucide-react';
 import { EmaarLogo, NakheelLogo } from './developer-logos';
 import { Separator } from '../ui/separator';
-import { resolveImage } from '@/lib/property-media';
+import { ProgressiveImage } from './progressive-image';
 
 const developerLogos = {
     'Emaar': EmaarLogo,
@@ -15,7 +14,7 @@ const developerLogos = {
 }
 
 export function OffPlanCard({ property }: { property: Property }) {
-  const image = resolveImage(property.images[0]);
+  const image = property.media?.[0] || property.images[0];
   const DevLogo = property.developerLogo ? developerLogos[property.developerLogo as keyof typeof developerLogos] : null;
 
   return (
@@ -23,13 +22,12 @@ export function OffPlanCard({ property }: { property: Property }) {
       <Link href={`/properties/${property.id}`} className="block">
         <div className="relative h-[250px]">
           {image && (
-            <Image
-              src={image.src}
+            <ProgressiveImage
+              source={image}
               alt={property.title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              data-ai-hint={image.hint}
-              unoptimized={image.unoptimized}
+              sizes="(max-width: 768px) 100vw, 380px"
+              imageClassName="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           )}
           {/* Red Ribbon */}

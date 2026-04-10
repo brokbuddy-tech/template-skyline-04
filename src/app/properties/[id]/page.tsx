@@ -22,6 +22,7 @@ export default async function PropertyDetailPage({
         ...feedProperty,
         ...property,
         images: property.images.length > 0 ? property.images : feedProperty?.images || [],
+        media: property.media && property.media.length > 0 ? property.media : feedProperty?.media || [],
         latitude: property.latitude ?? feedProperty?.latitude ?? null,
         longitude: property.longitude ?? feedProperty?.longitude ?? null,
         mapAddress: property.mapAddress || feedProperty?.mapAddress,

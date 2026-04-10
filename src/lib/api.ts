@@ -1,32 +1,16 @@
-import type { Property, PropertyAgent, SiteAgent, SiteConfig, Testimonial } from './types';
-import { PUBLIC_API_BASE_URLS, shouldRetryApiRequest } from './api-base';
-import { getSmartPropertyMatches } from './search';
+import type { 
+  Property, 
+  PropertyMedia, 
+  SiteConfig,
+  SiteAgent,
+  SiteBranding,
+  SiteStats
+} from './types';
+import { 
+  PUBLIC_API_BASE_URLS 
+} from './api-base';
 
-const CLIENT_PUBLIC_API_BASE = '/api/public';
-
-export const ORG_SLUG =
-  (((globalThis as any).process?.env?.NEXT_PUBLIC_ORG_SLUG as string | undefined) || 'skyline-realty').trim();
-
-const DEFAULT_SITE_CONFIG: SiteConfig = {
-  organization: {
-    name: 'Skyline Realty',
-    slug: ORG_SLUG,
-  },
-  categories: [],
-  amenities: [],
-  featuredAreas: [],
-  leadAgent: null,
-  branding: null,
-  stats: {
-    totalListings: 0,
-    readyListings: 0,
-    offPlanListings: 0,
-    activeAgents: 0,
-    awards: 0,
-    blogs: 0,
-    testimonials: 0,
-  },
-};
+// ── Types ──────────────────────────────────────────────────────────────────
 
 export type GetPropertiesParams = Record<string, string | number | boolean | undefined | null>;
 
@@ -57,95 +41,57 @@ type PublicListingImage = {
   isHero?: boolean | null;
 };
 
-type PublicListing = Record<string, any> & {
-  id: string;
-  title?: string | null;
-  description?: string | null;
-  transactionType?: string | null;
-  propertyType?: string | null;
-  category?: string | null;
-  readiness?: string | null;
-  emirate?: string | null;
-  area?: string | null;
-  price?: number | string | null;
-  currency?: string | null;
-  bedrooms?: number | string | null;
-  bathrooms?: number | string | null;
-  builtUpArea?: number | string | null;
-  size?: number | string | null;
-  images?: PublicListingImage[];
-  broker?: Record<string, any> | null;
-  organization?: { name?: string | null; slug?: string | null } | null;
-  developerName?: string | null;
-  constructionTimelineData?: Record<string, any> | null;
-  paymentPlanData?: Record<string, any> | null;
-  latitude?: number | null;
-  longitude?: number | null;
-  lat?: number | string | null;
-  lng?: number | string | null;
-  streetAddress?: string | null;
-  address?: string | null;
-};
-
-const LOCATION_FIELD_PATTERN = /(?:^|\.)(?:area|emirate|city|community|subcommunity|tower|building|street|address|location|district|neighbou?rhood|project|island|cluster)$/i;
-
-function getPublicApiBases() {
-  return typeof window === 'undefined' ? PUBLIC_API_BASE_URLS : [CLIENT_PUBLIC_API_BASE];
-}
-
-function normalizeTransactionType(value?: string | null): 'Sale' | 'Rent' {
-  return value?.toUpperCase() === 'RENT' ? 'Rent' : 'Sale';
-}
-
-function normalizeStatus(value?: string | null): 'Off-plan' | 'Ready' {
-  return value?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready';
-}
-
-function normalizeNumber(value: unknown): number {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
-  if (typeof value === 'string') {
-    const parsed = Number.parseFloat(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
-  return 0;
-}
-
-function normalizeCoordinate(...values: unknown[]): number | null {
-  for (const value of values) {
-    if (typeof value === 'number' && Number.isFinite(value)) return value;
-    if (typeof value === 'string') {
-      const parsed = Number.parseFloat(value);
-      if (Number.isFinite(parsed)) return parsed;
-    }
-  }
-
-  return null;
-}
+// ── Helpers ────────────────────────────────────────────────────────────────
 
 function buildStorageImageUrl(gcsPath?: string | null): string | null {
   if (!gcsPath) return null;
   return `https://storage.googleapis.com/brokbuddy-listing-images/${gcsPath.replace(/^\/+/, '')}`;
 }
 
+/** 
+ * Mimics Broker-OS getListingMediaUrl for the public API proxy.
+ * Uses /api/public/images/[id]/view?variant=[variant]
+ */
+function getPublicListingMediaUrl(
+  image?: PublicListingImage | null,
+  variant: 'thumbnail' | 'medium' | 'compressed' | 'original' = 'medium'
+): string | null {
+  if (!image) return null;
+  
+  // If the image is READY and has an ID, use the proxied variant endpoint
+  if (image.id && image.status?.toUpperCase() === 'READY') {
+    return `/api/public/images/${image.id}/view?variant=${variant}`;
+  }
+
+  // Fallback chain for non-ready or legacy images (mimicking Broker-OS buildMediaSlide/getProcessedUrl)
+  if (variant === 'thumbnail') {
+    return image.thumbnailUrl || image.mediumUrl || image.cdnUrl || image.url || null;
+  }
+  
+  if (variant === 'medium') {
+    return image.mediumUrl || image.cdnUrl || image.thumbnailUrl || image.url || null;
+  }
+
+  return image.cdnUrl || image.mediumUrl || image.thumbnailUrl || image.url || null;
+}
+
 function normalizeAssetUrl(value?: string | null): string | null {
   const normalized = value?.trim();
   if (!normalized) return null;
-  if (!normalized.startsWith('/')) return normalized;
+  
+  if (/^https?:\/\//i.test(normalized)) return normalized;
 
+  const path = normalized.startsWith('/') ? normalized : `/${normalized}`;
   const publicApiBase = PUBLIC_API_BASE_URLS[0];
   if (!publicApiBase) return normalized;
 
   const apiOrigin = publicApiBase.replace(/\/api\/public$/i, '');
 
   try {
-    return new URL(normalized, apiOrigin).toString();
+    return new URL(path, apiOrigin).toString();
   } catch {
     return normalized;
   }
-}
-
-function isProxiedPublicImageUrl(value?: string | null): boolean {
-  return /^\/api\/public\/images\/[^/]+\/view/i.test(value?.trim() || '');
 }
 
 function isRenderableImage(image?: PublicListingImage | null): boolean {
@@ -160,166 +106,89 @@ function isRenderableImage(image?: PublicListingImage | null): boolean {
   return true;
 }
 
-function normalizeImageUrl(image?: PublicListingImage | null): string | null {
-  if (!image || !isRenderableImage(image)) return null;
-
-  const storageUrl = buildStorageImageUrl(image.gcsPath);
-  const originalUrl = isProxiedPublicImageUrl(image.url)
-    ? normalizeAssetUrl(image.url) || storageUrl
-    : normalizeAssetUrl(image.url) || storageUrl;
-  const isReady = image.status?.toUpperCase() === 'READY';
-  const preferredUrl = isReady
-    ? normalizeAssetUrl(image.mediumUrl) ||
-      normalizeAssetUrl(image.cdnUrl) ||
-      normalizeAssetUrl(image.thumbnailUrl) ||
-      originalUrl
-    : originalUrl ||
-      normalizeAssetUrl(image.mediumUrl) ||
-      normalizeAssetUrl(image.thumbnailUrl) ||
-      normalizeAssetUrl(image.cdnUrl);
-
-  return preferredUrl?.trim() || null;
+function normalizeNumber(value: any): number {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    const parsed = parseFloat(value.replace(/,/g, ''));
+    return isNaN(parsed) ? 0 : parsed;
+  }
+  return 0;
 }
 
-function normalizeImages(images?: PublicListingImage[] | null): string[] {
-  if (!images?.length) return [];
-  return [...images]
+function normalizeLocation(listing: any): string {
+  const parts = [
+    listing.area,
+    listing.emirate
+  ].filter(p => !!p && typeof p === 'string');
+  
+  return parts.length > 0 ? parts.join(', ') : (listing.location || 'Dubai');
+}
+
+function collectPublicListingLocationValues(listing: any): string[] {
+  const values: string[] = [];
+  if (listing.location) values.push(listing.location);
+  if (listing.area) values.push(listing.area);
+  if (listing.emirate) values.push(listing.emirate);
+  if (listing.subArea) values.push(listing.subArea);
+  if (listing.streetAddress) values.push(listing.streetAddress);
+  if (listing.address) values.push(listing.address);
+  return values;
+}
+
+function flattenPublicListingValues(listing: any): string[] {
+  const values: string[] = [listing.title, listing.description];
+  return values.concat(collectPublicListingLocationValues(listing)).filter(Boolean);
+}
+
+function dedupeJoinedSearchValues(values: string[]): string {
+  return Array.from(new Set(values.filter(v => !!v && typeof v === 'string').map(v => v.trim())))
+    .join(' ')
+    .toLowerCase();
+}
+
+/**
+ * Maps raw API listing data to the Property type.
+ * Updated to mimic Broker-OS image fetching and READY status handling.
+ */
+export function mapListingToProperty(listing: any): Property {
+  const images: PublicListingImage[] = Array.isArray(listing.images) ? listing.images : [];
+  
+  const media: PropertyMedia[] = images
     .filter(isRenderableImage)
     .sort((left, right) => {
       const heroDelta = Number(Boolean(right.isHero)) - Number(Boolean(left.isHero));
       if (heroDelta !== 0) return heroDelta;
-
-      const orderDelta =
-        (left.order ?? Number.MAX_SAFE_INTEGER) - (right.order ?? Number.MAX_SAFE_INTEGER);
+      const orderDelta = (left.order ?? 999) - (right.order ?? 999);
       if (orderDelta !== 0) return orderDelta;
-
       return String(left.id || '').localeCompare(String(right.id || ''));
     })
-    .map(normalizeImageUrl)
-    .filter((image): image is string => Boolean(image));
-}
+    .map(img => {
+      const storageUrl = buildStorageImageUrl(img.gcsPath);
+      
+      // Use the proxied variant URLs (Mimicking Broker-OS getProcessedUrl/buildMediaSlide)
+      const thumb = getPublicListingMediaUrl(img, 'thumbnail');
+      const med = getPublicListingMediaUrl(img, 'medium');
+      const high = getPublicListingMediaUrl(img, 'compressed');
+      
+      const originalUrl = normalizeAssetUrl(img.url) || storageUrl || '';
 
-function pickDeveloperLogo(developerName?: string | null) {
-  const normalized = developerName?.trim().toLowerCase();
-  if (!normalized) return undefined;
-  if (normalized.includes('emaar')) return 'Emaar';
-  if (normalized.includes('nakheel')) return 'Nakheel';
-  return undefined;
-}
+      return {
+        url: med || high || originalUrl,
+        thumbnailUrl: thumb || med || originalUrl,
+        mediumUrl: med || high || originalUrl,
+        cdnUrl: high || med || originalUrl,
+      };
+    })
+    .filter(m => !!m.url);
 
-function normalizeLocation(listing: PublicListing) {
-  return [listing.area, listing.emirate].filter(Boolean).join(', ') || listing.location || 'Dubai';
-}
-
-function flattenPublicListingValues(value: unknown, bucket: string[] = []): string[] {
-  if (value === null || value === undefined) return bucket;
-
-  if (Array.isArray(value)) {
-    value.forEach(item => flattenPublicListingValues(item, bucket));
-    return bucket;
-  }
-
-  if (typeof value === 'object') {
-    Object.values(value as Record<string, unknown>).forEach(item => flattenPublicListingValues(item, bucket));
-    return bucket;
-  }
-
-  if (typeof value === 'string') {
-    const normalized = value.trim();
-    if (normalized) bucket.push(normalized);
-    return bucket;
-  }
-
-  if (typeof value === 'number' || typeof value === 'boolean') {
-    bucket.push(String(value));
-  }
-
-  return bucket;
-}
-
-function collectPublicListingLocationValues(
-  value: unknown,
-  bucket: string[] = [],
-  parentKey = ''
-): string[] {
-  if (!value || typeof value !== 'object') return bucket;
-
-  Object.entries(value as Record<string, unknown>).forEach(([key, childValue]) => {
-    const nextKey = parentKey ? `${parentKey}.${key}` : key;
-
-    if (LOCATION_FIELD_PATTERN.test(nextKey)) {
-      flattenPublicListingValues(childValue, bucket);
-    }
-
-    if (childValue && typeof childValue === 'object') {
-      collectPublicListingLocationValues(childValue, bucket, nextKey);
-    }
-  });
-
-  return bucket;
-}
-
-function dedupeJoinedSearchValues(values: Array<string | null | undefined>) {
-  return Array.from(
-    new Set(
-      values
-        .map(value => value?.trim())
-        .filter((value): value is string => Boolean(value))
-    )
-  ).join(' ');
-}
-
-function normalizeReferenceId(listing: PublicListing) {
-  return listing.listingCode || listing.referenceId || undefined;
-}
-
-function normalizePermitNumber(listing: PublicListing) {
-  return listing.trakheesiPermitNumber || listing.permitNumber || listing.trakheesi || undefined;
-}
-
-function normalizeReraNumber(listing: PublicListing) {
-  return listing.reraNumber || listing.reraPermit || undefined;
-}
-
-function normalizeHandoverDate(listing: PublicListing) {
-  const expectedCompletion =
-    listing.constructionTimelineData?.expected_completion ||
-    listing.constructionTimelineData?.expectedCompletion ||
-    listing.handoverDate;
-  if (typeof expectedCompletion === 'string' && expectedCompletion.trim()) {
-    return expectedCompletion;
-  }
-  return undefined;
-}
-
-function mapAgent(agent?: Record<string, any> | null, organizationName?: string): PropertyAgent | undefined {
-  if (!agent) return undefined;
-  return {
-    id: agent.id,
-    name: `${agent.firstName || ''} ${agent.lastName || ''}`.trim() || agent.brokerProfile?.displayName || 'Skyline Agent',
-    title: agent.brokerProfile?.tagline || 'Real Estate Advisor',
-    avatarUrl: agent.avatar || null,
-    phone: agent.brokerProfile?.publicPhone || agent.phone || null,
-    email: agent.brokerProfile?.publicEmail || agent.email || null,
-    whatsapp: agent.brokerProfile?.whatsapp || agent.phone || null,
-    company: organizationName,
-    licenseNumber: agent.licenseNumber || null,
-    slug: agent.brokerProfile?.slug || null,
-    instagram: agent.brokerProfile?.instagram || null,
-    linkedin: agent.brokerProfile?.linkedin || null,
-    twitter: agent.brokerProfile?.twitter || null,
-  };
-}
-
-function mapListingToProperty(listing: PublicListing): Property {
-  const images = normalizeImages(listing.images);
-  const organizationName = listing.organization?.name || 'Skyline Realty';
   const sqft = normalizeNumber(listing.builtUpArea) || normalizeNumber(listing.size) || normalizeNumber(listing.areaSqFt);
+  
   const amenities = Array.isArray(listing.amenities)
     ? listing.amenities.filter(Boolean)
     : Array.isArray(listing.fields?.amenities)
       ? listing.fields.amenities.filter(Boolean)
       : [];
+      
   const searchableText = dedupeJoinedSearchValues(flattenPublicListingValues(listing));
   const searchableLocation = dedupeJoinedSearchValues([
     listing.location,
@@ -343,306 +212,200 @@ function mapListingToProperty(listing: PublicListing): Property {
     bathrooms: normalizeNumber(listing.bathrooms),
     sqft,
     type: listing.category || listing.type || listing.propertyType || 'Property',
-    amenities,
-    images,
-    description: listing.description?.trim() || 'More details available on request.',
-    referenceId: normalizeReferenceId(listing),
-    trakheesi: normalizePermitNumber(listing),
-    reraPermit: normalizeReraNumber(listing),
-    dldPermitLink: listing.dldPermitLink || null,
-    status: normalizeStatus(listing.readiness),
-    transactionType: normalizeTransactionType(listing.transactionType),
-    photoCount: images.length,
-    tag: listing.propertyType === 'COMMERCIAL' ? 'Commercial' : 'Residential',
-    developerLogo: pickDeveloperLogo(listing.developerName),
-    developerName: listing.developerName || undefined,
-    category: listing.category || undefined,
-    nearby: Array.isArray(listing.nearby) ? listing.nearby : [],
-    handoverDate: normalizeHandoverDate(listing),
-    latitude: normalizeCoordinate(listing.latitude, listing.lat),
-    longitude: normalizeCoordinate(listing.longitude, listing.lng),
-    paymentPlanData: listing.paymentPlanData || null,
-    constructionTimelineData: listing.constructionTimelineData || null,
-    organizationName,
-    organizationSlug: listing.organization?.slug || ORG_SLUG,
-    agent: mapAgent(listing.broker, organizationName),
+    transactionType: listing.transactionType === 'RENT' ? 'Rent' : 'Sale',
+    status: listing.readiness?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready',
+    amenities: amenities.map(String),
+    description: listing.description || '',
+    images: media.map(m => m.url),
+    media,
+    featured: Boolean(listing.featured || listing.isFeatured),
+    dldPermitLink: listing.dldPermitLink || listing.fields?.dldPermitLink || undefined,
+    handoverDate: listing.handoverDate || listing.fields?.handoverDate || undefined,
+    developerName: listing.developer?.name || listing.fields?.developerName || undefined,
+    developerLogo: listing.developer?.logo || listing.fields?.developerLogo || undefined,
+    tag: listing.tag || listing.fields?.tag || undefined,
+    agent: listing.broker ? {
+      name: `${listing.broker.firstName} ${listing.broker.lastName}`,
+      avatarUrl: listing.broker.avatar || '',
+      title: listing.broker.brokerProfile?.tagline || 'Property Consultant',
+      phone: listing.broker.phone || '',
+      email: listing.broker.email || '',
+      whatsapp: listing.broker.whatsapp || '',
+    } : undefined,
   };
 }
 
-async function fetchJson<T>(
-  path: string,
-  {
-    params,
-    revalidate,
-    init,
-  }: {
-    params?: GetPropertiesParams;
-    revalidate?: number;
-    init?: RequestInit;
-  } = {}
-): Promise<T> {
-  const requestInit: RequestInit = {
-    ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(init?.headers || {}),
-    },
-  };
+// ── API Methods ─────────────────────────────────────────────────────────────
 
-  if (typeof window === 'undefined' && revalidate) {
-    (requestInit as RequestInit & { next?: { revalidate: number } }).next = { revalidate };
-  }
-
-  const publicApiBases = getPublicApiBases();
-  let lastError: Error | null = null;
-
-  for (const [index, publicApiBase] of publicApiBases.entries()) {
-    const url = new URL(
-      `${publicApiBase}${path}`,
-      typeof window === 'undefined' ? 'http://localhost' : window.location.origin
-    );
-
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value === undefined || value === null || value === '') return;
-        url.searchParams.set(key, String(value));
-      });
-    }
-
-    try {
-      const response = await fetch(url.toString(), requestInit);
-      if (!response.ok) {
-        const error = new Error(`Request failed for ${url.pathname}: ${response.status}`);
-        if (index < publicApiBases.length - 1 && shouldRetryApiRequest(response.status)) {
-          lastError = error;
-          continue;
-        }
-
-        throw error;
-      }
-
-      return response.json() as Promise<T>;
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-
-      if (index === publicApiBases.length - 1) {
-        throw lastError;
-      }
-    }
-  }
-
-  throw lastError ?? new Error(`Request failed for ${path}`);
-}
-
-export function toSocialUrl(platform: 'instagram' | 'linkedin' | 'twitter' | 'website' | 'whatsapp', value?: string | null) {
-  if (!value) return null;
-  if (/^https?:\/\//i.test(value)) return value;
-  if (platform === 'website') return `https://${value.replace(/^\/+/, '')}`;
-  if (platform === 'instagram') return `https://instagram.com/${value.replace(/^@/, '')}`;
-  if (platform === 'linkedin') return `https://linkedin.com/in/${value.replace(/^@/, '')}`;
-  if (platform === 'twitter') return `https://x.com/${value.replace(/^@/, '')}`;
-  if (platform === 'whatsapp') {
-    const phone = value.replace(/[^\d+]/g, '');
-    return phone ? `https://wa.me/${phone.replace('+', '')}` : null;
-  }
-  return value;
-}
-
-export async function getSiteConfig(): Promise<SiteConfig> {
+async function safeFetch(url: string, options?: RequestInit, timeout = 10000): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  
   try {
-    const config = await fetchJson<SiteConfig>(`/org/${ORG_SLUG}/config`, {
-      revalidate: 300,
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
     });
-
-    return {
-      ...DEFAULT_SITE_CONFIG,
-      ...config,
-      organization: {
-        ...DEFAULT_SITE_CONFIG.organization,
-        ...(config.organization || {}),
-      },
-      categories: config.categories || [],
-      amenities: config.amenities || [],
-      featuredAreas: config.featuredAreas || [],
-      leadAgent: config.leadAgent || null,
-      branding: config.branding || null,
-      stats: {
-        ...DEFAULT_SITE_CONFIG.stats!,
-        ...(config.stats || {}),
-      },
-    };
+    return response;
   } catch (error) {
-    console.error('Failed to fetch site config', error);
-    return DEFAULT_SITE_CONFIG;
+    return new Response(null, { status: 503, statusText: 'Service Unavailable' });
+  } finally {
+    clearTimeout(id);
   }
 }
 
 export async function getProperties(params: GetPropertiesParams = {}): Promise<PaginatedProperties> {
-  try {
-    const data = await fetchJson<{ listings: PublicListing[]; total: number; page: number; totalPages: number }>(
-      `/org/${ORG_SLUG}/listings`,
-      {
-        params,
-        revalidate: 60,
-      }
-    );
-
-    return {
-      properties: (data.listings || []).map(mapListingToProperty),
-      total: data.total || 0,
-      page: data.page || 1,
-      totalPages: data.totalPages || 1,
-    };
-  } catch (error) {
-    console.error('Failed to fetch properties', error);
-    return {
-      properties: [],
-      total: 0,
-      page: 1,
-      totalPages: 1,
-    };
-  }
-}
-
-function normalizeAiSearchTransactionType(value?: string) {
-  if (value === 'rent') return 'RENT';
-  if (value === 'buy') return 'SALE';
-  return undefined;
-}
-
-function normalizeAiSearchReadiness(value?: string) {
-  const normalized = value?.trim();
-  if (!normalized) return undefined;
-  return normalized.toUpperCase().replace(/[^A-Z]/g, '');
-}
-
-async function fallbackAiPropertySearch(payload: {
-  query: string;
-  transactionType?: string;
-  category?: string;
-  readiness?: string;
-  limit?: number;
-}): Promise<AiPropertySearchResult> {
-  const normalizedTransactionType = normalizeAiSearchTransactionType(payload.transactionType);
-  const normalizedReadiness = normalizeAiSearchReadiness(payload.readiness);
-  const { properties } = await getProperties({
-    limit: Math.max(payload.limit || 12, 120),
-    transactionType: normalizedTransactionType,
-    category: payload.category,
-    readiness: normalizedReadiness,
+  const url = new URL(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/listings`);
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      url.searchParams.append(key, String(value));
+    }
   });
 
-  const matches = getSmartPropertyMatches(properties, payload.query, payload.limit || 12);
+  const response = await safeFetch(url.toString(), {
+    next: { revalidate: 60 },
+  });
+
+  if (!response.ok) {
+    return { properties: [], total: 0, page: 1, totalPages: 1 };
+  }
+
+  const data = await response.json();
+  
+  const rawListings = Array.isArray(data) ? data : (data.listings || []);
+  const total = data.total || rawListings.length;
+  const page = data.page || 1;
+  const totalPages = data.totalPages || Math.ceil(total / (params.limit as number || 10)) || 1;
 
   return {
-    propertyIds: matches.map(property => property.id),
-    source: 'fallback',
-    model: null,
+    properties: rawListings.map(mapListingToProperty),
+    total,
+    page,
+    totalPages,
   };
 }
 
-export async function searchPropertiesWithAI(payload: {
-  query: string;
-  transactionType?: string;
-  category?: string;
-  readiness?: string;
-  limit?: number;
-}): Promise<AiPropertySearchResult> {
-  try {
-    const result = await fetchJson<AiPropertySearchResult>(`/org/${ORG_SLUG}/ai-property-search`, {
-      init: {
-        method: 'POST',
-        body: JSON.stringify({
-          query: payload.query,
-          transactionType: normalizeAiSearchTransactionType(payload.transactionType),
-          category: payload.category,
-          readiness: normalizeAiSearchReadiness(payload.readiness),
-          limit: payload.limit,
-        }),
-      },
-    });
-
-    if (result.source === 'fallback') {
-      const refinedFallback = await fallbackAiPropertySearch(payload);
-
-      if (refinedFallback.propertyIds.length > 0) {
-        return refinedFallback;
-      }
-    }
-
-    return result;
-  } catch (error) {
-    console.warn('AI property search failed, using template fallback search.', error);
-    return fallbackAiPropertySearch(payload);
-  }
-}
-
 export async function getPropertyById(id: string): Promise<Property | null> {
-  try {
-    const data = await fetchJson<PublicListing>(`/listing/${id}`, {
-      revalidate: 60,
-    });
-    return mapListingToProperty(data);
-  } catch (error) {
-    console.error(`Failed to fetch property ${id}`, error);
-    return null;
-  }
-}
-
-export async function getTestimonials(): Promise<Testimonial[]> {
-  try {
-    return await fetchJson<Testimonial[]>(`/org/${ORG_SLUG}/testimonials`, {
-      revalidate: 300,
-    });
-  } catch (error) {
-    console.error('Failed to fetch testimonials', error);
-    return [];
-  }
-}
-
-export async function getAgents(): Promise<SiteAgent[]> {
-  try {
-    const agents = await fetchJson<Record<string, any>[]>(`/org/${ORG_SLUG}/agents`, {
-      revalidate: 300,
-    });
-
-    return agents.map(agent => ({
-      id: agent.id,
-      name: agent.brokerProfile?.displayName || `${agent.firstName || ''} ${agent.lastName || ''}`.trim(),
-      email: agent.brokerProfile?.publicEmail || agent.email,
-      phone: agent.brokerProfile?.publicPhone || agent.phone,
-      whatsapp: agent.brokerProfile?.whatsapp || agent.phone,
-      avatar: agent.avatar || null,
-      licenseNumber: agent.licenseNumber || null,
-      slug: agent.brokerProfile?.slug || null,
-      tagline: agent.brokerProfile?.tagline || null,
-      bio: agent.brokerProfile?.bio || null,
-      instagram: agent.brokerProfile?.instagram || null,
-      linkedin: agent.brokerProfile?.linkedin || null,
-      twitter: agent.brokerProfile?.twitter || null,
-      specializations: agent.brokerProfile?.specializations || [],
-      languages: agent.brokerProfile?.languages || [],
-      yearsExperience: agent.brokerProfile?.yearsExperience ?? null,
-    }));
-  } catch (error) {
-    console.error('Failed to fetch agents', error);
-    return [];
-  }
-}
-
-export async function submitOrgInquiry(payload: {
-  name: string;
-  email: string;
-  phone?: string;
-  message: string;
-  listingId?: string;
-  propertyType?: string;
-  budget?: number;
-}) {
-  return fetchJson<{ message: string; data: unknown }>(`/org/${ORG_SLUG}/inquiry`, {
-    init: {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    },
+  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/listing/${id}`, {
+    next: { revalidate: 60 },
   });
+
+  if (!response.ok) return null;
+
+  const data = await response.json();
+  return mapListingToProperty(data);
+}
+
+export async function getSmartPropertyMatches(query: string | Record<string, any>): Promise<AiPropertySearchResult> {
+  try {
+    const queryStr = typeof query === 'string' ? query : query.query || '';
+    const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/search?q=${encodeURIComponent(queryStr)}`, {
+      method: 'POST',
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) throw new Error('AI search failed');
+
+    return await response.json();
+  } catch (error) {
+    return { propertyIds: [], source: 'fallback', model: null };
+  }
+}
+
+/** Legacy alias for AI search with expanded compatibility */
+export const searchPropertiesWithAI = getSmartPropertyMatches;
+
+export async function submitOrgInquiry(payload: any): Promise<any> {
+  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/inquiry`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err || 'Failed to submit inquiry');
+  }
+
+  return await response.json();
+}
+
+export function toSocialUrl(network: string, handle?: string | null): string {
+  if (!handle) return '';
+  const trimmed = handle.trim();
+  if (!trimmed) return '';
+  if (trimmed.startsWith('http')) return trimmed;
+
+  switch (network.toLowerCase()) {
+    case 'instagram': return `https://instagram.com/${trimmed.replace(/^@/, '')}`;
+    case 'twitter': return `https://twitter.com/${trimmed.replace(/^@/, '')}`;
+    case 'linkedin': return trimmed.includes('linkedin.com') ? trimmed : `https://linkedin.com/in/${trimmed}`;
+    case 'whatsapp': return `https://wa.me/${trimmed.replace(/\D/g, '')}`;
+    default: return trimmed;
+  }
+}
+
+export async function getSiteConfig(): Promise<SiteConfig> {
+  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/config`, {
+    next: { revalidate: 3600 },
+  });
+
+  const defaultTitle = 'Skyline Realty';
+  const defaultSlug = 'skyline-realty';
+
+  if (!response.ok) {
+    return {
+      organization: { name: defaultTitle, slug: defaultSlug },
+      categories: [],
+      amenities: [],
+    };
+  }
+
+  const data = await response.json();
+  return {
+    organization: data.organization || { name: defaultTitle, slug: defaultSlug },
+    categories: data.categories || [],
+    amenities: data.amenities || [],
+    featuredAreas: data.featuredAreas || [],
+    leadAgent: data.leadAgent || null,
+    branding: data.branding || null,
+    stats: data.stats || {
+      totalListings: 0,
+      readyListings: 0,
+      offPlanListings: 0,
+      activeAgents: 0,
+      awards: 0,
+      blogs: 0,
+      testimonials: 0,
+    },
+  };
+}
+
+export async function getAreaGuides(): Promise<any[]> {
+  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/area-guides`, {
+    next: { revalidate: 3600 },
+  });
+  return response.ok ? await response.json() : [];
+}
+
+export async function getTestimonials(): Promise<any[]> {
+  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/testimonials`, {
+    next: { revalidate: 3600 },
+  });
+  return response.ok ? await response.json() : [];
+}
+
+export async function getBlogs(): Promise<any[]> {
+  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/blogs`, {
+    next: { revalidate: 3600 },
+  });
+  return response.ok ? await response.json() : [];
+}
+
+export async function getSellerTestimonials(): Promise<any[]> {
+  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/seller-testimonials`, {
+    next: { revalidate: 3600 },
+  });
+  return response.ok ? await response.json() : [];
 }

@@ -11,9 +11,9 @@ import { getProperties } from '@/lib/api';
 import { resolveImage } from '@/lib/property-media';
 import { getSmartPropertyMatches } from '@/lib/search';
 import { Property } from '@/lib/types';
-import Image from 'next/image';
 import Link from 'next/link';
 import { MetaballLoader } from './metaball-loader';
+import { ProgressiveImage } from './progressive-image';
 
 interface Message {
   id: string;
@@ -256,21 +256,19 @@ export function AIChatbot() {
 
 
 function PropertyCardInChat({ property }: { property: Property }) {
-  const image = resolveImage(property.images[0]);
+  const image = property.media?.[0] || property.images[0];
 
   return (
     <div className="w-48 flex-shrink-0">
       <Link href={`/properties/${property.id}`} className="block group">
         <div className="bg-white rounded-lg overflow-hidden">
           {image && (
-            <Image
-              src={image.src}
+            <ProgressiveImage
+              image={image}
               alt={property.title}
               width={200}
               height={150}
-              className="w-full h-24 object-cover"
-              data-ai-hint={image.hint}
-              unoptimized={image.unoptimized}
+              imageClassName="w-full h-24 object-cover"
             />
           )}
           <div className="p-2">

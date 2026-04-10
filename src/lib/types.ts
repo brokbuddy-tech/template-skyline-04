@@ -1,8 +1,20 @@
-
 import type { LucideIcon } from 'lucide-react';
 
 export type PropertyStatus = 'Off-plan' | 'Ready';
 export type PropertyTransactionType = 'Sale' | 'Rent';
+export type PropertyImageSource = {
+  id?: string | null;
+  src: string;
+  thumbnailSrc?: string | null;
+  originalSrc?: string | null;
+  alt?: string;
+  hint?: string;
+  status?: string | null;
+  isPlaceholder?: boolean;
+  unoptimized?: boolean;
+};
+
+export type PropertyImage = string | PropertyImageSource;
 
 export type PropertyAgent = {
   id?: string;
@@ -20,6 +32,13 @@ export type PropertyAgent = {
   twitter?: string | null;
 };
 
+export type PropertyMedia = {
+  url: string;
+  thumbnailUrl: string | null;
+  mediumUrl: string | null;
+  cdnUrl: string | null;
+};
+
 export type Property = {
   id: string;
   title: string;
@@ -34,17 +53,18 @@ export type Property = {
   sqft: number;
   type: string;
   amenities: string[];
-  images: string[];
+  images: PropertyImage[];
+  media?: PropertyMedia[];
   description: string;
   referenceId?: string;
   trakheesi?: string;
   reraPermit?: string;
   dldPermitLink?: string | null;
-  featured?: boolean;
   status?: PropertyStatus;
   transactionType: PropertyTransactionType;
   photoCount?: number;
   tag?: string;
+  featured?: boolean;
   developerLogo?: string;
   developerName?: string;
   category?: string;

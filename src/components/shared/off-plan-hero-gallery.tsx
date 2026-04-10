@@ -1,11 +1,10 @@
 
 'use client';
 
-import Image from 'next/image';
 import { Camera, MapPin, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Property } from '@/lib/types';
-import { resolveImage } from '@/lib/property-media';
+import { ProgressiveImage } from './progressive-image';
 
 interface OffPlanHeroGalleryProps {
   property: Property;
@@ -19,11 +18,11 @@ export function OffPlanHeroGallery({
   mapHref = '#property-location',
 }: OffPlanHeroGalleryProps) {
   const images = [
-    property.images[0] || 'prop-1-1',
-    property.images[1] || 'prop-1-2',
-    property.images[2] || 'prop-1-3',
-    property.images[3] || 'prop-4-1',
-  ].map((id) => resolveImage(id));
+    property.media?.[0] || property.images?.[0] || 'prop-1-1',
+    property.media?.[1] || property.images?.[1] || 'prop-1-2',
+    property.media?.[2] || property.images?.[2] || 'prop-1-3',
+    property.media?.[3] || property.images?.[3] || 'prop-4-1',
+  ];
   
   const [mainImage, lifestyleImage, amenityImage, bedroomImage] = images;
   const galleryBadge = badgeText || (property.status === 'Off-plan' ? 'Artist Impression' : 'Property Gallery');
@@ -38,13 +37,13 @@ export function OffPlanHeroGallery({
         <div className="col-span-2 row-span-2 rounded-l-2xl overflow-hidden relative cursor-pointer group">
           {mainImage && (
             <>
-              <Image
-                src={mainImage.src}
-                alt={mainImage.alt}
+              <ProgressiveImage
+                source={mainImage}
+                alt={property.title}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform"
-                data-ai-hint={mainImage.hint}
-                unoptimized={mainImage.unoptimized}
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+                imageClassName="object-cover transition-transform group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </>
@@ -74,13 +73,12 @@ export function OffPlanHeroGallery({
         {/* Lifestyle Image */}
         <div className="col-span-2 row-span-1 rounded-tr-2xl overflow-hidden relative cursor-pointer group">
           {lifestyleImage && (
-            <Image
-              src={lifestyleImage.src}
-              alt={lifestyleImage.alt}
+            <ProgressiveImage
+              source={lifestyleImage}
+              alt={`${property.title} view 2`}
               fill
-              className="object-cover group-hover:scale-105 transition-transform"
-              data-ai-hint={lifestyleImage.hint}
-              unoptimized={lifestyleImage.unoptimized}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              imageClassName="object-cover transition-transform group-hover:scale-105"
             />
           )}
         </div>
@@ -88,13 +86,12 @@ export function OffPlanHeroGallery({
         {/* Amenity Image */}
         <div className="col-span-1 row-span-1 overflow-hidden relative cursor-pointer group">
           {amenityImage && (
-            <Image
-              src={amenityImage.src}
-              alt={amenityImage.alt}
+            <ProgressiveImage
+              source={amenityImage}
+              alt={`${property.title} view 3`}
               fill
-              className="object-cover group-hover:scale-105 transition-transform"
-              data-ai-hint={amenityImage.hint}
-              unoptimized={amenityImage.unoptimized}
+              sizes="(max-width: 768px) 100vw, 25vw"
+              imageClassName="object-cover transition-transform group-hover:scale-105"
             />
           )}
         </div>
@@ -102,13 +99,12 @@ export function OffPlanHeroGallery({
         {/* View All Trigger */}
         <div className="col-span-1 row-span-1 rounded-br-2xl overflow-hidden relative cursor-pointer group">
           {bedroomImage && (
-            <Image
-              src={bedroomImage.src}
-              alt={bedroomImage.alt}
+            <ProgressiveImage
+              source={bedroomImage}
+              alt={`${property.title} view 4`}
               fill
-              className="object-cover group-hover:scale-105 transition-transform"
-              data-ai-hint={bedroomImage.hint}
-              unoptimized={bedroomImage.unoptimized}
+              sizes="(max-width: 768px) 100vw, 25vw"
+              imageClassName="object-cover transition-transform group-hover:scale-105"
             />
           )}
           <div className="absolute inset-0 bg-black/60 hover:bg-black/70 transition-colors flex items-center justify-center">
@@ -121,13 +117,12 @@ export function OffPlanHeroGallery({
       <div className="md:hidden flex h-[300px] overflow-x-auto snap-x gap-2">
         {images.map((image, index) => image && (
           <div key={index} className="w-[90vw] h-full flex-shrink-0 rounded-xl overflow-hidden relative snap-center">
-            <Image
-              src={image.src}
-              alt={image.alt}
+            <ProgressiveImage
+              source={image}
+              alt={`${property.title} image ${index + 1}`}
               fill
-              className="object-cover"
-              data-ai-hint={image.hint}
-              unoptimized={image.unoptimized}
+              sizes="90vw"
+              imageClassName="object-cover"
             />
           </div>
         ))}

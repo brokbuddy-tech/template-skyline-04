@@ -41,7 +41,12 @@ import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
 import { amenityIcons } from '@/lib/amenity-icons';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { LocationMap } from './location-map';
+import dynamic from 'next/dynamic';
+
+const DynamicLocationMap = dynamic(
+  () => import('./location-map').then(mod => ({ default: mod.LocationMap })),
+  { ssr: false, loading: () => <div className="leaflet-property-map relative h-96 w-full overflow-hidden rounded-lg border border-border bg-muted/35 animate-pulse" /> }
+);
 import { Card } from '../ui/card';
 import { DownloadBrochureModal } from './download-brochure-modal';
 
@@ -390,7 +395,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
               {/* Location Map Section */}
               <div className="mb-12">
                   <h2 className="text-xl font-bold text-foreground mb-6">Location</h2>
-                  <LocationMap />
+                  <DynamicLocationMap />
               </div>
 
               <Separator className="my-12" />

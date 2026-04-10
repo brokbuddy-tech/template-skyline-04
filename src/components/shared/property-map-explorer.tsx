@@ -52,6 +52,7 @@ function PanToSelection({ position }: { position: LatLngExpression | null }) {
 }
 
 export function PropertyMapExplorer({ properties }: { properties: Property[] }) {
+  const [mounted, setMounted] = useState(false);
   const mappableProperties = useMemo(
     () => properties.filter(
       (property): property is MappableProperty =>
@@ -60,6 +61,10 @@ export function PropertyMapExplorer({ properties }: { properties: Property[] }) 
     [properties],
   );
   const [selectedId, setSelectedId] = useState<string | null>(mappableProperties[0]?.id ?? null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!mappableProperties.length) {
@@ -91,11 +96,22 @@ export function PropertyMapExplorer({ properties }: { properties: Property[] }) 
     );
   }
 
+  if (!mounted) {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="leaflet-property-map overflow-hidden rounded-3xl border border-border">
+          <div className="h-[560px] w-full bg-muted/35 animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="leaflet-property-map overflow-hidden rounded-3xl border border-border">
         <div className="h-[560px] w-full">
           <MapContainer
+            key={mappableProperties.map(p => p.id).join(',')}
             center={selectedPosition ?? positions[0]}
             zoom={13}
             className="h-full w-full"

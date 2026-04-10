@@ -18,7 +18,12 @@ import { toSocialUrl } from '@/lib/api';
 import { amenityIcons } from '@/lib/amenity-icons';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { DownloadBrochureModal } from './download-brochure-modal';
-import { LocationMap } from './location-map';
+import dynamic from 'next/dynamic';
+
+const DynamicLocationMap = dynamic(
+  () => import('./location-map').then(mod => ({ default: mod.LocationMap })),
+  { ssr: false, loading: () => <div className="leaflet-property-map relative h-96 w-full overflow-hidden rounded-lg border border-border bg-muted/35 animate-pulse" /> }
+);
 import { OffPlanHeroGallery } from './off-plan-hero-gallery';
 import { PropertyDescriptionDisplay } from './property-description-display';
 
@@ -488,7 +493,7 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
 
               <div className="mb-12">
                 <h2 className="mb-6 text-xl font-bold text-foreground">Location</h2>
-                <LocationMap
+                <DynamicLocationMap
                   latitude={property.latitude}
                   longitude={property.longitude}
                   locationLabel={property.location}

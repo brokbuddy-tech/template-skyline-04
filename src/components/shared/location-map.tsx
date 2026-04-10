@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useRef } from 'react';
 import L, { type LatLngExpression } from 'leaflet';
 import Link from 'next/link';
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet';
 
 function createMarkerIcon(active = false) {
     return L.divIcon({
@@ -13,16 +12,6 @@ function createMarkerIcon(active = false) {
         iconAnchor: [9, 30],
         popupAnchor: [0, -24],
     });
-}
-
-function FitMapToMarker({ position }: { position: LatLngExpression }) {
-    const map = useMap();
-
-    useEffect(() => {
-        map.setView(position, 15, { animate: false });
-    }, [map, position]);
-
-    return null;
 }
 
 export function LocationMap({
@@ -36,12 +25,61 @@ export function LocationMap({
     locationLabel?: string;
     addressLabel?: string;
 }) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const mapRef = useRef<L.Map | null>(null);
+
     const hasCoordinates = latitude != null && longitude != null;
-    const markerPosition = hasCoordinates ? [latitude, longitude] as LatLngExpression : null;
+    const markerPosition = hasCoordinates
+        ? [latitude, longitude] as LatLngExpression
+        : null;
     const openStreetMapUrl = hasCoordinates
         ? `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=15/${latitude}/${longitude}`
         : `https://www.openstreetmap.org/search?query=${encodeURIComponent(addressLabel || locationLabel || 'Dubai')}`;
-    const markerIcon = useMemo(() => createMarkerIcon(true), []);
+
+    useEffect(() => {
+        if (!containerRef.current || !markerPosition) return;
+
+        // Destroy any previous map instance on this container
+        if (mapRef.current) {
+            mapRef.current.remove();
+            mapRef.current = null;
+        }
+
+        const map = L.map(containerRef.current, {
+            center: markerPosition,
+            zoom: 15,
+            scrollWheelZoom: false,
+            zoomControl: false,
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+        }).addTo(map);
+
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        const marker = L.marker(markerPosition, {
+            icon: createMarkerIcon(true),
+        }).addTo(map);
+
+        marker.bindPopup(
+            `<div style="line-height:1.5">
+                <p style="font-weight:600;font-size:0.875rem">${addressLabel || locationLabel || 'Property location'}</p>
+                <p style="font-size:0.75rem;opacity:0.7">${latitude?.toFixed(5)}, ${longitude?.toFixed(5)}</p>
+            </div>`
+        );
+
+        mapRef.current = map;
+
+        // Leaflet needs a tick to measure the container correctly
+        const timer = setTimeout(() => map.invalidateSize(), 200);
+
+        return () => {
+            clearTimeout(timer);
+            map.remove();
+            mapRef.current = null;
+        };
+    }, [latitude, longitude]);
 
     if (!markerPosition) {
         return (
@@ -59,32 +97,7 @@ export function LocationMap({
 
     return (
         <div className="leaflet-property-map relative h-96 w-full overflow-hidden rounded-lg border border-border">
-            <MapContainer
-                center={markerPosition}
-                zoom={15}
-                className="h-full w-full"
-                scrollWheelZoom={false}
-                zoomControl={false}
-            >
-                <TileLayer
-                    attribution='&copy; OpenStreetMap contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <ZoomControl position="bottomright" />
-                <FitMapToMarker position={markerPosition} />
-                <Marker position={markerPosition} icon={markerIcon}>
-                    <Popup>
-                        <div className="space-y-1">
-                            <p className="text-sm font-semibold text-foreground">
-                                {addressLabel || locationLabel || 'Property location'}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                {latitude?.toFixed(5)}, {longitude?.toFixed(5)}
-                            </p>
-                        </div>
-                    </Popup>
-                </Marker>
-            </MapContainer>
+            <div ref={containerRef} className="h-full w-full" />
             <div className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-background/90 via-background/55 to-transparent px-4 py-4">
                 <p className="text-sm font-semibold text-foreground">
                     {addressLabel || locationLabel || 'Dubai'}
@@ -104,5 +117,5 @@ export function LocationMap({
                 </Link>
             </div>
         </div>
-    )
+    );
 }

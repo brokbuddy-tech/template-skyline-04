@@ -14,7 +14,12 @@ import { CurrencyContext } from '@/context/currency-context';
 import { amenityIcons } from '@/lib/amenity-icons';
 import { ReadMore } from '@/components/shared/read-more';
 import { AgentSidebar } from '@/components/shared/agent-sidebar';
-import { LocationMap } from '@/components/shared/location-map';
+import dynamic from 'next/dynamic';
+
+const DynamicLocationMap = dynamic(
+  () => import('@/components/shared/location-map').then(mod => ({ default: mod.LocationMap })),
+  { ssr: false, loading: () => <div className="leaflet-property-map relative h-96 w-full overflow-hidden rounded-lg border border-border bg-muted/35 animate-pulse" /> }
+);
 import { LiveOffPlanPropertyPage } from '@/components/shared/live-off-plan-property-page';
 import { OffPlanHeroGallery } from '@/components/shared/off-plan-hero-gallery';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
@@ -203,7 +208,7 @@ export function PropertyDetailPageClient({
               <AnimateOnScroll>
                 <section id="property-location">
                   <h2 className="text-3xl font-headline mb-6">Location</h2>
-                  <LocationMap
+                  <DynamicLocationMap
                     latitude={property.latitude}
                     longitude={property.longitude}
                     locationLabel={property.location}

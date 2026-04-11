@@ -50,7 +50,9 @@ function buildStorageImageUrl(gcsPath?: string | null): string | null {
 
 /** 
  * Mimics Broker-OS getListingMediaUrl for the public API proxy.
- * Uses /api/public/images/[id]/view?variant=[variant]
+ * COST OPTIMIZATION: Prefer direct CDN/GCS URLs when available to avoid
+ * routing image bytes through the API server (the #1 networking cost driver).
+ * Only falls back to the proxy URL when no direct URLs exist.
  */
 function getPublicListingMediaUrl(
   image?: PublicListingImage | null,
@@ -58,21 +60,32 @@ function getPublicListingMediaUrl(
 ): string | null {
   if (!image) return null;
   
-  // If the image is READY and has an ID, use the proxied variant endpoint
+  // Prefer direct CDN/GCS URLs to skip the API proxy entirely
+  if (variant === 'thumbnail') {
+    if (image.thumbnailUrl) return image.thumbnailUrl;
+    if (image.mediumUrl) return image.mediumUrl;
+    if (image.cdnUrl) return image.cdnUrl;
+  }
+  
+  if (variant === 'medium') {
+    if (image.mediumUrl) return image.mediumUrl;
+    if (image.cdnUrl) return image.cdnUrl;
+    if (image.thumbnailUrl) return image.thumbnailUrl;
+  }
+
+  if (variant === 'compressed' || variant === 'original') {
+    if (image.cdnUrl) return image.cdnUrl;
+    if (image.mediumUrl) return image.mediumUrl;
+    if (image.thumbnailUrl) return image.thumbnailUrl;
+  }
+
+  // Last resort: use the proxy URL if the image is READY and has an ID
   if (image.id && image.status?.toUpperCase() === 'READY') {
     return `/api/public/images/${image.id}/view?variant=${variant}`;
   }
 
-  // Fallback chain for non-ready or legacy images (mimicking Broker-OS buildMediaSlide/getProcessedUrl)
-  if (variant === 'thumbnail') {
-    return image.thumbnailUrl || image.mediumUrl || image.cdnUrl || image.url || null;
-  }
-  
-  if (variant === 'medium') {
-    return image.mediumUrl || image.cdnUrl || image.thumbnailUrl || image.url || null;
-  }
-
-  return image.cdnUrl || image.mediumUrl || image.thumbnailUrl || image.url || null;
+  // Final fallback to raw url
+  return image.url || null;
 }
 
 function normalizeAssetUrl(value?: string | null): string | null {
@@ -264,7 +277,7 @@ export async function getProperties(params: GetPropertiesParams = {}): Promise<P
   });
 
   const response = await safeFetch(url.toString(), {
-    next: { revalidate: 60 },
+    next: { revalidate: 300 },
   });
 
   if (!response.ok) {
@@ -288,7 +301,7 @@ export async function getProperties(params: GetPropertiesParams = {}): Promise<P
 
 export async function getPropertyById(id: string): Promise<Property | null> {
   const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/listing/${id}`, {
-    next: { revalidate: 60 },
+    next: { revalidate: 300 },
   });
 
   if (!response.ok) return null;
@@ -302,7 +315,7 @@ export async function getSmartPropertyMatches(query: string | Record<string, any
     const queryStr = typeof query === 'string' ? query : query.query || '';
     const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/search?q=${encodeURIComponent(queryStr)}`, {
       method: 'POST',
-      next: { revalidate: 60 },
+      next: { revalidate: 300 },
     });
 
     if (!response.ok) throw new Error('AI search failed');

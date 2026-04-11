@@ -48,9 +48,29 @@ function buildStorageImageUrl(gcsPath?: string | null): string | null {
   return `https://storage.googleapis.com/brokbuddy-listing-images/${gcsPath.replace(/^\/+/, '')}`;
 }
 
+const GCS_PUBLIC_BASE = 'https://storage.googleapis.com/brokbuddy-listing-images';
+const BROKEN_CDN_PATTERNS = [
+  /^https?:\/\/cdn\.brokbuddy\.com\//,
+  /^https?:\/\/34\.160\.56\.176\//,
+];
+
+/**
+ * Rewrites CDN URLs that point to non-operational CDN hosts
+ * to use direct GCS public URLs instead.
+ */
+function rewriteCdnToGcs(url?: string | null): string | null {
+  if (!url) return null;
+  for (const pattern of BROKEN_CDN_PATTERNS) {
+    if (pattern.test(url)) {
+      return url.replace(pattern, `${GCS_PUBLIC_BASE}/`);
+    }
+  }
+  return url;
+}
+
 /** 
  * Mimics Broker-OS getListingMediaUrl for the public API proxy.
- * COST OPTIMIZATION: Prefer direct CDN/GCS URLs when available to avoid
+ * COST OPTIMIZATION: Prefer direct GCS URLs when available to avoid
  * routing image bytes through the API server (the #1 networking cost driver).
  * Only falls back to the proxy URL when no direct URLs exist.
  */
@@ -59,32 +79,13 @@ function getPublicListingMediaUrl(
   variant: 'thumbnail' | 'medium' | 'compressed' | 'original' = 'medium'
 ): string | null {
   if (!image) return null;
-  
-  // Prefer direct CDN/GCS URLs to skip the API proxy entirely
-  if (variant === 'thumbnail') {
-    if (image.thumbnailUrl) return image.thumbnailUrl;
-    if (image.mediumUrl) return image.mediumUrl;
-    if (image.cdnUrl) return image.cdnUrl;
-  }
-  
-  if (variant === 'medium') {
-    if (image.mediumUrl) return image.mediumUrl;
-    if (image.cdnUrl) return image.cdnUrl;
-    if (image.thumbnailUrl) return image.thumbnailUrl;
-  }
 
-  if (variant === 'compressed' || variant === 'original') {
-    if (image.cdnUrl) return image.cdnUrl;
-    if (image.mediumUrl) return image.mediumUrl;
-    if (image.thumbnailUrl) return image.thumbnailUrl;
-  }
-
-  // Last resort: use the proxy URL if the image is READY and has an ID
-  if (image.id && image.status?.toUpperCase() === 'READY') {
+  // Force API proxy as CDN and direct GCS URLs are currently returning 403
+  // due to unauthenticated bucket permissions.
+  if (image.id) {
     return `/api/public/images/${image.id}/view?variant=${variant}`;
   }
 
-  // Final fallback to raw url
   return image.url || null;
 }
 

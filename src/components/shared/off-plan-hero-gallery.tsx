@@ -72,7 +72,7 @@ export function OffPlanHeroGallery({
           <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider">
             {galleryBadge}
           </div>
-          <div className="absolute bottom-4 right-4 flex gap-3">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
             <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black">
               <Camera size={16} /> <span className="ml-2">Virtual Tour</span>
             </Button>
@@ -180,7 +180,7 @@ export function OffPlanHeroGallery({
         <DialogPortal>
           <DialogOverlay className="bg-black/95 z-[9999]" />
           <DialogContent className="fixed inset-0 z-[10000] flex flex-col items-center justify-center w-screen h-screen max-w-none m-0 p-0 border-none bg-transparent shadow-none !translate-x-0 !translate-y-0 !top-0 !left-0 [&>button:last-child]:hidden">
-            
+
             {/* Custom Close */}
             <button
               onClick={() => setIsOpen(false)}

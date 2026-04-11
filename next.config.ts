@@ -14,6 +14,7 @@ const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL || 'https
 const apiOrigin = apiBaseUrl.replace(/\/api$/i, '');
 
 const nextConfig: NextConfig = {
+  compress: true,
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,

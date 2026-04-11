@@ -1,10 +1,16 @@
-
 'use client';
 
-import { Camera, MapPin, Play } from 'lucide-react';
+import { Camera, MapPin, Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Property } from '@/lib/types';
 import { ProgressiveImage } from './progressive-image';
+import { useEffect, useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogPortal,
+  DialogOverlay,
+} from '@/components/ui/dialog';
 
 interface OffPlanHeroGalleryProps {
   property: Property;
@@ -28,6 +34,15 @@ export function OffPlanHeroGallery({
   const galleryBadge = badgeText || (property.status === 'Off-plan' ? 'Artist Impression' : 'Property Gallery');
   const extraPhotoCount = Math.max((property.images?.length || 0) - 4, 0);
   const photoCountLabel = extraPhotoCount > 0 ? `+ ${extraPhotoCount} Photos` : 'View Gallery';
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // ALL images (not just 4)
+  const allImages =
+    property.media?.length
+      ? property.media
+      : property.images || [];
+
 
   return (
     <div className="w-full container mx-auto px-4 sm:px-8 py-6">
@@ -36,7 +51,13 @@ export function OffPlanHeroGallery({
         {/* Main Image */}
         <div className="col-span-2 row-span-2 rounded-l-2xl overflow-hidden relative cursor-pointer group">
           {mainImage && (
-            <>
+            <div
+              onClick={() => {
+                setActiveIndex(0);
+                setIsOpen(true);
+              }}
+              className="w-full h-full"
+            >
               <ProgressiveImage
                 source={mainImage}
                 alt={property.title}
@@ -46,7 +67,7 @@ export function OffPlanHeroGallery({
                 imageClassName="object-cover transition-transform group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-            </>
+            </div>
           )}
           <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider">
             {galleryBadge}
@@ -73,39 +94,66 @@ export function OffPlanHeroGallery({
         {/* Lifestyle Image */}
         <div className="col-span-2 row-span-1 rounded-tr-2xl overflow-hidden relative cursor-pointer group">
           {lifestyleImage && (
-            <ProgressiveImage
-              source={lifestyleImage}
-              alt={`${property.title} view 2`}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              imageClassName="object-cover transition-transform group-hover:scale-105"
-            />
+            <div
+              onClick={() => {
+                setActiveIndex(1);
+                setIsOpen(true);
+              }}
+              className="w-full h-full"
+            >
+
+              <ProgressiveImage
+                source={lifestyleImage}
+                alt={`${property.title} view 2`}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                imageClassName="object-cover transition-transform group-hover:scale-105"
+              />
+            </div>
           )}
         </div>
 
         {/* Amenity Image */}
         <div className="col-span-1 row-span-1 overflow-hidden relative cursor-pointer group">
           {amenityImage && (
-            <ProgressiveImage
-              source={amenityImage}
-              alt={`${property.title} view 3`}
-              fill
-              sizes="(max-width: 768px) 100vw, 25vw"
-              imageClassName="object-cover transition-transform group-hover:scale-105"
-            />
+            <div
+              onClick={() => {
+                setActiveIndex(2);
+                setIsOpen(true);
+              }}
+              className="w-full h-full"
+            >
+
+              <ProgressiveImage
+                source={amenityImage}
+                alt={`${property.title} view 3`}
+                fill
+                sizes="(max-width: 768px) 100vw, 25vw"
+                imageClassName="object-cover transition-transform group-hover:scale-105"
+              />
+            </div>
           )}
         </div>
 
         {/* View All Trigger */}
         <div className="col-span-1 row-span-1 rounded-br-2xl overflow-hidden relative cursor-pointer group">
           {bedroomImage && (
-            <ProgressiveImage
-              source={bedroomImage}
-              alt={`${property.title} view 4`}
-              fill
-              sizes="(max-width: 768px) 100vw, 25vw"
-              imageClassName="object-cover transition-transform group-hover:scale-105"
-            />
+            <div
+              onClick={() => {
+                setActiveIndex(3);
+                setIsOpen(true);
+              }}
+              className="w-full h-full"
+            >
+
+              <ProgressiveImage
+                source={bedroomImage}
+                alt={`${property.title} view 4`}
+                fill
+                sizes="(max-width: 768px) 100vw, 25vw"
+                imageClassName="object-cover transition-transform group-hover:scale-105"
+              />
+            </div>
           )}
           <div className="absolute inset-0 bg-black/60 hover:bg-black/70 transition-colors flex items-center justify-center">
             <p className="text-white font-bold text-lg">{photoCountLabel}</p>
@@ -127,6 +175,62 @@ export function OffPlanHeroGallery({
           </div>
         ))}
       </div>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogPortal>
+          <DialogOverlay className="bg-black/95 z-[9999]" />
+          <DialogContent className="fixed inset-0 z-[10000] flex flex-col items-center justify-center w-screen h-screen max-w-none m-0 p-0 border-none bg-transparent shadow-none !translate-x-0 !translate-y-0 !top-0 !left-0 [&>button:last-child]:hidden">
+            
+            {/* Custom Close */}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-6 left-6 text-white bg-black/50 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-black/70 transition-colors z-[101]"
+            >
+              <ChevronLeft size={20} /> Back to gallery
+            </button>
+
+            {/* Image Slider Area */}
+            <div className="relative w-full h-full flex items-center justify-center p-4 md:p-16">
+              <div className="relative w-full h-full">
+                <ProgressiveImage
+                  source={allImages[activeIndex]}
+                  fill
+                  sizes="100vw"
+                  className="bg-transparent"
+                  imageClassName="object-contain w-full h-full"
+                />
+              </div>
+
+              {/* Prev */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+                }}
+                className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-colors backdrop-blur-sm z-[101]"
+              >
+                <ChevronLeft size={32} />
+              </button>
+
+              {/* Next */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex((prev) => (prev + 1) % allImages.length);
+                }}
+                className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-colors backdrop-blur-sm z-[101]"
+              >
+                <ChevronRight size={32} />
+              </button>
+            </div>
+
+            {/* Counter */}
+            <div className="absolute bottom-6 right-6 text-white bg-black/50 px-4 py-2 rounded-lg backdrop-blur-md text-sm font-medium z-[101]">
+              {activeIndex + 1} / {allImages.length}
+            </div>
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
     </div>
   );
 }

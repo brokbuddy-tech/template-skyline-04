@@ -1,7 +1,6 @@
 
 import { PropertiesPageClient } from '@/components/shared/properties-page-client';
 import { getProperties, getSiteConfig } from '@/lib/api';
-import { properties as fallbackProperties } from '@/lib/data';
 import { filterProperties, getFiltersFromSearchParams } from '@/lib/search';
 
 export default async function PropertiesPage({
@@ -15,7 +14,7 @@ export default async function PropertiesPage({
     getProperties({ limit: 200 }),
   ]);
 
-  const allProperties = propertiesResponse.properties.length > 0 ? propertiesResponse.properties : fallbackProperties;
+  const allProperties = propertiesResponse.properties.length > 0 ? propertiesResponse.properties : [];
   const filteredProperties = filterProperties(allProperties, getFiltersFromSearchParams(resolvedSearchParams));
   const pageType = Array.isArray(resolvedSearchParams.type) ? resolvedSearchParams.type[0] : resolvedSearchParams.type;
   const title =

@@ -2,8 +2,6 @@
 import { notFound } from 'next/navigation';
 import { PropertyDetailPageClient } from '@/components/shared/property-detail-page-client';
 import { getProperties, getPropertyById, getSiteConfig } from '@/lib/api';
-import { properties as fallbackProperties } from '@/lib/data';
-
 export default async function PropertyDetailPage({
   params,
 }: {
@@ -27,14 +25,14 @@ export default async function PropertyDetailPage({
         longitude: property.longitude ?? feedProperty?.longitude ?? null,
         mapAddress: property.mapAddress || feedProperty?.mapAddress,
       }
-    : feedProperty || fallbackProperties.find(item => item.id === id) || null;
+    : feedProperty;
 
   if (!resolvedProperty) {
     notFound();
   }
 
-  const allProperties = allPropertiesResponse.properties.length > 0 ? allPropertiesResponse.properties : fallbackProperties;
-  const recommendedProperties = allProperties.filter(item => item.id !== resolvedProperty.id).slice(0, 2);
+  const allProperties = allPropertiesResponse.properties;
+  const recommendedProperties = allProperties.filter(item => item.id !== resolvedProperty?.id).slice(0, 2);
   const fallbackAgent = siteConfig.leadAgent
     ? {
         name: siteConfig.leadAgent.name,

@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { properties } from '@/lib/data';
+
 
 const stats = [
   { value: 250, suffix: '+', label: 'Modern Properties' },

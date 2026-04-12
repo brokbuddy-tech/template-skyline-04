@@ -43,6 +43,11 @@ export function OffPlanHeroGallery({
       ? property.media
       : property.images || [];
 
+  const [visitedIndices, setVisitedIndices] = useState<Set<number>>(new Set([0]));
+  useEffect(() => {
+    setVisitedIndices(prev => new Set(prev).add(activeIndex));
+  }, [activeIndex]);
+
 
   return (
     <div className="w-full container mx-auto px-4 sm:px-8 py-6">
@@ -192,13 +197,27 @@ export function OffPlanHeroGallery({
             {/* Image Slider Area */}
             <div className="relative w-full h-full flex items-center justify-center p-4 md:p-16">
               <div className="relative w-full h-full">
-                <ProgressiveImage
-                  source={allImages[activeIndex]}
-                  fill
-                  sizes="100vw"
-                  className="bg-transparent"
-                  imageClassName="object-contain w-full h-full"
-                />
+                {allImages.map((image, i) => {
+                  const isVisited = visitedIndices.has(i) || i === activeIndex;
+                  const isActive = i === activeIndex;
+
+                  if (!isVisited) return null;
+
+                  return (
+                    <div 
+                      key={i}
+                      className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                    >
+                      <ProgressiveImage
+                        source={image}
+                        fill
+                        sizes="100vw"
+                        className="bg-transparent"
+                        imageClassName="object-contain w-full h-full"
+                      />
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Prev */}

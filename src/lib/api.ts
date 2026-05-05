@@ -10,6 +10,7 @@ import {
   PUBLIC_API_BASE_URLS,
   PUBLIC_TEMPLATE_ORG_SLUG,
   getPublicTemplateUrl,
+  getTemplateFetchUrl,
 } from './api-base';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -161,6 +162,13 @@ function normalizeListingDescription(description?: string) {
   return plainText || 'Property details coming soon.';
 }
 
+function getStringValue(...values: unknown[]) {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim().length > 0) return value.trim();
+  }
+  return undefined;
+}
+
 function normalizeLocation(listing: any): string {
   const parts = [
     listing.area,
@@ -193,6 +201,33 @@ function dedupeJoinedSearchValues(values: string[]): string {
   return Array.from(new Set(values.filter(v => !!v && typeof v === 'string').map(v => v.trim())))
     .join(' ')
     .toLowerCase();
+}
+
+function mapListingAgent(listing: any): Property['agent'] {
+  const publicAgent = listing?.agent;
+  const legacyBroker = listing?.broker;
+  const agentName = getStringValue(
+    publicAgent?.name,
+    legacyBroker?.brokerProfile?.displayName,
+    [legacyBroker?.firstName, legacyBroker?.lastName].filter(Boolean).join(' ')
+  );
+
+  if (!agentName) {
+    return undefined;
+  }
+
+  return {
+    id: publicAgent?.id,
+    name: agentName,
+    avatarUrl: normalizeAssetUrl(publicAgent?.avatarUrl || publicAgent?.avatar || legacyBroker?.avatar) || '',
+    title: getStringValue(publicAgent?.title, publicAgent?.tagline, legacyBroker?.brokerProfile?.tagline) || 'Property Consultant',
+    phone: getStringValue(publicAgent?.phone, legacyBroker?.brokerProfile?.publicPhone, legacyBroker?.phone) || '',
+    email: getStringValue(publicAgent?.email, legacyBroker?.brokerProfile?.publicEmail, legacyBroker?.email) || '',
+    whatsapp: getStringValue(publicAgent?.whatsapp, legacyBroker?.brokerProfile?.whatsapp, legacyBroker?.whatsapp, legacyBroker?.brokerProfile?.publicPhone, legacyBroker?.phone) || '',
+    company: getStringValue(publicAgent?.company, listing?.organizationName, listing?.organization?.name),
+    licenseNumber: getStringValue(publicAgent?.licenseNumber, legacyBroker?.licenseNumber) || undefined,
+    slug: getStringValue(publicAgent?.slug, legacyBroker?.brokerProfile?.slug) || undefined,
+  };
 }
 
 /**
@@ -273,14 +308,7 @@ export function mapListingToProperty(listing: any): Property {
     developerName: listing.developer?.name || listing.fields?.developerName || undefined,
     developerLogo: listing.developer?.logo || listing.fields?.developerLogo || undefined,
     tag: listing.tag || listing.fields?.tag || undefined,
-    agent: listing.broker ? {
-      name: `${listing.broker.firstName} ${listing.broker.lastName}`,
-      avatarUrl: listing.broker.avatar || '',
-      title: listing.broker.brokerProfile?.tagline || 'Property Consultant',
-      phone: listing.broker.phone || '',
-      email: listing.broker.email || '',
-      whatsapp: listing.broker.whatsapp || '',
-    } : undefined,
+    agent: mapListingAgent(listing),
   };
 }
 
@@ -304,15 +332,18 @@ async function safeFetch(url: string, options?: RequestInit, timeout = 10000): P
 }
 
 export async function getProperties(params: GetPropertiesParams = {}): Promise<PaginatedProperties> {
-  const url = new URL(getPublicTemplateUrl('/listings'));
-  
+  const searchParams = new URLSearchParams();
+
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
-      url.searchParams.append(key, String(value));
+      searchParams.append(key, String(value));
     }
   });
 
-  const response = await safeFetch(url.toString(), {
+  const query = searchParams.toString();
+  const fetchUrl = getTemplateFetchUrl(`/listings${query ? `?${query}` : ''}`);
+
+  const response = await safeFetch(fetchUrl, {
     next: { revalidate: 300 },
   });
 
@@ -336,7 +367,7 @@ export async function getProperties(params: GetPropertiesParams = {}): Promise<P
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
-  const response = await safeFetch(getPublicTemplateUrl(`/listings/${id}`), {
+  const response = await safeFetch(getTemplateFetchUrl(`/listings/${id}`), {
     next: { revalidate: 300 },
   });
 
@@ -371,7 +402,7 @@ export async function getSmartPropertyMatches(query: string | Record<string, any
 export const searchPropertiesWithAI = getSmartPropertyMatches;
 
 export async function submitOrgInquiry(payload: any): Promise<any> {
-  const response = await safeFetch(getPublicTemplateUrl('/inquiry'), {
+  const response = await safeFetch(getTemplateFetchUrl('/inquiry'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -386,7 +417,7 @@ export async function submitOrgInquiry(payload: any): Promise<any> {
 }
 
 async function getTemplateSiteSnapshot(): Promise<PublicTemplateSiteSnapshot | null> {
-  const response = await safeFetch(getPublicTemplateUrl(), {
+  const response = await safeFetch(getTemplateFetchUrl(), {
     next: { revalidate: 3600 },
   });
 

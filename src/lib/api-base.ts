@@ -2,7 +2,6 @@ const env = {
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   NEXT_PUBLIC_FALLBACK_API_URL: process.env.NEXT_PUBLIC_FALLBACK_API_URL,
   NEXT_PUBLIC_ORG_SLUG: process.env.NEXT_PUBLIC_ORG_SLUG,
-  NEXT_PUBLIC_TEMPLATE_HEX_CODE: process.env.NEXT_PUBLIC_TEMPLATE_HEX_CODE,
 } as const;
 
 const DEFAULT_REMOTE_API_URL = 'https://brokbuddy-api.onrender.com';
@@ -37,7 +36,7 @@ export const API_BASE_URLS = uniqueValues([
 
 export const PUBLIC_API_BASE_URLS = API_BASE_URLS.map(baseUrl => `${baseUrl}/public`);
 export const PUBLIC_TEMPLATE_ORG_SLUG = getRequiredPublicEnv('NEXT_PUBLIC_ORG_SLUG');
-export const PUBLIC_TEMPLATE_HEX_CODE = getRequiredPublicEnv('NEXT_PUBLIC_TEMPLATE_HEX_CODE').toLowerCase();
+const PUBLIC_TEMPLATE_PROXY_BASE_PATH = '/api/public-template';
 
 function normalizePublicTemplatePath(path = '') {
   if (!path) return '';
@@ -45,11 +44,29 @@ function normalizePublicTemplatePath(path = '') {
 }
 
 export function getPublicTemplateUrl(path = '') {
+  return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}${normalizePublicTemplatePath(path)}`;
+}
+
+function getRequiredServerTemplateHexCode() {
+  const value = (process.env.TEMPLATE_HEX_CODE || '').trim();
+  if (!value) {
+    throw new Error('Missing required server env variable: TEMPLATE_HEX_CODE');
+  }
+  return value.toLowerCase();
+}
+
+export function getServerPublicTemplateUrl(path = '') {
   const baseUrl = PUBLIC_API_BASE_URLS[0] || '/api/public';
-  const publicTemplatePath = ['templates', PUBLIC_TEMPLATE_ORG_SLUG, PUBLIC_TEMPLATE_HEX_CODE]
+  const publicTemplatePath = ['templates', PUBLIC_TEMPLATE_ORG_SLUG, getRequiredServerTemplateHexCode()]
     .filter(Boolean)
     .join('/');
   return `${baseUrl}/${publicTemplatePath}${normalizePublicTemplatePath(path)}`;
+}
+
+export function getTemplateFetchUrl(path = '') {
+  return typeof window === 'undefined'
+    ? getServerPublicTemplateUrl(path)
+    : getPublicTemplateUrl(path);
 }
 
 export function shouldRetryApiRequest(status: number): boolean {

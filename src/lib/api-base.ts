@@ -1,9 +1,14 @@
-const env = (((globalThis as any).process?.env ?? {}) as Record<string, string | undefined>);
+const env = {
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  NEXT_PUBLIC_FALLBACK_API_URL: process.env.NEXT_PUBLIC_FALLBACK_API_URL,
+  NEXT_PUBLIC_ORG_SLUG: process.env.NEXT_PUBLIC_ORG_SLUG,
+  NEXT_PUBLIC_TEMPLATE_HEX_CODE: process.env.NEXT_PUBLIC_TEMPLATE_HEX_CODE,
+} as const;
 
 const DEFAULT_REMOTE_API_URL = 'https://brokbuddy-api.onrender.com';
 const DEFAULT_LOCAL_API_URL = 'http://localhost:4000';
 
-function getRequiredPublicEnv(name: string): string {
+function getRequiredPublicEnv(name: keyof typeof env): string {
   const value = (env[name] || '').trim();
   if (!value) {
     throw new Error(`Missing required public env variable: ${name}`);

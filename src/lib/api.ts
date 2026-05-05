@@ -139,6 +139,28 @@ function normalizeNumber(value: any): number {
   return 0;
 }
 
+function normalizeListingDescription(description?: string) {
+  const plainText = (description || '')
+    .replace(/<\s*br\s*\/?>/gi, '\n')
+    .replace(/<\/\s*(div|p|section|article|h[1-6])\s*>/gi, '\n\n')
+    .replace(/<\/\s*li\s*>/gi, '\n')
+    .replace(/<\s*li\b[^>]*>/gi, '- ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\r/g, '')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim();
+
+  return plainText || 'Property details coming soon.';
+}
+
 function normalizeLocation(listing: any): string {
   const parts = [
     listing.area,
@@ -160,7 +182,10 @@ function collectPublicListingLocationValues(listing: any): string[] {
 }
 
 function flattenPublicListingValues(listing: any): string[] {
-  const values: string[] = [listing.title, listing.description];
+  const values: string[] = [
+    listing.title,
+    normalizeListingDescription(listing.description),
+  ];
   return values.concat(collectPublicListingLocationValues(listing)).filter(Boolean);
 }
 
@@ -239,7 +264,7 @@ export function mapListingToProperty(listing: any): Property {
     transactionType: listing.transactionType === 'RENT' ? 'Rent' : 'Sale',
     status: listing.readiness?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready',
     amenities: amenities.map(String),
-    description: listing.description || '',
+    description: normalizeListingDescription(listing.description),
     images: media.map(m => m.url),
     media,
     featured: Boolean(listing.featured || listing.isFeatured),

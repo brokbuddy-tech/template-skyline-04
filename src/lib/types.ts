@@ -157,5 +157,6 @@ export type SiteConfig = {
   featuredAreas?: string[];
   leadAgent?: SiteAgent | null;
   branding?: SiteBranding | null;
+  profile?: Record<string, unknown> | null;
   stats?: SiteStats;
 };

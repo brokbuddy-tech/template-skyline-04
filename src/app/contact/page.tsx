@@ -46,11 +46,11 @@ export default function ContactPage() {
   }, [listingId]);
 
   const displayName =
-    siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Skyline Realty';
+    siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Our Team';
   const contactEmail =
     siteConfig?.branding?.publicEmail ||
     siteConfig?.leadAgent?.email ||
-    'hello@skyline-realty.com';
+    'hello@example.com';
   const contactPhone =
     siteConfig?.branding?.publicPhone ||
     siteConfig?.leadAgent?.phone ||

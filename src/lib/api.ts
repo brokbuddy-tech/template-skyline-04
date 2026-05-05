@@ -7,7 +7,9 @@ import type {
   SiteStats
 } from './types';
 import { 
-  PUBLIC_API_BASE_URLS 
+  PUBLIC_API_BASE_URLS,
+  PUBLIC_TEMPLATE_ORG_SLUG,
+  getPublicTemplateUrl,
 } from './api-base';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -25,6 +27,14 @@ export type AiPropertySearchResult = {
   propertyIds: string[];
   source: 'gemini' | 'fallback';
   model: string | null;
+};
+
+type PublicTemplateSiteSnapshot = SiteConfig & {
+  profile?: SiteConfig['profile'];
+  areaGuides?: any[];
+  testimonials?: any[];
+  sellerTestimonials?: any[];
+  blogs?: any[];
 };
 
 type PublicListingImage = {
@@ -83,7 +93,7 @@ function getPublicListingMediaUrl(
   // Force API proxy as CDN and direct GCS URLs are currently returning 403
   // due to unauthenticated bucket permissions.
   if (image.id) {
-    return `/api/public/images/${image.id}/view?variant=${variant}`;
+    return getPublicTemplateUrl(`/images/${image.id}/view?variant=${variant}`);
   }
 
   return image.url || null;
@@ -269,7 +279,7 @@ async function safeFetch(url: string, options?: RequestInit, timeout = 10000): P
 }
 
 export async function getProperties(params: GetPropertiesParams = {}): Promise<PaginatedProperties> {
-  const url = new URL(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/listings`);
+  const url = new URL(getPublicTemplateUrl('/listings'));
   
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
@@ -301,7 +311,7 @@ export async function getProperties(params: GetPropertiesParams = {}): Promise<P
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
-  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/listing/${id}`, {
+  const response = await safeFetch(getPublicTemplateUrl(`/listings/${id}`), {
     next: { revalidate: 300 },
   });
 
@@ -313,15 +323,20 @@ export async function getPropertyById(id: string): Promise<Property | null> {
 
 export async function getSmartPropertyMatches(query: string | Record<string, any>): Promise<AiPropertySearchResult> {
   try {
-    const queryStr = typeof query === 'string' ? query : query.query || '';
-    const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/search?q=${encodeURIComponent(queryStr)}`, {
-      method: 'POST',
-      next: { revalidate: 300 },
+    const queryInput = typeof query === 'string' ? { q: query } : query;
+    const properties = await getProperties({
+      q: typeof queryInput.q === 'string' ? queryInput.q : '',
+      transactionType: queryInput.transactionType,
+      category: queryInput.category,
+      readiness: queryInput.readiness,
+      limit: queryInput.limit || 8,
     });
 
-    if (!response.ok) throw new Error('AI search failed');
-
-    return await response.json();
+    return {
+      propertyIds: properties.properties.map((property) => property.id).slice(0, Number(queryInput.limit || 8)),
+      source: 'fallback',
+      model: null,
+    };
   } catch (error) {
     return { propertyIds: [], source: 'fallback', model: null };
   }
@@ -331,7 +346,7 @@ export async function getSmartPropertyMatches(query: string | Record<string, any
 export const searchPropertiesWithAI = getSmartPropertyMatches;
 
 export async function submitOrgInquiry(payload: any): Promise<any> {
-  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/inquiry`, {
+  const response = await safeFetch(getPublicTemplateUrl('/inquiry'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -340,6 +355,18 @@ export async function submitOrgInquiry(payload: any): Promise<any> {
   if (!response.ok) {
     const err = await response.text();
     throw new Error(err || 'Failed to submit inquiry');
+  }
+
+  return await response.json();
+}
+
+async function getTemplateSiteSnapshot(): Promise<PublicTemplateSiteSnapshot | null> {
+  const response = await safeFetch(getPublicTemplateUrl(), {
+    next: { revalidate: 3600 },
+  });
+
+  if (!response.ok) {
+    return null;
   }
 
   return await response.json();
@@ -361,14 +388,11 @@ export function toSocialUrl(network: string, handle?: string | null): string {
 }
 
 export async function getSiteConfig(): Promise<SiteConfig> {
-  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/config`, {
-    next: { revalidate: 3600 },
-  });
+  const data = await getTemplateSiteSnapshot();
+  const defaultTitle = 'Agency Website';
+  const defaultSlug = PUBLIC_TEMPLATE_ORG_SLUG || 'organization';
 
-  const defaultTitle = 'Skyline Realty';
-  const defaultSlug = 'skyline-realty';
-
-  if (!response.ok) {
+  if (!data) {
     return {
       organization: { name: defaultTitle, slug: defaultSlug },
       categories: [],
@@ -376,7 +400,6 @@ export async function getSiteConfig(): Promise<SiteConfig> {
     };
   }
 
-  const data = await response.json();
   return {
     organization: data.organization || { name: defaultTitle, slug: defaultSlug },
     categories: data.categories || [],
@@ -384,6 +407,7 @@ export async function getSiteConfig(): Promise<SiteConfig> {
     featuredAreas: data.featuredAreas || [],
     leadAgent: data.leadAgent || null,
     branding: data.branding || null,
+    profile: data.profile || null,
     stats: data.stats || {
       totalListings: 0,
       readyListings: 0,
@@ -397,29 +421,21 @@ export async function getSiteConfig(): Promise<SiteConfig> {
 }
 
 export async function getAreaGuides(): Promise<any[]> {
-  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/area-guides`, {
-    next: { revalidate: 3600 },
-  });
-  return response.ok ? await response.json() : [];
+  const data = await getTemplateSiteSnapshot();
+  return data?.areaGuides || [];
 }
 
 export async function getTestimonials(): Promise<any[]> {
-  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/testimonials`, {
-    next: { revalidate: 3600 },
-  });
-  return response.ok ? await response.json() : [];
+  const data = await getTemplateSiteSnapshot();
+  return data?.testimonials || [];
 }
 
 export async function getBlogs(): Promise<any[]> {
-  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/blogs`, {
-    next: { revalidate: 3600 },
-  });
-  return response.ok ? await response.json() : [];
+  const data = await getTemplateSiteSnapshot();
+  return data?.blogs || [];
 }
 
 export async function getSellerTestimonials(): Promise<any[]> {
-  const response = await safeFetch(`${PUBLIC_API_BASE_URLS[0]}/org/skyline-realty/seller-testimonials`, {
-    next: { revalidate: 3600 },
-  });
-  return response.ok ? await response.json() : [];
+  const data = await getTemplateSiteSnapshot();
+  return data?.sellerTestimonials || [];
 }

@@ -36,7 +36,7 @@ export const API_BASE_URLS = uniqueValues([
 
 export const PUBLIC_API_BASE_URLS = API_BASE_URLS.map(baseUrl => `${baseUrl}/public`);
 export const PUBLIC_TEMPLATE_ORG_SLUG = getRequiredPublicEnv('NEXT_PUBLIC_ORG_SLUG');
-const PUBLIC_TEMPLATE_PROXY_BASE_PATH = '/api/public-template';
+export const PUBLIC_TEMPLATE_PROXY_BASE_PATH = '/api/public-template';
 
 function normalizePublicTemplatePath(path = '') {
   if (!path) return '';

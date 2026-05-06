@@ -1,5 +1,27 @@
-# Firebase Studio
+# template-skyline-04
 
-This is a NextJS starter in Firebase Studio.
+Standalone Next.js public template for client deployments.
 
-To get started, take a look at src/app/page.tsx.
+Required env vars:
+
+- `NEXT_PUBLIC_API_URL`
+- `NEXT_PUBLIC_ORG_SLUG`
+- `TEMPLATE_HEX_CODE`
+
+Optional env var:
+
+- `NEXT_PUBLIC_FALLBACK_API_URL`
+
+Deployment contract:
+
+- Data loads from `/api/public/templates/:slug/:templateHexCode`
+- Browser requests proxy through `src/app/api/public/[...path]/route.ts`
+
+Checks before deploy:
+
+- `npm run typecheck`
+- `npm run build`
+
+Reference:
+
+- See [templates/README.md](../../README.md) for the shared deployment contract

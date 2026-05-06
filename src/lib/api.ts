@@ -9,6 +9,7 @@ import type {
 import { 
   PUBLIC_API_BASE_URLS,
   PUBLIC_TEMPLATE_ORG_SLUG,
+  PUBLIC_TEMPLATE_PROXY_BASE_PATH,
   getPublicTemplateUrl,
   getTemplateFetchUrl,
 } from './api-base';

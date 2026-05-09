@@ -22,8 +22,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'SkyLines',
-  description: 'Minimalist editorial real estate website.',
+  title: 'Agency Website',
+  description: 'Dynamic public real estate website powered by Broker OS organization data.',
 };
 
 export default function RootLayout({

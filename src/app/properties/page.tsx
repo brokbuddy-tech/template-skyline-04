@@ -3,15 +3,19 @@ import { PropertiesPageClient } from '@/components/shared/properties-page-client
 import { getProperties, getSiteConfig } from '@/lib/api';
 import { filterProperties, getFiltersFromSearchParams } from '@/lib/search';
 
-export default async function PropertiesPage({
+type PropertiesPageSearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export async function PropertiesPageContent({
   searchParams,
+  agencySlug,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: PropertiesPageSearchParams;
+  agencySlug?: string | null;
 }) {
   const resolvedSearchParams = await searchParams;
   const [siteConfig, propertiesResponse] = await Promise.all([
-    getSiteConfig(),
-    getProperties({ limit: 200 }),
+    getSiteConfig(agencySlug),
+    getProperties({ limit: 200 }, agencySlug),
   ]);
 
   const allProperties = propertiesResponse.properties.length > 0 ? propertiesResponse.properties : [];
@@ -32,4 +36,12 @@ export default async function PropertiesPage({
       amenities={siteConfig.amenities}
     />
   );
+}
+
+export default async function PropertiesPage({
+  searchParams,
+}: {
+  searchParams: PropertiesPageSearchParams;
+}) {
+  return <PropertiesPageContent searchParams={searchParams} />;
 }

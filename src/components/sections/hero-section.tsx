@@ -14,8 +14,18 @@ const slideImages = [
 ].filter(Boolean) as (typeof PlaceHolderImages)[0][];
 
 
-export function HeroSection({ categories = [] }: { categories?: string[] }) {
+export function HeroSection({
+  categories = [],
+  agencyName,
+  tagline,
+}: {
+  categories?: string[];
+  agencyName?: string;
+  tagline?: string | null;
+}) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const displayName = agencyName || 'Your Agency';
+  const heroTagline = tagline?.trim() || 'Live listings, agent branding, and organization data synced directly from Broker OS.';
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -54,8 +64,11 @@ export function HeroSection({ categories = [] }: { categories?: string[] }) {
         >
           <div className='text-center'>
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white text-center text-balance">
-              Transforming Spaces, <br /> Realizing <span className="text-[#ff3223]">Dreams.</span>
+              Discover Dubai with <br /> <span className="text-[#ff3223]">{displayName}.</span>
             </h1>
+            <p className="mx-auto mt-5 max-w-3xl text-base text-white/90 sm:text-lg">
+              {heroTagline}
+            </p>
           </div>
           <HeroSearch categories={categories} />
         </div>

@@ -9,6 +9,8 @@ import { CurrencyContext } from '@/context/currency-context';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
 import { ProgressiveImage } from './progressive-image';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 
 
 interface PropertyCardProps {
@@ -18,13 +20,15 @@ interface PropertyCardProps {
 export function PropertyCard({ property }: PropertyCardProps) {
   const image = property.media?.[0] || property.images[0];
   const { formatPrice } = useContext(CurrencyContext);
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
 
   const isForSale = property.transactionType === 'Sale';
   const isOffPlan = property.status === 'Off-plan';
 
   return (
     <div className="group" data-hoverable="true">
-      <Link href={`/properties/${property.id}`} className="block">
+      <Link href={prefixAgencyPath(`/properties/${property.id}`, agencySlug)} className="block">
         <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-muted/20">
           {image && (
             <ProgressiveImage

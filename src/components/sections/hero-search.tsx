@@ -13,8 +13,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AdvancedSearchModal } from '../shared/advanced-search-modal';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { searchPropertiesWithAI } from '@/lib/api';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
 const searchTabs = ['Buy', 'Rent', 'Sell', 'Manage'];
 const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
@@ -25,6 +26,8 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
   const [query, setQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
   const propertyTypes = useMemo(
     () => (categories.length > 0 ? categories : fallbackPropertyTypes),
     [categories]
@@ -32,12 +35,12 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
 
   const handleSearch = async () => {
     if (activeTab === 'Sell') {
-      router.push('/sell');
+      router.push(prefixAgencyPath('/sell', agencySlug));
       return;
     }
 
     if (activeTab === 'Manage') {
-      router.push('/contact');
+      router.push(prefixAgencyPath('/contact', agencySlug));
       return;
     }
 
@@ -73,7 +76,7 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
       params.delete('ids');
     }
 
-    router.push(`/properties?${params.toString()}`);
+    router.push(prefixAgencyPath(`/properties?${params.toString()}`, agencySlug));
   };
 
   const renderTab = (tab: string) => {

@@ -19,6 +19,8 @@ import { amenityIcons } from '@/lib/amenity-icons';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { DownloadBrochureModal } from './download-brochure-modal';
 import dynamic from 'next/dynamic';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 
 const DynamicLocationMap = dynamic(
   () => import('./location-map').then(mod => ({ default: mod.LocationMap })),
@@ -211,6 +213,8 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
   const [buyerType, setBuyerType] = useState('end-user');
   const { formatPrice } = useContext(CurrencyContext);
   const { isSubmitting, submitInquiry } = useOrgInquiry();
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
   const masterplanImage = PlaceHolderImages.find(image => image.id === 'masterplan');
   const paymentPlanCards = getPaymentPlanCards(property);
   const timelineSteps = getTimelineSteps(property);
@@ -583,7 +587,7 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
                     </DialogTrigger>
                     <Button asChild className="w-full bg-green-500 text-white hover:bg-green-600">
                       <a
-                        href={whatsappHref || `/contact?listingId=${property.id}`}
+                        href={whatsappHref || prefixAgencyPath(`/contact?listingId=${property.id}`, agencySlug)}
                         target={whatsappHref ? '_blank' : undefined}
                         rel={whatsappHref ? 'noreferrer' : undefined}
                       >

@@ -1,4 +1,6 @@
 
+import { prefixAgencyPath } from './agency-routing';
+
 export type NavLink = {
   label: string;
   href: string;
@@ -17,10 +19,15 @@ export type NavItem = {
 
 export type NavConfig = NavItem[];
 
-export const navConfig: NavConfig = [
+function withAgencyPath(agencySlug?: string | null, href?: string) {
+  return href ? prefixAgencyPath(href, agencySlug) : href;
+}
+
+export function getNavConfig(agencySlug?: string | null): NavConfig {
+  return [
   {
     label: 'New Projects',
-    href: '/off-plan',
+    href: withAgencyPath(agencySlug, '/off-plan'),
   },
   {
     label: 'Buy',
@@ -28,21 +35,21 @@ export const navConfig: NavConfig = [
       {
         header: 'Residential',
         links: [
-          { label: 'Apartments', href: '/properties?type=buy&propertyType=Apartment' },
-          { label: 'Townhouses', href: '/properties?type=buy&propertyType=Townhouse' },
-          { label: 'Penthouses', href: '/properties?type=buy&propertyType=Penthouse' },
-          { label: 'Villas', href: '/properties?type=buy&propertyType=Villa' },
-          { label: 'View All', href: '/properties?type=buy' },
+          { label: 'Apartments', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Apartment')! },
+          { label: 'Townhouses', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Townhouse')! },
+          { label: 'Penthouses', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Penthouse')! },
+          { label: 'Villas', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Villa')! },
+          { label: 'View All', href: withAgencyPath(agencySlug, '/properties?type=buy')! },
         ],
       },
       {
         header: 'Off Plan',
         links: [
-          { label: 'Apartments', href: '/off-plan' },
-          { label: 'Townhouses', href: '/off-plan' },
-          { label: 'Penthouses', href: '/off-plan' },
-          { label: 'Villas', href: '/off-plan' },
-          { label: 'View All', href: '/off-plan' },
+          { label: 'Apartments', href: withAgencyPath(agencySlug, '/off-plan')! },
+          { label: 'Townhouses', href: withAgencyPath(agencySlug, '/off-plan')! },
+          { label: 'Penthouses', href: withAgencyPath(agencySlug, '/off-plan')! },
+          { label: 'Villas', href: withAgencyPath(agencySlug, '/off-plan')! },
+          { label: 'View All', href: withAgencyPath(agencySlug, '/off-plan')! },
         ],
       },
     ],
@@ -53,16 +60,16 @@ export const navConfig: NavConfig = [
         {
             header: 'Rent',
             links: [
-                { label: 'Apartments', href: '/properties?type=rent' },
-                { label: 'Offices', href: '/properties?type=rent' },
-                { label: 'Townhouses', href: '/properties?type=rent' },
+                { label: 'Apartments', href: withAgencyPath(agencySlug, '/properties?type=rent')! },
+                { label: 'Offices', href: withAgencyPath(agencySlug, '/properties?type=rent')! },
+                { label: 'Townhouses', href: withAgencyPath(agencySlug, '/properties?type=rent')! },
             ],
         },
         {
             header: '',
             links: [
-                { label: 'Villas', href: '/properties?type=rent' },
-                { label: 'Commercial', href: '/properties?type=rent' },
+                { label: 'Villas', href: withAgencyPath(agencySlug, '/properties?type=rent')! },
+                { label: 'Commercial', href: withAgencyPath(agencySlug, '/properties?type=rent')! },
             ]
         }
     ]
@@ -73,28 +80,28 @@ export const navConfig: NavConfig = [
       {
         header: 'Sales',
         links: [
-          { label: 'Offices for Sale', href: '/properties?type=buy&propertyType=Office' },
-          { label: 'Shops for Sale', href: '/properties?type=buy&propertyType=Retail' },
-          { label: 'Warehouses for Sale', href: '/properties?type=buy&propertyType=Warehouse' },
-          { label: 'Full Buildings for Sale', href: '/properties?type=buy&propertyType=Building' },
-          { label: 'Plots for Sale', href: '/properties?type=buy&propertyType=Land' },
-          { label: 'View All Commercial', href: '/properties?category=commercial' },
+          { label: 'Offices for Sale', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Office')! },
+          { label: 'Shops for Sale', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Retail')! },
+          { label: 'Warehouses for Sale', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Warehouse')! },
+          { label: 'Full Buildings for Sale', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Building')! },
+          { label: 'Plots for Sale', href: withAgencyPath(agencySlug, '/properties?type=buy&propertyType=Land')! },
+          { label: 'View All Commercial', href: withAgencyPath(agencySlug, '/properties?category=commercial')! },
         ]
       },
       {
         header: 'Leasing',
         links: [
-          { label: 'Offices for Rent', href: '/properties?type=rent&propertyType=Office' },
-          { label: 'Shops for Rent', href: '/properties?type=rent&propertyType=Retail' },
-          { label: 'Warehouses for Rent', href: '/properties?type=rent&propertyType=Warehouse' },
-          { label: 'Staff Accommodation', href: '/properties?type=rent&propertyType=StaffAccommodation' },
+          { label: 'Offices for Rent', href: withAgencyPath(agencySlug, '/properties?type=rent&propertyType=Office')! },
+          { label: 'Shops for Rent', href: withAgencyPath(agencySlug, '/properties?type=rent&propertyType=Retail')! },
+          { label: 'Warehouses for Rent', href: withAgencyPath(agencySlug, '/properties?type=rent&propertyType=Warehouse')! },
+          { label: 'Staff Accommodation', href: withAgencyPath(agencySlug, '/properties?type=rent&propertyType=StaffAccommodation')! },
         ]
       },
     ]
   },
   {
     label: 'Sell',
-    href: '/sell',
+    href: withAgencyPath(agencySlug, '/sell'),
   },
   {
     label: 'Services',
@@ -102,17 +109,17 @@ export const navConfig: NavConfig = [
       {
         header: 'Client Services',
         links: [
-            { label: 'Asset Management', href: '/services/asset-management' },
-            { label: 'Holiday Homes', href: '/services/holiday-homes' },
-            { label: 'List Your Property', href: '/sell' },
-            { label: 'Property Valuation', href: '/services/property-valuation' },
+            { label: 'Asset Management', href: withAgencyPath(agencySlug, '/services/asset-management')! },
+            { label: 'Holiday Homes', href: withAgencyPath(agencySlug, '/services/holiday-homes')! },
+            { label: 'List Your Property', href: withAgencyPath(agencySlug, '/sell')! },
+            { label: 'Property Valuation', href: withAgencyPath(agencySlug, '/services/property-valuation')! },
         ]
       },
       {
         header: 'Advisory',
         links: [
-            { label: 'Investment Advisory', href: '/services/investment-advisory' },
-            { label: 'Mortgage Advisory', href: '/services/mortgage-advisory' },
+            { label: 'Investment Advisory', href: withAgencyPath(agencySlug, '/services/investment-advisory')! },
+            { label: 'Mortgage Advisory', href: withAgencyPath(agencySlug, '/services/mortgage-advisory')! },
         ]
       }
     ]
@@ -123,16 +130,16 @@ export const navConfig: NavConfig = [
       {
         header: 'Developers',
         links: [
-          { label: 'Emaar', href: '/developers/emaar' },
-          { label: 'Nakheel', href: '/developers/nakheel' },
-          { label: 'Danube', href: '/developers/danube' },
+          { label: 'Emaar', href: withAgencyPath(agencySlug, '/developers/emaar')! },
+          { label: 'Nakheel', href: withAgencyPath(agencySlug, '/developers/nakheel')! },
+          { label: 'Danube', href: withAgencyPath(agencySlug, '/developers/danube')! },
         ],
       },
       {
         header: '',
         links: [
-          { label: 'Select Group', href: '/developers/select-group' },
-          { label: 'View All Developers', href: '/developers' },
+          { label: 'Select Group', href: withAgencyPath(agencySlug, '/developers/select-group')! },
+          { label: 'View All Developers', href: withAgencyPath(agencySlug, '/developers')! },
         ],
       },
     ],
@@ -143,11 +150,15 @@ export const navConfig: NavConfig = [
       {
         header: 'Company',
         links: [
-          { label: 'About', href: '/about' },
-          { label: 'Contact', href: '/contact' },
-          { label: 'Map', href: '/map' },
+          { label: 'About', href: withAgencyPath(agencySlug, '/about')! },
+          { label: 'Agents', href: withAgencyPath(agencySlug, '/agents')! },
+          { label: 'Contact', href: withAgencyPath(agencySlug, '/contact')! },
+          { label: 'Map', href: withAgencyPath(agencySlug, '/map')! },
         ],
       },
     ],
   },
-];
+  ];
+}
+
+export const navConfig: NavConfig = getNavConfig();

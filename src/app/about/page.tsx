@@ -10,22 +10,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { getSiteConfig } from "@/lib/api";
+import type { SiteConfig } from "@/lib/types";
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from "@/lib/agency-routing";
+import { usePathname } from "next/navigation";
 
-
-const stats = [
-  { value: 250, suffix: '+', label: 'Modern Properties' },
-  { value: 98, suffix: '%', label: 'Client Satisfaction' },
-  { value: 12, suffix: '+', label: 'Years of Experience' },
-  { value: 5, suffix: '+', label: 'Awards Won' },
-];
 
 export default function AboutPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
 
   const heroImage = PlaceHolderImages.find((img) => img.id === 'about-hero');
   const founderImage = PlaceHolderImages.find((img) => img.id === 'founder-photo');
   const ctaImage = PlaceHolderImages.find((img) => img.id === 'cta-background');
+  const displayName =
+    siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Agency Website';
+  const aboutCompany =
+    siteConfig?.profile?.aboutCompany?.trim()
+    || siteConfig?.branding?.bio?.trim()
+    || `${displayName} helps buyers, sellers, renters, and investors make confident real estate decisions with clear advice and responsive support.`;
+  const officeAddress = siteConfig?.profile?.officeAddress?.trim() || siteConfig?.featuredAreas?.slice(0, 3).join(', ');
+  const officeTimings = siteConfig?.profile?.officeTimings?.trim() || null;
+  const founderName = siteConfig?.leadAgent?.name || `${displayName} Team`;
+  const founderTagline = siteConfig?.leadAgent?.tagline || 'Lead advisor';
+  const stats = [
+    { value: siteConfig?.stats?.totalListings ?? 0, suffix: '+', label: 'Live Listings' },
+    { value: siteConfig?.stats?.activeAgents ?? 0, suffix: '+', label: 'Active Agents' },
+    { value: siteConfig?.stats?.offPlanListings ?? 0, suffix: '+', label: 'Off-plan Launches' },
+    { value: siteConfig?.stats?.readyListings ?? 0, suffix: '+', label: 'Ready Homes' },
+  ];
 
 
   useEffect(() => {
@@ -51,6 +67,23 @@ export default function AboutPage() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      const nextSiteConfig = await getSiteConfig(agencySlug);
+      if (active) {
+        setSiteConfig(nextSiteConfig);
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, [agencySlug]);
 
   const scale = 1 + scrollProgress * 0.5;
   const opacity = 1 - scrollProgress * 2;
@@ -83,10 +116,10 @@ export default function AboutPage() {
             style={{ opacity: Math.max(0, opacity) }}
           >
             <h1 className="text-5xl md:text-8xl font-bold font-sans">
-              We are SkyLines.
+              We are {displayName}.
             </h1>
             <p className="mt-4 text-lg md:text-2xl text-balance">
-              Building dreams into <span className="text-accent">stunning real estate</span>.
+              {officeAddress ? `Serving ${officeAddress} with` : 'Building'} <span className="text-accent">public-ready real estate experiences</span>.
             </p>
           </div>
         </div>
@@ -103,12 +136,13 @@ export default function AboutPage() {
             <div className="md:col-span-3">
                 <AnimateOnScroll delay={100}>
                     <div className="space-y-6 text-base md:text-lg text-muted-foreground">
-                        <p>
-                            At SkyLines, our mission is to redefine the real estate experience through a commitment to minimalist design, unparalleled service, and a deep understanding of our clients' desires. We believe a home is more than just a property; it's a sanctuary, a canvas for life's moments, and a reflection of one's aspirations.
-                        </p>
-                        <p>
-                            We meticulously curate and craft properties that are not only aesthetically pleasing but also functional and timeless. By focusing on quality over quantity, we ensure that every home we represent is a masterpiece of architecture and design, ready to inspire its new inhabitants.
-                        </p>
+                        <p>{aboutCompany}</p>
+                        {officeTimings || officeAddress ? (
+                          <p>
+                            {officeAddress ? `${displayName} operates from ${officeAddress}. ` : ''}
+                            {officeTimings ? `Office timings: ${officeTimings}.` : 'Our public website stays synced directly with Broker OS.'}
+                          </p>
+                        ) : null}
                     </div>
                 </AnimateOnScroll>
             </div>
@@ -152,16 +186,17 @@ export default function AboutPage() {
             <div className="space-y-6 md:space-y-8">
                 <AnimateOnScroll delay={100}>
                     <blockquote className="text-2xl md:text-4xl font-headline italic text-balance">
-                        &ldquo;We don&apos;t just sell properties; we curate lifestyles. Every detail is considered, every space is designed to evoke emotion and create a lasting sense of home.&rdquo;
+                        &ldquo;Every public page, listing, and contact point should feel as polished as the service behind it.&rdquo;
                     </blockquote>
                 </AnimateOnScroll>
                 <AnimateOnScroll delay={200}>
                     <p className="text-base md:text-lg text-muted-foreground">
-                        From the very beginning, my goal was to build a real estate firm that values artistry and integrity as much as it values commerce. We are dedicated to creating spaces that are both beautiful and meaningful, helping our clients find not just a house, but a place where they can truly belong.
+                        {siteConfig?.leadAgent?.bio?.trim()
+                          || `${displayName} combines agent expertise, live inventory, and organization-managed branding so clients always see current listings, current contacts, and a consistent agency identity.`}
                     </p>
                 </AnimateOnScroll>
                 <AnimateOnScroll delay={300}>
-                    <p className="text-base md:text-lg font-semibold">Alex Sky, Founder</p>
+                    <p className="text-base md:text-lg font-semibold">{founderName}{founderTagline ? `, ${founderTagline}` : ''}</p>
                 </AnimateOnScroll>
             </div>
         </div>
@@ -183,7 +218,7 @@ export default function AboutPage() {
             <AnimateOnScroll>
                 <h2 className="text-4xl md:text-6xl font-headline mb-8 text-balance">Ready to start your journey?</h2>
                 <Button size="lg" asChild>
-                    <Link href="/properties">
+                    <Link href={prefixAgencyPath('/properties', agencySlug)}>
                         Explore Properties
                         <span className="group-hover:translate-x-1 transition-transform duration-300 ml-2 hidden sm:inline">↗</span>
                     </Link>

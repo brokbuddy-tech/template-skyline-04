@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet';
 import { MapPin } from 'lucide-react';
 import type { Property } from '@/lib/types';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 
 type MappableProperty = Property & {
   latitude: number;
@@ -53,6 +55,8 @@ function PanToSelection({ position }: { position: LatLngExpression | null }) {
 
 export function PropertyMapExplorer({ properties }: { properties: Property[] }) {
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
   const mappableProperties = useMemo(
     () => properties.filter(
       (property): property is MappableProperty =>
@@ -143,7 +147,7 @@ export function PropertyMapExplorer({ properties }: { properties: Property[] }) 
                     <p className="text-sm font-medium text-foreground">
                       {property.currency || 'AED'} {Math.round(property.price).toLocaleString()}
                     </p>
-                    <Link href={`/properties/${property.id}`} className="text-xs font-semibold text-accent underline-offset-2 hover:underline">
+                    <Link href={prefixAgencyPath(`/properties/${property.id}`, agencySlug)} className="text-xs font-semibold text-accent underline-offset-2 hover:underline">
                       View property
                     </Link>
                   </div>
@@ -186,7 +190,7 @@ export function PropertyMapExplorer({ properties }: { properties: Property[] }) 
                 {property.currency || 'AED'} {Math.round(property.price).toLocaleString()}
               </p>
               <Link
-                href={`/properties/${property.id}`}
+                href={prefixAgencyPath(`/properties/${property.id}`, agencySlug)}
                 className={`text-sm font-semibold ${property.id === selectedId ? 'text-background' : 'text-accent'}`}
               >
                 Open listing

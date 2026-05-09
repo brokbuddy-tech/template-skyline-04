@@ -61,7 +61,7 @@ export default function SellPage() {
   }, []);
 
   const displayName =
-    siteConfig?.branding?.displayName || siteConfig?.organization.name || 'SkyLines';
+    siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Agency Website';
   const agentsCount = siteConfig?.stats?.activeAgents || 300;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -203,7 +203,7 @@ export default function SellPage() {
           <AnimateOnScroll className="text-center">
             <h2 className="text-4xl md:text-5xl font-headline font-bold text-foreground">Why Sell With Us?</h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto text-balance">
-              At SkyLines, selling your property is more than a transaction—it's a partnership. We dedicate ourselves to achieving your goals with personalized service and unparalleled market expertise.
+              At {displayName}, selling your property is more than a transaction: it is a partnership built on live market insight, responsive communication, and organization-managed branding that keeps every public touchpoint current.
             </p>
           </AnimateOnScroll>
           <AnimateOnScroll delay={200}>

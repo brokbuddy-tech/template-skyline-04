@@ -1,23 +1,49 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { getSiteConfig, toSocialUrl } from '@/lib/api';
 import { AnimateOnScroll } from '../animate-on-scroll';
+import type { SiteConfig } from '@/lib/types';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
-export async function Footer() {
-  const siteConfig = await getSiteConfig();
+export function Footer() {
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      const nextSiteConfig = await getSiteConfig(agencySlug);
+      if (active) {
+        setSiteConfig(nextSiteConfig);
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, [agencySlug]);
+
   const displayName =
-    siteConfig.branding?.displayName || siteConfig.organization.name || 'SkyLines';
+    siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Agency Website';
   const navLinks = [
-    { href: '/properties?type=buy', label: 'Buy' },
-    { href: '/about', label: 'About Us' },
-    { href: '/contact', label: 'Contact Us' },
-    { href: '/map', label: 'Map' },
+    { href: prefixAgencyPath('/properties?type=buy', agencySlug), label: 'Buy' },
+    { href: prefixAgencyPath('/agents', agencySlug), label: 'Agents' },
+    { href: prefixAgencyPath('/about', agencySlug), label: 'About Us' },
+    { href: prefixAgencyPath('/contact', agencySlug), label: 'Contact Us' },
   ];
 
   const socialLinks = [
-    { href: toSocialUrl('instagram', siteConfig.branding?.instagram), label: 'Instagram' },
-    { href: toSocialUrl('twitter', siteConfig.branding?.twitter), label: 'X (Twitter)' },
-    { href: toSocialUrl('linkedin', siteConfig.branding?.linkedin), label: 'LinkedIn' },
-    { href: toSocialUrl('whatsapp', siteConfig.branding?.whatsapp), label: 'WhatsApp' },
+    { href: toSocialUrl('instagram', siteConfig?.branding?.instagram), label: 'Instagram' },
+    { href: toSocialUrl('twitter', siteConfig?.branding?.twitter), label: 'X (Twitter)' },
+    { href: toSocialUrl('linkedin', siteConfig?.branding?.linkedin), label: 'LinkedIn' },
+    { href: toSocialUrl('whatsapp', siteConfig?.branding?.whatsapp), label: 'WhatsApp' },
   ].filter((link): link is { href: string; label: string } => Boolean(link.href));
 
   return (

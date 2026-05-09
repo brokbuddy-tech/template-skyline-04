@@ -12,6 +12,17 @@ function buildUpstreamUrl(baseUrl: string, path: string[], search: string): URL 
   return new URL(`${baseUrl}${pathname}${search}`);
 }
 
+async function fetchWithTimeout(input: URL | string, init?: RequestInit, timeoutMs = 5000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(input, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function proxyRequest(request: Request, context: RouteContext): Promise<Response> {
   const { path = [] } = await context.params;
   const requestHeaders = new Headers(request.headers);
@@ -27,15 +38,15 @@ async function proxyRequest(request: Request, context: RouteContext): Promise<Re
     const upstreamUrl = buildUpstreamUrl(publicApiBase, path, new URL(request.url).search);
 
     try {
-      const upstreamResponse = await fetch(upstreamUrl, {
+      const upstreamResponse = await fetchWithTimeout(upstreamUrl, {
         method: request.method,
         headers: requestHeaders,
         body: requestBody,
         redirect: 'follow',
         cache: 'no-store',
-      });
+      }, 5000);
 
-      if (!upstreamResponse.ok && index < PUBLIC_API_BASE_URLS.length - 1 && shouldRetryApiRequest(upstreamResponse.status)) {
+      if (!upstreamResponse.ok && index < PUBLIC_API_BASE_URLS.length - 1 && await shouldRetryApiRequest(upstreamResponse)) {
         lastError = new Error(`Request failed for ${upstreamUrl.pathname}: ${upstreamResponse.status}`);
         continue;
       }

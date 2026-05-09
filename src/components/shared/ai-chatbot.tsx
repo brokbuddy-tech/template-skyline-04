@@ -14,6 +14,8 @@ import { Property } from '@/lib/types';
 import Link from 'next/link';
 import { MetaballLoader } from './metaball-loader';
 import { ProgressiveImage } from './progressive-image';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 
 interface Message {
   id: string;
@@ -31,6 +33,8 @@ export function AIChatbot() {
   const [isCatalogLoading, setIsCatalogLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const chatPopupRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
 
   async function loadCatalog() {
     if (catalog.length > 0 || isCatalogLoading) return catalog;
@@ -163,7 +167,7 @@ export function AIChatbot() {
             }}
           >
             <div className="flex justify-between items-center p-4 border-b border-gray-200" style={{ borderColor: '#EAEAEA' }}>
-              <h2 className="font-headline text-xl font-semibold text-black">SkyLines AI</h2>
+              <h2 className="font-headline text-xl font-semibold text-black">Agency Assistant</h2>
               <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
                 <X className="h-5 w-5 text-gray-500"/>
               </Button>
@@ -197,7 +201,7 @@ export function AIChatbot() {
                         <div className="mt-2 -mr-3">
                            <div className="flex overflow-x-auto gap-3 pb-2 pr-3" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                             {message.properties.map((prop) => (
-                              <PropertyCardInChat key={prop.id} property={prop} />
+                              <PropertyCardInChat key={prop.id} property={prop} agencySlug={agencySlug} />
                             ))}
                           </div>
                         </div>
@@ -255,12 +259,18 @@ export function AIChatbot() {
 }
 
 
-function PropertyCardInChat({ property }: { property: Property }) {
+function PropertyCardInChat({
+  property,
+  agencySlug,
+}: {
+  property: Property;
+  agencySlug?: string | null;
+}) {
   const image = property.media?.[0] || property.images[0];
 
   return (
     <div className="w-48 flex-shrink-0">
-      <Link href={`/properties/${property.id}`} className="block group">
+      <Link href={prefixAgencyPath(`/properties/${property.id}`, agencySlug)} className="block group">
         <div className="bg-white rounded-lg overflow-hidden">
           {image && (
             <ProgressiveImage

@@ -3,8 +3,15 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { AnimateOnScroll } from "../animate-on-scroll";
 import type { Property } from "@/lib/types";
+import { prefixAgencyPath } from "@/lib/agency-routing";
 
-export function FeaturedProperties({ properties }: { properties: Property[] }) {
+export function FeaturedProperties({
+  properties,
+  agencySlug,
+}: {
+  properties: Property[];
+  agencySlug?: string | null;
+}) {
   const featuredProperties = properties.slice(0, 3);
 
   return (
@@ -27,7 +34,7 @@ export function FeaturedProperties({ properties }: { properties: Property[] }) {
         </div>
         <AnimateOnScroll className="text-center mt-16">
             <Button asChild size="lg">
-                <Link href="/properties">View All Properties</Link>
+                <Link href={prefixAgencyPath('/properties', agencySlug)}>View All Properties</Link>
             </Button>
         </AnimateOnScroll>
       </div>

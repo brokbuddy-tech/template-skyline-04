@@ -8,11 +8,11 @@ import type {
 } from './types';
 import { 
   PUBLIC_API_BASE_URLS,
-  PUBLIC_TEMPLATE_ORG_SLUG,
+  getClientTemplateFetchUrl,
   PUBLIC_TEMPLATE_PROXY_BASE_PATH,
-  getPublicTemplateUrl,
-  getTemplateFetchUrl,
+  shouldRetryApiRequest,
 } from './api-base';
+import { getDefaultAgencySlug, getEffectiveAgencySlug } from './agency-routing';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -37,6 +37,18 @@ type PublicTemplateSiteSnapshot = SiteConfig & {
   testimonials?: any[];
   sellerTestimonials?: any[];
   blogs?: any[];
+};
+
+type ResolvedAgencyContext = {
+  organization: {
+    id?: string;
+    name?: string;
+    slug: string;
+    hexCode: string;
+    templateUrl?: string | null;
+    publicAgencyUrl?: string | null;
+    country?: string | null;
+  };
 };
 
 type PublicListingImage = {
@@ -88,14 +100,15 @@ function rewriteCdnToGcs(url?: string | null): string | null {
  */
 function getPublicListingMediaUrl(
   image?: PublicListingImage | null,
-  variant: 'thumbnail' | 'medium' | 'compressed' | 'original' = 'medium'
+  variant: 'thumbnail' | 'medium' | 'compressed' | 'original' = 'medium',
+  agencySlug?: string | null,
 ): string | null {
   if (!image) return null;
 
   // Force API proxy as CDN and direct GCS URLs are currently returning 403
   // due to unauthenticated bucket permissions.
   if (image.id) {
-    return getPublicTemplateUrl(`/images/${image.id}/view?variant=${variant}`);
+    return getClientTemplateFetchUrl(`/images/${image.id}/view?variant=${variant}`, agencySlug);
   }
 
   return image.url || null;
@@ -236,7 +249,7 @@ function mapListingAgent(listing: any): Property['agent'] {
  * Maps raw API listing data to the Property type.
  * Updated to mimic Broker-OS image fetching and READY status handling.
  */
-export function mapListingToProperty(listing: any): Property {
+export function mapListingToProperty(listing: any, agencySlug?: string | null): Property {
   const images: PublicListingImage[] = Array.isArray(listing.images) ? listing.images : [];
   
   const media: PropertyMedia[] = images
@@ -252,9 +265,9 @@ export function mapListingToProperty(listing: any): Property {
       const storageUrl = buildStorageImageUrl(img.gcsPath);
       
       // Use the proxied variant URLs (Mimicking Broker-OS getProcessedUrl/buildMediaSlide)
-      const thumb = getPublicListingMediaUrl(img, 'thumbnail');
-      const med = getPublicListingMediaUrl(img, 'medium');
-      const high = getPublicListingMediaUrl(img, 'compressed');
+      const thumb = getPublicListingMediaUrl(img, 'thumbnail', agencySlug);
+      const med = getPublicListingMediaUrl(img, 'medium', agencySlug);
+      const high = getPublicListingMediaUrl(img, 'compressed', agencySlug);
       
       const originalUrl = normalizeAssetUrl(img.url) || storageUrl || '';
 
@@ -316,6 +329,88 @@ export function mapListingToProperty(listing: any): Property {
 
 // ── API Methods ─────────────────────────────────────────────────────────────
 
+function splitTemplatePath(path = '') {
+  const [pathname = '', search = ''] = path.split('?');
+  return {
+    pathname: pathname || '',
+    search: search ? `?${search}` : '',
+  };
+}
+
+function appendHexToSearch(search: string, hexCode: string) {
+  const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
+  params.set('hex', hexCode);
+  const serialized = params.toString();
+  return serialized ? `?${serialized}` : '';
+}
+
+function buildBackendPublicUrl(publicApiBaseUrl: string, agencySlug: string, hexCode: string, path = '') {
+  const { pathname, search } = splitTemplatePath(path);
+  const trimmedPathname = pathname.replace(/^\/+/, '');
+  const segments = trimmedPathname.split('/').filter(Boolean);
+
+  if (segments.length === 0) {
+    return `${publicApiBaseUrl}/organization${appendHexToSearch(search, hexCode)}`;
+  }
+
+  if (segments[0] === 'listings') {
+    if (segments[1]) {
+      return `${publicApiBaseUrl}/listings/${encodeURIComponent(segments[1])}${appendHexToSearch(search, hexCode)}`;
+    }
+    return `${publicApiBaseUrl}/listings${appendHexToSearch(search, hexCode)}`;
+  }
+
+  if (segments[0] === 'agents') {
+    if (segments[1]) {
+      return `${publicApiBaseUrl}/agent/${encodeURIComponent(segments[1])}${appendHexToSearch(search, hexCode)}`;
+    }
+    return `${publicApiBaseUrl}/agents${appendHexToSearch(search, hexCode)}`;
+  }
+
+  if (segments[0] === 'inquiry') {
+    return `${publicApiBaseUrl}/inquiries${appendHexToSearch(search, hexCode)}`;
+  }
+
+  if (segments[0] === 'logo' && segments[1] === 'view') {
+    return `${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}/logo/view${search}`;
+  }
+
+  if (segments[0] === 'images' && segments[1]) {
+    const remaining = segments.slice(2).map(encodeURIComponent).join('/');
+    return `${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}/images/${encodeURIComponent(segments[1])}/${remaining}${search}`;
+  }
+
+  return `${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}${pathname.startsWith('/') ? pathname : `/${pathname}`}${search}`;
+}
+
+async function resolveAgencyContext(agencySlug?: string | null): Promise<ResolvedAgencyContext | null> {
+  const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
+  if (!resolvedAgencySlug) {
+    return null;
+  }
+
+  for (const publicApiBase of PUBLIC_API_BASE_URLS) {
+    try {
+      const response = await safeFetch(`${publicApiBase}/agency/${encodeURIComponent(resolvedAgencySlug)}/resolve`, {
+        cache: 'no-store',
+      }, 4000);
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const data = await response.json() as ResolvedAgencyContext;
+      if (data?.organization?.hexCode) {
+        return data;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
 async function safeFetch(url: string, options?: RequestInit, timeout = 10000): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
@@ -333,7 +428,48 @@ async function safeFetch(url: string, options?: RequestInit, timeout = 10000): P
   }
 }
 
-export async function getProperties(params: GetPropertiesParams = {}): Promise<PaginatedProperties> {
+async function fetchTemplateResponse(
+  path = '',
+  options?: RequestInit,
+  timeout = 10000,
+  agencySlug?: string | null,
+): Promise<Response> {
+  const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
+  if (!resolvedAgencySlug) {
+    return new Response(null, { status: 404, statusText: 'Agency Not Found' });
+  }
+
+  if (typeof window !== 'undefined') {
+    return safeFetch(getClientTemplateFetchUrl(path, resolvedAgencySlug), options, timeout);
+  }
+
+  const resolvedContext = await resolveAgencyContext(resolvedAgencySlug);
+  if (!resolvedContext?.organization?.hexCode) {
+    return new Response(null, { status: 404, statusText: 'Agency Not Found' });
+  }
+
+  let lastResponse: Response | null = null;
+  for (const publicApiBase of PUBLIC_API_BASE_URLS) {
+    const backendUrl = buildBackendPublicUrl(
+      publicApiBase,
+      resolvedAgencySlug,
+      resolvedContext.organization.hexCode,
+      path,
+    );
+    const response = await safeFetch(backendUrl, options, timeout);
+    lastResponse = response;
+    if (response.ok || !(await shouldRetryApiRequest(response))) {
+      return response;
+    }
+  }
+
+  return lastResponse || new Response(null, { status: 502, statusText: 'Service Unavailable' });
+}
+
+export async function getProperties(
+  params: GetPropertiesParams = {},
+  agencySlug?: string | null,
+): Promise<PaginatedProperties> {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
@@ -343,11 +479,9 @@ export async function getProperties(params: GetPropertiesParams = {}): Promise<P
   });
 
   const query = searchParams.toString();
-  const fetchUrl = getTemplateFetchUrl(`/listings${query ? `?${query}` : ''}`);
-
-  const response = await safeFetch(fetchUrl, {
+  const response = await fetchTemplateResponse(`/listings${query ? `?${query}` : ''}`, {
     next: { revalidate: 300 },
-  });
+  }, 10000, agencySlug);
 
   if (!response.ok) {
     return { properties: [], total: 0, page: 1, totalPages: 1 };
@@ -361,22 +495,22 @@ export async function getProperties(params: GetPropertiesParams = {}): Promise<P
   const totalPages = data.totalPages || Math.ceil(total / (params.limit as number || 10)) || 1;
 
   return {
-    properties: rawListings.map(mapListingToProperty),
+    properties: rawListings.map((listing: any) => mapListingToProperty(listing, agencySlug)),
     total,
     page,
     totalPages,
   };
 }
 
-export async function getPropertyById(id: string): Promise<Property | null> {
-  const response = await safeFetch(getTemplateFetchUrl(`/listings/${id}`), {
+export async function getPropertyById(id: string, agencySlug?: string | null): Promise<Property | null> {
+  const response = await fetchTemplateResponse(`/listings/${id}`, {
     next: { revalidate: 300 },
-  });
+  }, 10000, agencySlug);
 
   if (!response.ok) return null;
 
   const data = await response.json();
-  return mapListingToProperty(data);
+  return mapListingToProperty(data, agencySlug);
 }
 
 export async function getSmartPropertyMatches(query: string | Record<string, any>): Promise<AiPropertySearchResult> {
@@ -404,7 +538,7 @@ export async function getSmartPropertyMatches(query: string | Record<string, any
 export const searchPropertiesWithAI = getSmartPropertyMatches;
 
 export async function submitOrgInquiry(payload: any): Promise<any> {
-  const response = await safeFetch(getTemplateFetchUrl('/inquiry'), {
+  const response = await fetchTemplateResponse('/inquiry', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -418,10 +552,10 @@ export async function submitOrgInquiry(payload: any): Promise<any> {
   return await response.json();
 }
 
-async function getTemplateSiteSnapshot(): Promise<PublicTemplateSiteSnapshot | null> {
-  const response = await safeFetch(getTemplateFetchUrl(), {
+async function getTemplateSiteSnapshot(agencySlug?: string | null): Promise<PublicTemplateSiteSnapshot | null> {
+  const response = await fetchTemplateResponse('', {
     next: { revalidate: 3600 },
-  });
+  }, 10000, agencySlug);
 
   if (!response.ok) {
     return null;
@@ -445,10 +579,10 @@ export function toSocialUrl(network: string, handle?: string | null): string {
   }
 }
 
-export async function getSiteConfig(): Promise<SiteConfig> {
-  const data = await getTemplateSiteSnapshot();
+export async function getSiteConfig(agencySlug?: string | null): Promise<SiteConfig> {
+  const data = await getTemplateSiteSnapshot(agencySlug);
   const defaultTitle = 'Agency Website';
-  const defaultSlug = PUBLIC_TEMPLATE_ORG_SLUG || 'organization';
+  const defaultSlug = getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug() || 'organization';
 
   if (!data) {
     return {
@@ -478,22 +612,128 @@ export async function getSiteConfig(): Promise<SiteConfig> {
   };
 }
 
-export async function getAreaGuides(): Promise<any[]> {
-  const data = await getTemplateSiteSnapshot();
+export async function getSiteConfigOrNull(agencySlug?: string | null): Promise<SiteConfig | null> {
+  const data = await getTemplateSiteSnapshot(agencySlug);
+  if (!data) {
+    return null;
+  }
+
+  return {
+    organization: data.organization || { name: 'Agency Website', slug: agencySlug || 'organization' },
+    categories: data.categories || [],
+    amenities: data.amenities || [],
+    featuredAreas: data.featuredAreas || [],
+    leadAgent: data.leadAgent || null,
+    branding: data.branding || null,
+    profile: data.profile || null,
+    stats: data.stats || {
+      totalListings: 0,
+      readyListings: 0,
+      offPlanListings: 0,
+      activeAgents: 0,
+      awards: 0,
+      blogs: 0,
+      testimonials: 0,
+    },
+  };
+}
+
+export async function getAreaGuides(agencySlug?: string | null): Promise<any[]> {
+  const data = await getTemplateSiteSnapshot(agencySlug);
   return data?.areaGuides || [];
 }
 
-export async function getTestimonials(): Promise<any[]> {
-  const data = await getTemplateSiteSnapshot();
+export async function getTestimonials(agencySlug?: string | null): Promise<any[]> {
+  const data = await getTemplateSiteSnapshot(agencySlug);
   return data?.testimonials || [];
 }
 
-export async function getBlogs(): Promise<any[]> {
-  const data = await getTemplateSiteSnapshot();
+export async function getBlogs(agencySlug?: string | null): Promise<any[]> {
+  const data = await getTemplateSiteSnapshot(agencySlug);
   return data?.blogs || [];
 }
 
-export async function getSellerTestimonials(): Promise<any[]> {
-  const data = await getTemplateSiteSnapshot();
+export async function getSellerTestimonials(agencySlug?: string | null): Promise<any[]> {
+  const data = await getTemplateSiteSnapshot(agencySlug);
   return data?.sellerTestimonials || [];
+}
+
+export async function getAgents(agencySlug?: string | null): Promise<{
+  organization: SiteConfig['organization'];
+  agents: SiteAgent[];
+}> {
+  const response = await fetchTemplateResponse('/agents', {
+    next: { revalidate: 300 },
+  }, 10000, agencySlug);
+
+  if (!response.ok) {
+    return {
+      organization: {
+        name: 'Agency Website',
+        slug: getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug() || 'organization',
+      },
+      agents: [],
+    };
+  }
+
+  const data = await response.json();
+  return {
+    organization: data.organization || {
+      name: 'Agency Website',
+      slug: getEffectiveAgencySlug(agencySlug) || getDefaultAgencySlug() || 'organization',
+    },
+    agents: Array.isArray(data.agents) ? data.agents : [],
+  };
+}
+
+export async function getAgentProfile(
+  agentSlug: string,
+  agencySlug?: string | null,
+): Promise<{
+  organization: SiteConfig['organization'];
+  profile?: SiteConfig['profile'];
+  agent: (SiteAgent & {
+    totalDeals?: number;
+    totalListings?: number;
+    primaryColor?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+  }) | null;
+  stats: {
+    activeListings: number;
+    soldListings: number;
+    rentedListings: number;
+  };
+  activeListings: Property[];
+  soldListings: Property[];
+  rentedListings: Property[];
+} | null> {
+  const response = await fetchTemplateResponse(`/agents/${agentSlug}`, {
+    next: { revalidate: 300 },
+  }, 10000, agencySlug);
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const data = await response.json();
+  return {
+    organization: data.organization,
+    profile: data.profile || null,
+    agent: data.agent || null,
+    stats: data.stats || {
+      activeListings: 0,
+      soldListings: 0,
+      rentedListings: 0,
+    },
+    activeListings: Array.isArray(data.activeListings)
+      ? data.activeListings.map((listing: any) => mapListingToProperty(listing, agencySlug))
+      : [],
+    soldListings: Array.isArray(data.soldListings)
+      ? data.soldListings.map((listing: any) => mapListingToProperty(listing, agencySlug))
+      : [],
+    rentedListings: Array.isArray(data.rentedListings)
+      ? data.rentedListings.map((listing: any) => mapListingToProperty(listing, agencySlug))
+      : [],
+  };
 }

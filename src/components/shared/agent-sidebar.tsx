@@ -7,9 +7,11 @@ import Link from "next/link"
 import type { Property, PropertyAgent, SiteAgent } from "@/lib/types"
 import { resolveImage } from "@/lib/property-media"
 import { toSocialUrl } from "@/lib/api"
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from "@/lib/agency-routing"
+import { usePathname } from "next/navigation"
 
 function getAgentName(agent?: PropertyAgent | SiteAgent | null) {
-  return agent?.name || 'Skyline Agent';
+  return agent?.name || 'Assigned Agent';
 }
 
 function getAgentSubtitle(agent?: PropertyAgent | SiteAgent | null) {
@@ -26,12 +28,14 @@ export function AgentSidebar({
   agent?: PropertyAgent | SiteAgent | null;
   property?: Pick<Property, 'id' | 'title'>;
 }) {
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
   const agentImage = resolveImage((agent as PropertyAgent | undefined)?.avatarUrl || (agent as SiteAgent | undefined)?.avatar || 'founder-photo', 'founder-photo');
   const phone = agent?.phone || undefined;
   const whatsapp = agent?.whatsapp || phone || undefined;
   const subtitle = getAgentSubtitle(agent);
   const socials = [
-    { name: 'Copy Link', icon: LinkIcon, href: property ? `/properties/${property.id}` : null },
+    { name: 'Copy Link', icon: LinkIcon, href: property ? prefixAgencyPath(`/properties/${property.id}`, agencySlug) : null },
     { name: 'WhatsApp', icon: MessageSquare, href: toSocialUrl('whatsapp', whatsapp) },
     { name: 'Facebook', icon: Facebook, href: null },
     { name: 'X', icon: Twitter, href: toSocialUrl('twitter', agent?.twitter) },
@@ -77,12 +81,12 @@ export function AgentSidebar({
 
           <div className="mt-4 flex flex-col gap-2 w-full">
             <Button size="sm" asChild className="w-full bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-[10px] h-10 font-semibold transition-colors shadow-sm">
-              <a href={phone ? `tel:${phone}` : '/contact'}>
+              <a href={phone ? `tel:${phone}` : prefixAgencyPath('/contact', agencySlug)}>
                 <Phone className="mr-2 h-4 w-4" /> CALL AGENT
               </a>
             </Button>
             <Button variant="outline" size="sm" asChild className="w-full border-[#1E88E5] text-[#1E88E5] hover:bg-[#1E88E5]/5 rounded-[10px] h-10 font-semibold transition-colors">
-              <a href={toSocialUrl('whatsapp', whatsapp) || '/contact'} target="_blank" rel="noreferrer">
+              <a href={toSocialUrl('whatsapp', whatsapp) || prefixAgencyPath('/contact', agencySlug)} target="_blank" rel="noreferrer">
                 <MessageSquare className="mr-2 h-4 w-4" /> WHATSAPP
               </a>
             </Button>
@@ -112,7 +116,7 @@ export function AgentSidebar({
           Interested in this property? Request details below.
         </p>
         <Button size="sm" variant="outline" asChild className="w-full bg-transparent border-white/40 text-white hover:bg-white/10 hover:text-white rounded-[10px] h-10 font-semibold transition-colors">
-          <Link href={property ? `/contact?listingId=${property.id}` : '/contact'}>
+          <Link href={property ? prefixAgencyPath(`/contact?listingId=${property.id}`, agencySlug) : prefixAgencyPath('/contact', agencySlug)}>
             REGISTER YOUR INTEREST
           </Link>
         </Button>

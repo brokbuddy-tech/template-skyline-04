@@ -12,8 +12,6 @@ function normalizeApiBaseUrl(value: string) {
 
 const apiBaseUrl = normalizeApiBaseUrl(process.env.NEXT_PUBLIC_API_URL || 'https://brokbuddy-api.onrender.com');
 const apiOrigin = apiBaseUrl.replace(/\/api$/i, '');
-const publicTemplateOrgSlug = (process.env.NEXT_PUBLIC_ORG_SLUG || '').trim();
-const templateHexCode = (process.env.TEMPLATE_HEX_CODE || '').trim().toLowerCase();
 
 const nextConfig: NextConfig = {
   compress: true,
@@ -77,22 +75,14 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    return [
-      ...(publicTemplateOrgSlug && templateHexCode ? [
+    return {
+      fallback: [
         {
-          source: '/api/public-template',
-          destination: `${apiOrigin}/api/public/templates/${publicTemplateOrgSlug}/${templateHexCode}`,
+          source: '/api/:path*',
+          destination: `${apiOrigin}/api/:path*`,
         },
-        {
-          source: '/api/public-template/:path*',
-          destination: `${apiOrigin}/api/public/templates/${publicTemplateOrgSlug}/${templateHexCode}/:path*`,
-        },
-      ] : []),
-      {
-        source: '/api/:path*',
-        destination: `${apiOrigin}/api/:path*`,
-      },
-    ];
+      ],
+    };
   },
 };
 

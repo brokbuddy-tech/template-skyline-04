@@ -27,6 +27,8 @@ import { UpfrontCostModal } from '@/components/shared/upfront-cost-modal';
 import { Card } from '@/components/ui/card';
 import { FaqAccordion } from '@/components/shared/faq-accordion';
 import type { Property, PropertyAgent } from '@/lib/types';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 
 const propertyTypeIcons: Record<string, React.ElementType> = {
   House: Building,
@@ -86,6 +88,8 @@ export function PropertyDetailPageClient({
 }) {
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const { formatPrice } = useContext(CurrencyContext);
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -265,7 +269,7 @@ export function PropertyDetailPageClient({
             </div>
             <div className="text-center mt-16">
               <Button asChild size="lg">
-                <Link href="/properties">View All Properties</Link>
+                <Link href={prefixAgencyPath('/properties', agencySlug)}>View All Properties</Link>
               </Button>
             </div>
           </div>

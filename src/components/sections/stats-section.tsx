@@ -4,13 +4,22 @@ import { Card } from '../ui/card';
 import { CountUp } from '../shared/count-up';
 import { AnimateOnScroll } from '../animate-on-scroll';
 import type { SiteStats } from '@/lib/types';
+import { prefixAgencyPath } from '@/lib/agency-routing';
 
-export function StatsSection({ stats }: { stats?: SiteStats }) {
+export function StatsSection({
+  stats,
+  agencyName,
+  agencySlug,
+}: {
+  stats?: SiteStats;
+  agencyName?: string;
+  agencySlug?: string | null;
+}) {
   const cards = [
-    { value: stats?.totalListings ?? 0, suffix: '+', label: 'Modern Properties' },
-    { value: 98, suffix: '%', label: 'Client Satisfaction' },
-    { value: 12, suffix: '+', label: 'Years of Experience' },
-    { value: 5, suffix: '+', label: 'Awards & Recognition' },
+    { value: stats?.totalListings ?? 0, suffix: '+', label: 'Live Listings' },
+    { value: stats?.activeAgents ?? 0, suffix: '+', label: 'Active Agents' },
+    { value: stats?.offPlanListings ?? 0, suffix: '+', label: 'Off-plan Launches' },
+    { value: stats?.readyListings ?? 0, suffix: '+', label: 'Ready Homes' },
   ];
 
   return (
@@ -20,14 +29,14 @@ export function StatsSection({ stats }: { stats?: SiteStats }) {
           <div className="lg:col-span-2">
             <AnimateOnScroll>
               <h2 className="text-4xl md:text-5xl font-headline font-medium mb-6 text-balance">
-                Building dreams into stunning <span className="text-accent">real estate</span>
+                {agencyName || 'This agency'} runs on <span className="text-accent">live Broker OS data</span>
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8 text-balance">
-                We take pride in our track record of success and the relationships we've built. Our numbers speak for themselves, showcasing our commitment to excellence in every project we undertake.
+                Listings, agents, and inventory totals update dynamically from the organization workspace, so this public website always reflects the latest public-ready information.
               </p>
               <Button asChild variant="outline" size="lg" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-                <Link href="/about">
-                  More About Us
+                <Link href={prefixAgencyPath('/about', agencySlug)}>
+                  More About {agencyName || 'Us'}
                   <span className="group-hover:translate-x-1 transition-transform duration-300">↗</span>
                 </Link>
               </Button>

@@ -17,6 +17,7 @@ import { type ChangeEvent, type Dispatch, type SetStateAction, useContext, useMe
 import { CurrencyContext } from '@/context/currency-context';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { searchPropertiesWithAI } from '@/lib/api';
+import { prefixAgencyPath, resolveAgencySlugFromPathname, stripAgencySlugFromPathname } from '@/lib/agency-routing';
 
 const fallbackAmenities = [
   'Pool',
@@ -31,6 +32,8 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
   const { formatPrice } = useContext(CurrencyContext);
   const router = useRouter();
   const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
+  const normalizedPathname = stripAgencySlugFromPathname(pathname, agencySlug);
   const searchParams = useSearchParams();
   const minPrice = 0;
   const maxPrice = 50000000;
@@ -59,7 +62,7 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
     setBeds('');
     setBaths('');
     setSelectedAmenities([]);
-    router.push(pathname === '/properties' ? '/properties' : '/properties');
+    router.push(prefixAgencyPath('/properties', agencySlug));
   };
 
   const handleNumericChange = (setter: Dispatch<SetStateAction<string>>) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +87,9 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
 
   const applyFilters = async () => {
     const params = new URLSearchParams(searchParams.toString());
-    const destination = pathname === '/properties' ? pathname : '/properties';
+    const destination = normalizedPathname === '/properties'
+      ? prefixAgencyPath(normalizedPathname, agencySlug)
+      : prefixAgencyPath('/properties', agencySlug);
 
     if (aiQuery.trim()) {
       params.set('q', aiQuery.trim());

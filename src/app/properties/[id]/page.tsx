@@ -2,16 +2,18 @@
 import { notFound } from 'next/navigation';
 import { PropertyDetailPageClient } from '@/components/shared/property-detail-page-client';
 import { getProperties, getPropertyById, getSiteConfig } from '@/lib/api';
-export default async function PropertyDetailPage({
-  params,
+
+export async function PropertyDetailPageContent({
+  id,
+  agencySlug,
 }: {
-  params: Promise<{ id: string }>;
+  id: string;
+  agencySlug?: string | null;
 }) {
-  const { id } = await params;
   const [property, allPropertiesResponse, siteConfig] = await Promise.all([
-    getPropertyById(id),
-    getProperties({ limit: 200 }),
-    getSiteConfig(),
+    getPropertyById(id, agencySlug),
+    getProperties({ limit: 200 }, agencySlug),
+    getSiteConfig(agencySlug),
   ]);
 
   const feedProperty = allPropertiesResponse.properties.find(item => item.id === id) || null;
@@ -36,7 +38,7 @@ export default async function PropertyDetailPage({
   const fallbackAgent = siteConfig.leadAgent
     ? {
         name: siteConfig.leadAgent.name,
-        title: siteConfig.leadAgent.tagline || undefined,
+        title: siteConfig.leadAgent.tagline || siteConfig.leadAgent.title || undefined,
         avatarUrl: siteConfig.leadAgent.avatar || undefined,
         phone: siteConfig.leadAgent.phone || undefined,
         email: siteConfig.leadAgent.email || undefined,
@@ -57,4 +59,13 @@ export default async function PropertyDetailPage({
       fallbackAgent={fallbackAgent}
     />
   );
+}
+
+export default async function PropertyDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return <PropertyDetailPageContent id={id} />;
 }

@@ -97,6 +97,7 @@ export type Testimonial = {
 export type SiteAgent = {
   id?: string;
   name: string;
+  title?: string | null;
   email?: string | null;
   phone?: string | null;
   whatsapp?: string | null;
@@ -116,6 +117,8 @@ export type SiteAgent = {
   totalListings?: number;
   primaryColor?: string | null;
   coverImage?: string | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
 };
 
 export type SiteBranding = {
@@ -145,11 +148,41 @@ export type SiteStats = {
   testimonials: number;
 };
 
+export type SiteProfile = {
+  logo?: string | null;
+  aboutCompany?: string;
+  officeAddress?: string;
+  officeTimings?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  contact?: {
+    primaryPhone?: string;
+    secondaryPhone?: string;
+    whatsappNumber?: string;
+    officialEmail?: string;
+  };
+  social?: {
+    facebookUrl?: string;
+    instagramUrl?: string;
+    tiktokUrl?: string;
+    twitterUrl?: string;
+    youtubeUrl?: string;
+  };
+  footer?: {
+    copyrightSuffix?: string;
+    privacyPolicyText?: string;
+    termsAndConditionsText?: string;
+  };
+};
+
 export type SiteConfig = {
   organization: {
     id?: string;
     name: string;
     slug: string;
+    hexCode?: string;
+    templateUrl?: string | null;
+    publicAgencyUrl?: string | null;
     country?: string | null;
   };
   categories: string[];
@@ -157,6 +190,6 @@ export type SiteConfig = {
   featuredAreas?: string[];
   leadAgent?: SiteAgent | null;
   branding?: SiteBranding | null;
-  profile?: Record<string, unknown> | null;
+  profile?: SiteProfile | null;
   stats?: SiteStats;
 };

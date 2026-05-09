@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ThemeSwitch } from '../shared/theme-switch';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 import {
   Accordion,
   AccordionContent,
@@ -16,6 +18,8 @@ import type { NavConfig } from '@/lib/nav-config';
 
 export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
 
   useEffect(() => {
     if (isOpen) {
@@ -66,7 +70,7 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
                           <ul className="space-y-2">
                             {column.links.map((item) => (
                               <li key={item.label}>
-                                <Link href={item.href} onClick={handleLinkClick} className="text-lg text-gray-700 dark:text-gray-300 hover:text-rose-500 block">
+                                <Link href={prefixAgencyPath(item.href, agencySlug)} onClick={handleLinkClick} className="text-lg text-gray-700 dark:text-gray-300 hover:text-rose-500 block">
                                   {item.label}
                                 </Link>
                               </li>
@@ -79,7 +83,7 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
                 ) : (
                   <Link
                     key={link.href}
-                    href={link.href!}
+                    href={prefixAgencyPath(link.href!, agencySlug)}
                     className="text-3xl font-headline font-medium text-gray-900 dark:text-gray-100 hover:text-rose-500 py-4 border-b"
                     onClick={handleLinkClick}
                   >
@@ -96,7 +100,7 @@ export function MobileNav({ navLinks }: { navLinks: NavConfig }) {
               asChild
               onClick={handleLinkClick}
             >
-              <Link href="/properties">Book Now</Link>
+              <Link href={prefixAgencyPath('/properties', agencySlug)}>Book Now</Link>
             </Button>
             <ThemeSwitch />
           </div>

@@ -7,6 +7,8 @@ import { MapPin, Building2, Clock } from 'lucide-react';
 import { EmaarLogo, NakheelLogo } from './developer-logos';
 import { Separator } from '../ui/separator';
 import { ProgressiveImage } from './progressive-image';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 
 const developerLogos = {
     'Emaar': EmaarLogo,
@@ -16,10 +18,12 @@ const developerLogos = {
 export function OffPlanCard({ property }: { property: Property }) {
   const image = property.media?.[0] || property.images[0];
   const DevLogo = property.developerLogo ? developerLogos[property.developerLogo as keyof typeof developerLogos] : null;
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
 
   return (
     <div className="w-[320px] md:w-[380px] bg-white dark:bg-black rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 flex-shrink-0 group">
-      <Link href={`/properties/${property.id}`} className="block">
+      <Link href={prefixAgencyPath(`/properties/${property.id}`, agencySlug)} className="block">
         <div className="relative h-[250px]">
           {image && (
             <ProgressiveImage

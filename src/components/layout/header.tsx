@@ -6,14 +6,19 @@ import { Button } from '@/components/ui/button';
 import { Logo } from '../logo';
 import { MobileNav } from './mobile-nav';
 import { CurrencySwitcher } from '../shared/currency-switcher';
-import { navConfig } from '@/lib/nav-config';
+import { getNavConfig } from '@/lib/nav-config';
 import { MegaMenu } from './mega-menu';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { ThemeSwitch } from '../shared/theme-switch';
+import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { usePathname } from 'next/navigation';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
+  const navConfig = getNavConfig(agencySlug);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,9 +34,9 @@ export function Header() {
         'sticky top-0 w-full bg-white/95 dark:bg-black/95 border-b border-gray-100 dark:border-gray-800 h-[80px] flex items-center justify-between px-4 sm:px-8 z-40 transition-all duration-300',
         isScrolled && 'shadow-sm backdrop-blur-md'
       )}
-    >
+      >
       <div className="flex items-center flex-shrink-0">
-        <Link href="/">
+        <Link href={prefixAgencyPath('/', agencySlug)}>
           <Logo />
         </Link>
       </div>

@@ -48,10 +48,12 @@ export default function ContactPage() {
   const displayName =
     siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Our Team';
   const contactEmail =
+    siteConfig?.profile?.contact?.officialEmail ||
     siteConfig?.branding?.publicEmail ||
     siteConfig?.leadAgent?.email ||
-    'hello@example.com';
+    '';
   const contactPhone =
+    siteConfig?.profile?.contact?.primaryPhone ||
     siteConfig?.branding?.publicPhone ||
     siteConfig?.leadAgent?.phone ||
     siteConfig?.leadAgent?.whatsapp ||
@@ -59,7 +61,10 @@ export default function ContactPage() {
   const whatsappLink =
     toSocialUrl(
       'whatsapp',
-      siteConfig?.branding?.whatsapp || siteConfig?.leadAgent?.whatsapp || contactPhone
+      siteConfig?.profile?.contact?.whatsappNumber
+      || siteConfig?.branding?.whatsapp
+      || siteConfig?.leadAgent?.whatsapp
+      || contactPhone
     ) || null;
   const directLink =
     whatsappLink || (contactPhone ? `tel:${contactPhone}` : `mailto:${contactEmail}`);
@@ -224,6 +229,16 @@ export default function ContactPage() {
                       <strong>Areas:</strong> {featuredAreas}
                     </p>
                   )}
+                  {siteConfig?.profile?.officeAddress && (
+                    <p>
+                      <strong>Office:</strong> {siteConfig.profile.officeAddress}
+                    </p>
+                  )}
+                  {siteConfig?.profile?.officeTimings && (
+                    <p>
+                      <strong>Hours:</strong> {siteConfig.profile.officeTimings}
+                    </p>
+                  )}
                   {siteConfig?.organization.country && (
                     <p>
                       <strong>Country:</strong> {siteConfig.organization.country}
@@ -238,12 +253,19 @@ export default function ContactPage() {
                   <SocialIcons
                     links={{
                       instagram:
-                        siteConfig?.branding?.instagram || siteConfig?.leadAgent?.instagram,
+                        siteConfig?.profile?.social?.instagramUrl
+                        || siteConfig?.branding?.instagram
+                        || siteConfig?.leadAgent?.instagram,
                       linkedin:
                         siteConfig?.branding?.linkedin || siteConfig?.leadAgent?.linkedin,
-                      twitter: siteConfig?.branding?.twitter || siteConfig?.leadAgent?.twitter,
+                      twitter:
+                        siteConfig?.profile?.social?.twitterUrl
+                        || siteConfig?.branding?.twitter
+                        || siteConfig?.leadAgent?.twitter,
                       whatsapp:
-                        siteConfig?.branding?.whatsapp || siteConfig?.leadAgent?.whatsapp,
+                        siteConfig?.profile?.contact?.whatsappNumber
+                        || siteConfig?.branding?.whatsapp
+                        || siteConfig?.leadAgent?.whatsapp,
                     }}
                   />
                 </div>

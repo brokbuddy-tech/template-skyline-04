@@ -4,8 +4,15 @@ import Link from 'next/link';
 import { OffPlanCard } from '../shared/off-plan-card';
 import { ArrowRight } from 'lucide-react';
 import type { Property } from '@/lib/types';
+import { prefixAgencyPath } from '@/lib/agency-routing';
 
-export function LatestProjects({ properties }: { properties: Property[] }) {
+export function LatestProjects({
+  properties,
+  agencySlug,
+}: {
+  properties: Property[];
+  agencySlug?: string | null;
+}) {
   const offPlanProperties = properties.filter((p) => p.status === 'Off-plan');
 
   return (
@@ -21,7 +28,7 @@ export function LatestProjects({ properties }: { properties: Property[] }) {
               variant="outline"
               className="hidden md:flex rounded-full bg-gray-100 hover:bg-gray-200 dark:text-black"
             >
-              <Link href="/off-plan">
+              <Link href={prefixAgencyPath('/off-plan', agencySlug)}>
                 VIEW ALL PROJECTS
                 <span className="ml-2 bg-black text-white rounded-full p-1">
                   <ArrowRight className="w-4 h-4" />
@@ -42,7 +49,7 @@ export function LatestProjects({ properties }: { properties: Property[] }) {
             </div>
             <div className="md:hidden text-center mt-8">
                 <Button asChild variant="secondary">
-                    <Link href="/off-plan">VIEW ALL PROJECTS</Link>
+                    <Link href={prefixAgencyPath('/off-plan', agencySlug)}>VIEW ALL PROJECTS</Link>
                 </Button>
             </div>
           </div>

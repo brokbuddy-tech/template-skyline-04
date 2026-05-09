@@ -102,6 +102,7 @@ export type SiteAgent = {
   phone?: string | null;
   whatsapp?: string | null;
   avatar?: string | null;
+  avatarUrl?: string | null;
   licenseNumber?: string | null;
   slug?: string | null;
   tagline?: string | null;
@@ -117,6 +118,7 @@ export type SiteAgent = {
   totalListings?: number;
   primaryColor?: string | null;
   coverImage?: string | null;
+  coverImageUrl?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
 };

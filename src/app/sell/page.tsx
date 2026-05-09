@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useState, type FormEvent } from 'react';
+import { usePathname } from 'next/navigation';
 import { AnimateOnScroll } from '@/components/animate-on-scroll';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useOrgInquiry } from '@/hooks/use-org-inquiry';
 import { getSiteConfig } from '@/lib/api';
+import { getEffectiveAgencySlug, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 import type { SiteConfig } from '@/lib/types';
 import { MapPin, Users, CalendarClock } from 'lucide-react';
 import { Award, Handshake, TrendingUp } from 'lucide-react';
@@ -41,6 +43,8 @@ function getFormValue(formData: FormData, key: string) {
 }
 
 export default function SellPage() {
+  const pathname = usePathname();
+  const agencySlug = getEffectiveAgencySlug(resolveAgencySlugFromPathname(pathname));
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
   const [offeringType, setOfferingType] = useState('sale');
   const { isSubmitting, submitInquiry } = useOrgInquiry();
@@ -49,7 +53,7 @@ export default function SellPage() {
     let active = true;
 
     async function loadConfig() {
-      const config = await getSiteConfig();
+      const config = await getSiteConfig(agencySlug);
       if (active) setSiteConfig(config);
     }
 
@@ -58,7 +62,7 @@ export default function SellPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [agencySlug]);
 
   const displayName =
     siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Agency Website';

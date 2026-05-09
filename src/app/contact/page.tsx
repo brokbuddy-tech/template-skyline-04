@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState, type FormEvent } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { AnimateOnScroll } from '@/components/animate-on-scroll';
 import { SocialIcons } from '@/components/shared/social-icons';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useOrgInquiry } from '@/hooks/use-org-inquiry';
 import { getPropertyById, getSiteConfig, toSocialUrl } from '@/lib/api';
+import { getEffectiveAgencySlug, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 import type { Property, SiteConfig } from '@/lib/types';
 
 function getFormValue(formData: FormData, key: string) {
@@ -18,8 +19,10 @@ function getFormValue(formData: FormData, key: string) {
 }
 
 export default function ContactPage() {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const listingId = searchParams.get('listingId') || undefined;
+  const agencySlug = getEffectiveAgencySlug(resolveAgencySlugFromPathname(pathname));
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const { isSubmitting, submitInquiry } = useOrgInquiry();
@@ -29,8 +32,8 @@ export default function ContactPage() {
 
     async function loadPageData() {
       const [config, property] = await Promise.all([
-        getSiteConfig(),
-        listingId ? getPropertyById(listingId) : Promise.resolve(null),
+        getSiteConfig(agencySlug),
+        listingId ? getPropertyById(listingId, agencySlug) : Promise.resolve(null),
       ]);
 
       if (!active) return;
@@ -43,7 +46,7 @@ export default function ContactPage() {
     return () => {
       active = false;
     };
-  }, [listingId]);
+  }, [agencySlug, listingId]);
 
   const displayName =
     siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Our Team';

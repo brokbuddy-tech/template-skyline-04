@@ -1,3 +1,5 @@
+export const AGENCY_SLUG_COOKIE = 'bb_agency_slug';
+
 const RESERVED_ROOT_SEGMENTS = new Set([
   'about',
   'agents',
@@ -5,8 +7,13 @@ const RESERVED_ROOT_SEGMENTS = new Set([
   'contact',
   'developers',
   'favicon.ico',
+  'images',
+  'inquiry',
+  'listings',
+  'logo',
   'map',
   'off-plan',
+  'property',
   'properties',
   'robots.txt',
   'sell',
@@ -15,7 +22,7 @@ const RESERVED_ROOT_SEGMENTS = new Set([
   '_next',
 ]);
 
-function normalizeAgencySlug(value?: string | null) {
+export function normalizeAgencySlug(value?: string | null) {
   const trimmed = value?.trim().replace(/^\/+|\/+$/g, '');
   return trimmed || null;
 }
@@ -54,23 +61,22 @@ export function getEffectiveAgencySlug(explicitAgencySlug?: string | null) {
 
 export function prefixAgencyPath(path: string, agencySlug?: string | null) {
   const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
-  if (!resolvedAgencySlug) return path;
-  if (!path) return `/${resolvedAgencySlug}`;
+  if (!path) return '/';
   if (/^https?:\/\//i.test(path) || path.startsWith('mailto:') || path.startsWith('tel:')) {
     return path;
   }
 
   const [pathname, search = ''] = path.split('?');
   const normalizedPathname = pathname.startsWith('/') ? pathname : `/${pathname}`;
-  if (normalizedPathname === `/${resolvedAgencySlug}` || normalizedPathname.startsWith(`/${resolvedAgencySlug}/`)) {
-    return path;
-  }
+  const rootPathname =
+    resolvedAgencySlug && (
+      normalizedPathname === `/${resolvedAgencySlug}`
+      || normalizedPathname.startsWith(`/${resolvedAgencySlug}/`)
+    )
+      ? (normalizedPathname.slice(resolvedAgencySlug.length + 1) || '/')
+      : normalizedPathname;
 
-  const prefixedPathname = normalizedPathname === '/'
-    ? `/${resolvedAgencySlug}`
-    : `/${resolvedAgencySlug}${normalizedPathname}`;
-
-  return search ? `${prefixedPathname}?${search}` : prefixedPathname;
+  return search ? `${rootPathname}?${search}` : rootPathname;
 }
 
 export function stripAgencySlugFromPathname(pathname: string, agencySlug?: string | null) {

@@ -9,7 +9,10 @@ import { ClientLayout } from '@/components/layout/client-layout';
 import { ThemeProvider } from '@/components/theme-provider';
 import { CurrencyProvider } from '@/context/currency-context';
 import { MobileNav } from '@/components/layout/mobile-nav';
+import { getSiteConfig } from '@/lib/api';
+import { buildAgencyThemeStyle } from '@/lib/agency-theme';
 import { navConfig } from '@/lib/nav-config';
+import { getRequestAgencySlug } from '@/lib/server-agency';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,16 +24,41 @@ const manrope = Manrope({
   variable: '--font-manrope',
 });
 
-export const metadata: Metadata = {
-  title: 'Agency Website',
-  description: 'Dynamic public real estate website powered by Broker OS organization data.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const agencySlug = await getRequestAgencySlug();
+  const siteConfig = await getSiteConfig(agencySlug);
+  const displayName =
+    siteConfig.branding?.displayName || siteConfig.organization.name || 'Agency Website';
+  const description =
+    siteConfig.profile?.aboutCompany
+    || siteConfig.branding?.bio
+    || siteConfig.branding?.tagline
+    || `Explore the public website for ${displayName}.`;
 
-export default function RootLayout({
+  return {
+    title: {
+      default: displayName,
+      template: `%s | ${displayName}`,
+    },
+    description,
+    openGraph: {
+      title: displayName,
+      description,
+      url: siteConfig.organization.publicAgencyUrl || undefined,
+      siteName: displayName,
+      images: siteConfig.profile?.logo ? [{ url: siteConfig.profile.logo }] : undefined,
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const agencySlug = await getRequestAgencySlug();
+  const siteConfig = await getSiteConfig(agencySlug);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -44,12 +72,14 @@ export default function RootLayout({
         >
           <CurrencyProvider>
             <ClientLayout>
-              <div className="lg:hidden fixed top-4 right-4 z-50">
-                <MobileNav navLinks={navConfig} />
+              <div style={buildAgencyThemeStyle(siteConfig.profile)}>
+                <div className="lg:hidden fixed top-4 right-4 z-50">
+                  <MobileNav navLinks={navConfig} />
+                </div>
+                <Header />
+                <main className="min-h-screen">{children}</main>
+                <Footer />
               </div>
-              <Header />
-              <main className="min-h-screen">{children}</main>
-              <Footer />
             </ClientLayout>
           </CurrencyProvider>
         </ThemeProvider>

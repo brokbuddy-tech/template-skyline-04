@@ -1,5 +1,3 @@
-import { getEffectiveAgencySlug } from './agency-routing';
-
 const env = {
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   NEXT_PUBLIC_FALLBACK_API_URL: process.env.NEXT_PUBLIC_FALLBACK_API_URL,
@@ -7,7 +5,7 @@ const env = {
 
 const DEFAULT_REMOTE_API_URL = 'https://brokbuddy-api.onrender.com';
 const DEFAULT_LOCAL_API_URL = 'http://localhost:4000';
-export const PUBLIC_TEMPLATE_PROXY_BASE_PATH = '/api/public-template';
+export const PUBLIC_TEMPLATE_PROXY_BASE_PATH = '/api/public-template-proxy';
 
 export function normalizeApiBaseUrl(value: string) {
   const normalized = value.trim().replace(/\/+$/, '');
@@ -47,13 +45,51 @@ export const API_BASE_URLS = prioritizeApiBaseUrls(uniqueValues([
 
 export const PUBLIC_API_BASE_URLS = API_BASE_URLS.map((baseUrl) => `${baseUrl}/public`);
 
-export function getPublicTemplateProxyPath(agencySlug?: string | null, path = '') {
-  const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
-  if (!resolvedAgencySlug) {
-    throw new Error('Missing agency slug for public template request.');
+function tryParseAssetUrl(value: string) {
+  const normalized = value.trim();
+  if (!normalized) return null;
+
+  if (normalized.startsWith('/')) {
+    const [pathname, search = ''] = normalized.split('?');
+    return {
+      pathname,
+      search: search ? `?${search}` : '',
+    };
   }
 
-  return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}/${resolvedAgencySlug}${normalizePublicTemplatePath(path)}`;
+  try {
+    const parsed = new URL(normalized);
+    return {
+      pathname: parsed.pathname,
+      search: parsed.search,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function normalizePublicTemplateAssetUrl(value?: string | null) {
+  const normalized = value?.trim();
+  if (!normalized) return null;
+
+  const parsed = tryParseAssetUrl(normalized);
+  if (!parsed) return normalized;
+
+  const sluggedProxyMatch = parsed.pathname.match(/^\/api\/public-template\/[^/]+(\/.*)?$/i);
+  if (sluggedProxyMatch) {
+    return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}${sluggedProxyMatch[1] || ''}${parsed.search}`;
+  }
+
+  const backendAssetMatch = parsed.pathname.match(/^\/api\/public\/templates\/[^/]+\/[^/]+\/(logo\/view|images\/[^/]+\/.*|profile-assets\/[^/]+\/(?:avatar|cover)\/view)$/i);
+  if (backendAssetMatch) {
+    return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}/${backendAssetMatch[1]}${parsed.search}`;
+  }
+
+  return normalized;
+}
+
+export function getPublicTemplateProxyPath(_agencySlug?: string | null, path = '') {
+  return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}${normalizePublicTemplatePath(path)}`;
 }
 
 export function getClientTemplateFetchUrl(path = '', agencySlug?: string | null) {

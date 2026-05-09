@@ -411,6 +411,35 @@ async function resolveAgencyContext(agencySlug?: string | null): Promise<Resolve
   return null;
 }
 
+async function fetchDirectTemplateResponse(
+  resolvedAgencySlug: string,
+  path = '',
+  options?: RequestInit,
+  timeout = 10000,
+): Promise<Response> {
+  const resolvedContext = await resolveAgencyContext(resolvedAgencySlug);
+  if (!resolvedContext?.organization?.hexCode) {
+    return new Response(null, { status: 404, statusText: 'Agency Not Found' });
+  }
+
+  let lastResponse: Response | null = null;
+  for (const publicApiBase of PUBLIC_API_BASE_URLS) {
+    const backendUrl = buildBackendPublicUrl(
+      publicApiBase,
+      resolvedAgencySlug,
+      resolvedContext.organization.hexCode,
+      path,
+    );
+    const response = await safeFetch(backendUrl, options, timeout);
+    lastResponse = response;
+    if (response.ok || !(await shouldRetryApiRequest(response))) {
+      return response;
+    }
+  }
+
+  return lastResponse || new Response(null, { status: 502, statusText: 'Service Unavailable' });
+}
+
 async function safeFetch(url: string, options?: RequestInit, timeout = 10000): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
@@ -440,30 +469,15 @@ async function fetchTemplateResponse(
   }
 
   if (typeof window !== 'undefined') {
-    return safeFetch(getClientTemplateFetchUrl(path, resolvedAgencySlug), options, timeout);
-  }
-
-  const resolvedContext = await resolveAgencyContext(resolvedAgencySlug);
-  if (!resolvedContext?.organization?.hexCode) {
-    return new Response(null, { status: 404, statusText: 'Agency Not Found' });
-  }
-
-  let lastResponse: Response | null = null;
-  for (const publicApiBase of PUBLIC_API_BASE_URLS) {
-    const backendUrl = buildBackendPublicUrl(
-      publicApiBase,
-      resolvedAgencySlug,
-      resolvedContext.organization.hexCode,
-      path,
-    );
-    const response = await safeFetch(backendUrl, options, timeout);
-    lastResponse = response;
-    if (response.ok || !(await shouldRetryApiRequest(response))) {
-      return response;
+    const proxyResponse = await safeFetch(getClientTemplateFetchUrl(path, resolvedAgencySlug), options, timeout);
+    if (proxyResponse.ok) {
+      return proxyResponse;
     }
+
+    return fetchDirectTemplateResponse(resolvedAgencySlug, path, options, timeout);
   }
 
-  return lastResponse || new Response(null, { status: 502, statusText: 'Service Unavailable' });
+  return fetchDirectTemplateResponse(resolvedAgencySlug, path, options, timeout);
 }
 
 export async function getProperties(

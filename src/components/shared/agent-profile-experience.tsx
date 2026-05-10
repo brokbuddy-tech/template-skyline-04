@@ -385,14 +385,14 @@ export function AgentProfileExperience({
       </section>
 
       <div className="sticky top-[80px] z-30 border-y border-slate-200 bg-white/95 backdrop-blur">
-        <nav className="mx-auto flex max-w-[1880px] items-center justify-center gap-4 overflow-x-auto px-4 sm:gap-8">
+        <nav className="mx-auto grid max-w-[1880px] grid-cols-4 items-center gap-1 px-2 sm:flex sm:justify-center sm:gap-8 sm:px-4">
           {sectionItems.map(item => (
             <button
               key={item.id}
               type="button"
               onClick={() => scrollToSection(item.id)}
               className={cn(
-                'border-b-2 px-2 py-3 text-[18px] font-semibold transition-colors sm:text-[16px]',
+                'flex min-w-0 w-full items-center justify-center border-b-2 px-0.5 py-3 text-center text-[10px] font-semibold leading-tight whitespace-normal transition-colors sm:w-auto sm:px-2 sm:py-3 sm:text-[18px] sm:whitespace-nowrap',
                 activeSection === item.id
                   ? 'border-[#21479b] text-[#21479b]'
                   : 'border-transparent text-[#586786] hover:text-[#21479b]',

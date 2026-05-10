@@ -110,11 +110,8 @@ export function Logo({
         )}
       </div>
       <div className="min-w-0">
-        <p className="truncate text-sm font-black uppercase tracking-[0.18em] text-foreground">
+        <p className="truncate text-sm font-black uppercase tracking-[0.18em] text-foreground text-wrap">
           {displayName}
-        </p>
-        <p className="truncate text-[11px] font-medium text-muted-foreground">
-          {tagline}
         </p>
       </div>
     </div>

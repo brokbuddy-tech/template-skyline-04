@@ -281,7 +281,7 @@ export function AgentProfileExperience({
   return (
     <div className="bg-white text-[#08152f]">
       <section className="!p-0 border-b border-slate-200 bg-white">
-        <div className="relative h-[340px] overflow-hidden bg-[#a3a3a3] sm:h-[420px] lg:h-[540px]">
+        <div className="relative h-[340px] overflow-hidden bg-[#a3a3a3] sm:h-[350px] lg:h-[330px]">
           {coverImage ? (
             <Image
               src={coverImage.src}

@@ -1,0 +1,31 @@
+   ▲ Next.js 15.3.8 (Turbopack)
+   - Local:        http://localhost:9101
+   - Network:      http://192.168.1.5:9101
+   - Environments: .env
+
+ ✓ Starting...
+Creating turbopack project {
+  dir: 'F:\\BrokBuddy\\brokbuddy\\templates\\UAE\\template-skyline-04',
+  testMode: true
+}
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 1430ms
+ ✓ Ready in 9.4s
+ ○ Compiling / ...
+
+[1m[33mwarn[39m[22m - The class `duration-[3000ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;3000ms&rsqb;` to silence this warning.
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+
+[1m[33mwarn[39m[22m - The class `ease-[cubic-bezier(0.2,0.8,0.2,1)]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `ease-&lsqb;cubic-bezier(0.2,0.8,0.2,1)&rsqb;` to silence this warning.
+ ✓ Compiled / in 23.5s
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:9101". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 4909ms
+ ○ Compiling /api/public-template-proxy/[[...path]] ...
+ ✓ Compiled /api/public-template-proxy/[[...path]] in 1040ms
+ GET /api/public-template-proxy/skyline-realty 200 in 4172ms
+ GET /api/public-template-proxy/skyline-realty/logo/view?v=logos%2Fcmm0c75t80000jjkvkw2dp6oc%2Fcompressed%2F1778043757804_czt6du7t.webp 200 in 4749ms
+[?25h

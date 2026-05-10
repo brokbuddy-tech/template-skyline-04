@@ -173,7 +173,7 @@ export async function AgentProfilePageContent({
     },
     {
       value: formatCompactPortfolio(featuredListings.reduce((sum, listing) => sum + (listing.price || 0), 0)),
-      label: 'Portfolio',
+      label: 'Sales',
     },
   ];
 

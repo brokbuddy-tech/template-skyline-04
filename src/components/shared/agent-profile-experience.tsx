@@ -204,26 +204,35 @@ export function AgentProfileExperience({
       return;
     }
 
-    const observer = new IntersectionObserver(
-      entries => {
-        const visible = entries
-          .filter(entry => entry.isIntersecting)
-          .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+    const stickyOffset = 180;
+    let frameId = 0;
 
-        if (visible[0]) {
-          setActiveSection(visible[0].target.id as SectionId);
+    const updateActiveSection = () => {
+      const scrollPosition = window.scrollY + stickyOffset;
+      let nextActiveSection = sections[0].id as SectionId;
+
+      for (const section of sections) {
+        if (section.offsetTop <= scrollPosition) {
+          nextActiveSection = section.id as SectionId;
         }
-      },
-      {
-        rootMargin: '-18% 0px -58% 0px',
-        threshold: [0.2, 0.4, 0.6],
-      },
-    );
+      }
 
-    sections.forEach(section => observer.observe(section));
+      setActiveSection(current => (current === nextActiveSection ? current : nextActiveSection));
+    };
+
+    const handleScroll = () => {
+      cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(updateActiveSection);
+    };
+
+    updateActiveSection();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
 
     return () => {
-      observer.disconnect();
+      cancelAnimationFrame(frameId);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
@@ -231,6 +240,7 @@ export function AgentProfileExperience({
     const section = document.getElementById(sectionId);
     if (!section) return;
 
+    setActiveSection(sectionId);
     const top = section.getBoundingClientRect().top + window.scrollY - 150;
     window.scrollTo({ top, behavior: 'smooth' });
   };

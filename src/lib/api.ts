@@ -168,6 +168,30 @@ function normalizeNumber(value: any): number {
   return 0;
 }
 
+function getOptionalNumber(...values: any[]): number | null {
+  for (const value of values) {
+    if (value === null || value === undefined || value === '') {
+      continue;
+    }
+
+    if (typeof value === 'number') {
+      if (!Number.isNaN(value)) {
+        return value;
+      }
+      continue;
+    }
+
+    if (typeof value === 'string') {
+      const parsed = parseFloat(value.replace(/,/g, ''));
+      if (!Number.isNaN(parsed)) {
+        return parsed;
+      }
+    }
+  }
+
+  return null;
+}
+
 function normalizeListingDescription(description?: string) {
   const plainText = (description || '')
     .replace(/<\s*br\s*\/?>/gi, '\n')
@@ -336,6 +360,8 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     developerName: listing.developer?.name || listing.fields?.developerName || undefined,
     developerLogo: listing.developer?.logo || listing.fields?.developerLogo || undefined,
     tag: listing.tag || listing.fields?.tag || undefined,
+    latitude: getOptionalNumber(listing.latitude, listing.lat, listing.fields?.latitude, listing.fields?.lat),
+    longitude: getOptionalNumber(listing.longitude, listing.lng, listing.fields?.longitude, listing.fields?.lng),
     agent: mapListingAgent(listing),
   };
 }

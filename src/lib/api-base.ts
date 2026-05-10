@@ -84,21 +84,31 @@ export function normalizePublicTemplateAssetUrl(value?: string | null) {
   const parsed = tryParseAssetUrl(normalized);
   if (!parsed) return normalized;
 
-  const sluggedProxyMatch = parsed.pathname.match(/^\/api\/public-template\/[^/]+(\/.*)?$/i);
-  if (sluggedProxyMatch) {
-    return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}${sluggedProxyMatch[1] || ''}${parsed.search}`;
+  if (parsed.pathname.startsWith(PUBLIC_TEMPLATE_PROXY_BASE_PATH)) {
+    return `${parsed.pathname}${parsed.search}`;
   }
 
-  const backendAssetMatch = parsed.pathname.match(/^\/api\/public\/templates\/[^/]+\/[^/]+\/(logo\/view|images\/[^/]+\/.*|profile-assets\/[^/]+\/(?:avatar|cover)\/view)$/i);
+  const sluggedProxyMatch = parsed.pathname.match(/^\/api\/public-template\/([^/]+)(\/.*)?$/i);
+  if (sluggedProxyMatch) {
+    return getPublicTemplateProxyPath(sluggedProxyMatch[1], sluggedProxyMatch[2] || '') + parsed.search;
+  }
+
+  const backendAssetMatch = parsed.pathname.match(/^\/api\/public\/templates\/([^/]+)\/[^/]+\/(logo\/view|images\/[^/]+\/.*|profile-assets\/[^/]+\/(?:avatar|cover)\/view)$/i);
   if (backendAssetMatch) {
-    return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}/${backendAssetMatch[1]}${parsed.search}`;
+    return getPublicTemplateProxyPath(backendAssetMatch[1], backendAssetMatch[2]) + parsed.search;
   }
 
   return normalized;
 }
 
-export function getPublicTemplateProxyPath(_agencySlug?: string | null, path = '') {
-  return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}${normalizePublicTemplatePath(path)}`;
+export function getPublicTemplateProxyPath(agencySlug?: string | null, path = '') {
+  const normalizedPath = normalizePublicTemplatePath(path);
+  const normalizedAgencySlug = agencySlug?.trim();
+  if (!normalizedAgencySlug) {
+    return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}${normalizedPath}`;
+  }
+
+  return `${PUBLIC_TEMPLATE_PROXY_BASE_PATH}/${encodeURIComponent(normalizedAgencySlug)}${normalizedPath}`;
 }
 
 export function getClientTemplateFetchUrl(path = '', agencySlug?: string | null) {

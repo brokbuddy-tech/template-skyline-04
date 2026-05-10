@@ -93,17 +93,17 @@ export function AgentsDirectoryClient({
 
             return (
               <Card key={agent.id || agent.slug || agent.name} className="overflow-hidden rounded-[28px] border border-border bg-background shadow-sm">
-                <div className="relative h-36 bg-[radial-gradient(circle_at_top_right,hsl(var(--accent)/0.18),transparent_42%),linear-gradient(135deg,hsl(var(--primary))_0%,hsl(var(--accent))_100%)]" />
-                <div className="px-6 pb-6">
-                  <div className="-mt-14 flex items-end gap-4">
-                    <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-[24px] border-4 border-background bg-muted shadow-md">
+                <div className="relative z-0 h-36 bg-[radial-gradient(circle_at_top_right,hsl(var(--accent)/0.18),transparent_42%),linear-gradient(135deg,hsl(var(--primary))_0%,hsl(var(--accent))_100%)]" />
+                <div className="relative z-10 px-6 pb-6">
+                  <div className="relative z-10 -mt-14 flex items-end gap-4">
+                    <div className="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[24px] border-4 border-background bg-muted shadow-md">
                       {avatar ? (
                         <Image
                           src={avatar.src}
                           alt={agent.name}
                           width={96}
                           height={96}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-cover object-top"
                           data-ai-hint={avatar.hint}
                           unoptimized={avatar.unoptimized}
                         />

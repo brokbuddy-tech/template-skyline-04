@@ -47,22 +47,22 @@ export function AgentSidebar({
       {/* Top Card */}
       <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden">
         {/* Banner */}
-        <div className="h-[72px] bg-[#1E88E5] w-full relative overflow-hidden">
+        <div className="relative z-0 h-[72px] w-full overflow-hidden bg-[#1E88E5]">
           {/* Subtle circles in background as seen in design */}
           <div className="absolute top-2 left-6 w-[80px] h-[80px] bg-black/5 rounded-full"></div>
           <div className="absolute top-0 -right-8 w-28 h-28 bg-black/5 rounded-full"></div>
         </div>
 
         {/* Profile Content */}
-        <div className="p-4 pt-0 relative flex flex-col items-center">
-          <div className="relative -mt-[40px]">
+        <div className="relative z-10 flex flex-col items-center p-4 pt-0">
+          <div className="relative z-10 -mt-[40px]">
             {agentImage ? (
               <Image
                 src={agentImage.src}
                 alt={getAgentName(agent)}
                 width={104}
                 height={104}
-                className="rounded-full border-[5px] border-white object-cover bg-white shadow-sm w-[100px] h-[100px]"
+                className="h-[100px] w-[100px] rounded-full border-[5px] border-white bg-white object-cover object-top shadow-sm"
                 data-ai-hint={agentImage.hint}
                 unoptimized={agentImage.unoptimized}
               />

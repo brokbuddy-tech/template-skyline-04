@@ -9,7 +9,7 @@ import { resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 import type { SiteConfig } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-function BrandMark() {
+export function BrandMark() {
   return (
     <svg
       width="44"
@@ -32,18 +32,46 @@ function BrandMark() {
   );
 }
 
-export function Logo({ className }: { className?: string }) {
+function getDisplayName(siteConfig?: SiteConfig | null) {
+  return siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Agency Website';
+}
+
+function getLogoUrl(siteConfig?: SiteConfig | null) {
+  return siteConfig?.profile?.logo || null;
+}
+
+function getTagline(siteConfig?: SiteConfig | null) {
+  return siteConfig?.branding?.tagline || siteConfig?.profile?.officeAddress || 'Public real estate website';
+}
+
+export function Logo({
+  className,
+  initialSiteConfig,
+}: {
+  className?: string;
+  initialSiteConfig?: SiteConfig | null;
+}) {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
-  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(initialSiteConfig ?? null);
+
+  useEffect(() => {
+    setSiteConfig((current) => initialSiteConfig ?? current ?? null);
+  }, [initialSiteConfig]);
 
   useEffect(() => {
     let active = true;
 
     async function loadSiteConfig() {
-      const nextSiteConfig = await getSiteConfig(agencySlug);
-      if (active) {
-        setSiteConfig(nextSiteConfig);
+      try {
+        const nextSiteConfig = await getSiteConfig(agencySlug);
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig((current) => current ?? initialSiteConfig ?? null);
+        }
       }
     }
 
@@ -52,17 +80,11 @@ export function Logo({ className }: { className?: string }) {
     return () => {
       active = false;
     };
-  }, [agencySlug]);
+  }, [agencySlug, initialSiteConfig]);
 
-  const displayName =
-    siteConfig?.branding?.displayName
-    || siteConfig?.organization.name
-    || 'Agency Website';
-  const logoUrl = siteConfig?.profile?.logo || null;
-  const tagline =
-    siteConfig?.branding?.tagline
-    || siteConfig?.profile?.officeAddress
-    || 'Public real estate website';
+  const displayName = getDisplayName(siteConfig);
+  const logoUrl = getLogoUrl(siteConfig);
+  const tagline = getTagline(siteConfig);
 
   return (
     <div className={cn('flex items-center gap-3', className)}>

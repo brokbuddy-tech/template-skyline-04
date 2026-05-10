@@ -23,6 +23,15 @@ async function fetchWithTimeout(input: URL | string, init?: RequestInit, timeout
   }
 }
 
+function sanitizeProxyResponseHeaders(headers: Headers) {
+  const responseHeaders = new Headers(headers);
+  responseHeaders.delete('content-encoding');
+  responseHeaders.delete('content-length');
+  responseHeaders.delete('transfer-encoding');
+  responseHeaders.delete('connection');
+  return responseHeaders;
+}
+
 async function proxyRequest(request: Request, context: RouteContext): Promise<Response> {
   const { path = [] } = await context.params;
   const requestHeaders = new Headers(request.headers);
@@ -54,7 +63,7 @@ async function proxyRequest(request: Request, context: RouteContext): Promise<Re
       return new Response(upstreamResponse.body, {
         status: upstreamResponse.status,
         statusText: upstreamResponse.statusText,
-        headers: upstreamResponse.headers,
+        headers: sanitizeProxyResponseHeaders(upstreamResponse.headers),
       });
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));

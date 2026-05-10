@@ -9,8 +9,15 @@ import { AIChatbot } from "../shared/ai-chatbot";
 import { Toaster } from "../ui/toaster";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import type { SiteConfig } from "@/lib/types";
 
-export function ClientLayout({ children }: { children: React.ReactNode }) {
+export function ClientLayout({
+  children,
+  initialSiteConfig,
+}: {
+  children: React.ReactNode;
+  initialSiteConfig?: SiteConfig | null;
+}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
@@ -41,7 +48,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return (
       <>
         <CustomCursor />
-        <SplashScreen isLoading={true} />
+        <SplashScreen isLoading={true} initialSiteConfig={initialSiteConfig} />
       </>
     );
   }
@@ -50,7 +57,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <>
       <CustomCursor />
       {isLoading ? (
-        <SplashScreen isLoading={isLoading} />
+        <SplashScreen isLoading={isLoading} initialSiteConfig={initialSiteConfig} />
       ) : (
         <div key={pathname}>
           {children}

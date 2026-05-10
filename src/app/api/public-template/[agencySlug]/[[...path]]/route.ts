@@ -124,6 +124,15 @@ async function resolveAgencyContext(agencySlug: string) {
   return null;
 }
 
+function sanitizeProxyResponseHeaders(headers: Headers) {
+  const responseHeaders = new Headers(headers);
+  responseHeaders.delete('content-encoding');
+  responseHeaders.delete('content-length');
+  responseHeaders.delete('transfer-encoding');
+  responseHeaders.delete('connection');
+  return responseHeaders;
+}
+
 async function proxyRequest(request: Request, context: RouteContext): Promise<Response> {
   const { agencySlug, path = [] } = await context.params;
   const agencyContext = await resolveAgencyContext(agencySlug);
@@ -163,7 +172,7 @@ async function proxyRequest(request: Request, context: RouteContext): Promise<Re
       return new Response(upstreamResponse.body, {
         status: upstreamResponse.status,
         statusText: upstreamResponse.statusText,
-        headers: upstreamResponse.headers,
+        headers: sanitizeProxyResponseHeaders(upstreamResponse.headers),
       });
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));

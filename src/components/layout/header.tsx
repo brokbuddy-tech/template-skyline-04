@@ -13,8 +13,9 @@ import { useEffect, useState } from 'react';
 import { ThemeSwitch } from '../shared/theme-switch';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 import { usePathname } from 'next/navigation';
+import type { SiteConfig } from '@/lib/types';
 
-export function Header() {
+export function Header({ initialSiteConfig }: { initialSiteConfig?: SiteConfig | null }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
@@ -37,7 +38,7 @@ export function Header() {
       >
       <div className="flex items-center flex-shrink-0">
         <Link href={prefixAgencyPath('/', agencySlug)}>
-          <Logo />
+          <Logo initialSiteConfig={initialSiteConfig} />
         </Link>
       </div>
 

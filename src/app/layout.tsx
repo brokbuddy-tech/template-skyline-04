@@ -71,14 +71,14 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <CurrencyProvider>
-            <ClientLayout>
+            <ClientLayout initialSiteConfig={siteConfig}>
               <div style={buildAgencyThemeStyle(siteConfig.profile)}>
                 <div className="lg:hidden fixed top-4 right-4 z-50">
                   <MobileNav navLinks={navConfig} />
                 </div>
-                <Header />
+                <Header initialSiteConfig={siteConfig} />
                 <main className="min-h-screen">{children}</main>
-                <Footer />
+                <Footer initialSiteConfig={siteConfig} />
               </div>
             </ClientLayout>
           </CurrencyProvider>

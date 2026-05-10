@@ -8,18 +8,28 @@ import { AnimateOnScroll } from '../animate-on-scroll';
 import type { SiteConfig } from '@/lib/types';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
-export function Footer() {
+export function Footer({ initialSiteConfig }: { initialSiteConfig?: SiteConfig | null }) {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
-  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(initialSiteConfig ?? null);
+
+  useEffect(() => {
+    setSiteConfig((current) => initialSiteConfig ?? current ?? null);
+  }, [initialSiteConfig]);
 
   useEffect(() => {
     let active = true;
 
     async function loadSiteConfig() {
-      const nextSiteConfig = await getSiteConfig(agencySlug);
-      if (active) {
-        setSiteConfig(nextSiteConfig);
+      try {
+        const nextSiteConfig = await getSiteConfig(agencySlug);
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig((current) => current ?? initialSiteConfig ?? null);
+        }
       }
     }
 
@@ -28,7 +38,7 @@ export function Footer() {
     return () => {
       active = false;
     };
-  }, [agencySlug]);
+  }, [agencySlug, initialSiteConfig]);
 
   const displayName =
     siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Agency Website';

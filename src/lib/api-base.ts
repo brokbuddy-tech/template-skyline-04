@@ -7,6 +7,15 @@ const DEFAULT_REMOTE_API_URL = 'https://brokbuddy-api.onrender.com';
 const DEFAULT_LOCAL_API_URL = 'http://localhost:4000';
 export const PUBLIC_TEMPLATE_PROXY_BASE_PATH = '/api/public-template-proxy';
 
+export function normalizeTemplateHexCode(value?: string | null) {
+  const normalized = value?.trim().toLowerCase();
+  return normalized || null;
+}
+
+export function getConfiguredTemplateHexCode() {
+  return normalizeTemplateHexCode(process.env.TEMPLATE_HEX_CODE || '');
+}
+
 export function normalizeApiBaseUrl(value: string) {
   const normalized = value.trim().replace(/\/+$/, '');
 

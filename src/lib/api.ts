@@ -8,6 +8,7 @@ import type {
 } from './types';
 import { 
   PUBLIC_API_BASE_URLS,
+  getConfiguredTemplateHexCode,
   getClientTemplateFetchUrl,
   normalizePublicTemplateAssetUrl,
   PUBLIC_TEMPLATE_PROXY_BASE_PATH,
@@ -395,10 +396,32 @@ function buildBackendPublicUrl(publicApiBaseUrl: string, agencySlug: string, hex
   return `${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}${pathname.startsWith('/') ? pathname : `/${pathname}`}${search}`;
 }
 
+function getConfiguredAgencyContext(agencySlug?: string | null): ResolvedAgencyContext | null {
+  const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
+  const defaultAgencySlug = getDefaultAgencySlug();
+  const configuredHexCode = getConfiguredTemplateHexCode();
+
+  if (!resolvedAgencySlug || !defaultAgencySlug || !configuredHexCode || resolvedAgencySlug !== defaultAgencySlug) {
+    return null;
+  }
+
+  return {
+    organization: {
+      slug: resolvedAgencySlug,
+      hexCode: configuredHexCode,
+    },
+  };
+}
+
 async function resolveAgencyContext(agencySlug?: string | null): Promise<ResolvedAgencyContext | null> {
   const resolvedAgencySlug = getEffectiveAgencySlug(agencySlug);
   if (!resolvedAgencySlug) {
     return null;
+  }
+
+  const configuredContext = getConfiguredAgencyContext(resolvedAgencySlug);
+  if (configuredContext) {
+    return configuredContext;
   }
 
   for (const publicApiBase of PUBLIC_API_BASE_URLS) {

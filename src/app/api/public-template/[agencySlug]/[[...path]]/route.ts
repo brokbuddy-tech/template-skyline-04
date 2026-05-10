@@ -1,4 +1,9 @@
-import { PUBLIC_API_BASE_URLS, shouldRetryApiRequest } from '@/lib/api-base';
+import {
+  PUBLIC_API_BASE_URLS,
+  getConfiguredTemplateHexCode,
+  shouldRetryApiRequest,
+} from '@/lib/api-base';
+import { getDefaultAgencySlug } from '@/lib/agency-routing';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,6 +65,22 @@ function buildUpstreamUrl(
   return new URL(`${publicApiBaseUrl}/templates/${encodeURIComponent(agencySlug)}/${encodeURIComponent(hexCode)}/${joinedPath}${search}`);
 }
 
+function getConfiguredAgencyContext(agencySlug: string) {
+  const defaultAgencySlug = getDefaultAgencySlug();
+  const configuredHexCode = getConfiguredTemplateHexCode();
+
+  if (!defaultAgencySlug || !configuredHexCode || agencySlug !== defaultAgencySlug) {
+    return null;
+  }
+
+  return {
+    organization: {
+      slug: agencySlug,
+      hexCode: configuredHexCode,
+    },
+  };
+}
+
 async function fetchWithTimeout(input: URL | string, init?: RequestInit, timeoutMs = 5000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -72,6 +93,11 @@ async function fetchWithTimeout(input: URL | string, init?: RequestInit, timeout
 }
 
 async function resolveAgencyContext(agencySlug: string) {
+  const configuredContext = getConfiguredAgencyContext(agencySlug);
+  if (configuredContext) {
+    return configuredContext;
+  }
+
   for (const publicApiBaseUrl of PUBLIC_API_BASE_URLS) {
     try {
       const response = await fetchWithTimeout(`${publicApiBaseUrl}/agency/${encodeURIComponent(agencySlug)}/resolve`, {

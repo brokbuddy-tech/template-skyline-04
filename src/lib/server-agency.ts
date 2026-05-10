@@ -1,6 +1,7 @@
 import { cookies, headers } from 'next/headers';
 import {
   AGENCY_SLUG_COOKIE,
+  getDefaultAgencySlug,
   normalizeAgencySlug,
   resolveAgencySlugFromPathname,
 } from './agency-routing';
@@ -43,5 +44,5 @@ export async function getRequestAgencySlug() {
   }
 
   const cookieStore = await cookies();
-  return normalizeAgencySlug(cookieStore.get(AGENCY_SLUG_COOKIE)?.value) || undefined;
+  return normalizeAgencySlug(cookieStore.get(AGENCY_SLUG_COOKIE)?.value) || getDefaultAgencySlug() || undefined;
 }

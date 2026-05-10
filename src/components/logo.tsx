@@ -41,7 +41,14 @@ function getLogoUrl(siteConfig?: SiteConfig | null) {
 }
 
 function getTagline(siteConfig?: SiteConfig | null) {
-  return siteConfig?.branding?.tagline || siteConfig?.profile?.officeAddress || 'Public real estate website';
+  return (
+    siteConfig?.branding?.tagline
+    || siteConfig?.leadAgent?.title
+    || siteConfig?.leadAgent?.tagline
+    || siteConfig?.profile?.aboutCompany
+    || siteConfig?.profile?.officeAddress
+    || 'Public real estate website'
+  );
 }
 
 export function Logo({

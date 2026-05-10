@@ -382,26 +382,27 @@ export function AgentProfileExperience({
           </div>
         </div>
 
-        <div className="sticky top-[72px] z-30 border-y border-slate-200 bg-white/95 backdrop-blur">
-          <nav className="mx-auto flex max-w-[1880px] items-center justify-center gap-4 overflow-x-auto px-4 sm:gap-8">
-            {sectionItems.map(item => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => scrollToSection(item.id)}
-                className={cn(
-                  'border-b-2 px-2 py-6 text-[18px] font-semibold transition-colors sm:text-[20px]',
-                  activeSection === item.id
-                    ? 'border-[#21479b] text-[#21479b]'
-                    : 'border-transparent text-[#586786] hover:text-[#21479b]',
-                )}
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-        </div>
       </section>
+
+      <div className="sticky top-[80px] z-30 border-y border-slate-200 bg-white/95 backdrop-blur">
+        <nav className="mx-auto flex max-w-[1880px] items-center justify-center gap-4 overflow-x-auto px-4 sm:gap-8">
+          {sectionItems.map(item => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => scrollToSection(item.id)}
+              className={cn(
+                'border-b-2 px-2 py-3 text-[18px] font-semibold transition-colors sm:text-[16px]',
+                activeSection === item.id
+                  ? 'border-[#21479b] text-[#21479b]'
+                  : 'border-transparent text-[#586786] hover:text-[#21479b]',
+              )}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      </div>
 
       <section id="biography" className="scroll-mt-40 bg-[#f5f7fb] px-4 py-20 sm:px-5 lg:py-28">
         <div className="mx-auto grid max-w-[1880px] gap-14 xl:grid-cols-[minmax(0,1.1fr)_700px] xl:items-start">

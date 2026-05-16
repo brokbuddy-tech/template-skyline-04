@@ -30,7 +30,7 @@ export function ReadMore({ text, linesToShow = 4 }: ReadMoreProps) {
       <p
         ref={setElement}
         className={cn(
-            "text-muted-foreground leading-relaxed text-balance transition-all duration-300", 
+            "text-muted-foreground leading-relaxed text-balance whitespace-pre-line transition-all duration-300", 
             !isExpanded && `overflow-hidden`,
         )}
         style={{

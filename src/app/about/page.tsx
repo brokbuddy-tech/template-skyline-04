@@ -63,7 +63,7 @@ export default function AboutPage() {
         setScrollProgress(1);
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -115,11 +115,11 @@ export default function AboutPage() {
             className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white p-8"
             style={{ opacity: Math.max(0, opacity) }}
           >
-            <h1 className="text-5xl md:text-8xl font-bold font-sans">
+            <h1 className="text-6xl md:text-8xl font-bold font-sans">
               We are {displayName}.
             </h1>
-            <p className="mt-4 text-lg md:text-2xl text-balance">
-              {officeAddress ? `Serving ${officeAddress} with` : 'Building'} <span className="text-accent">public-ready real estate experiences</span>.
+            <p className="mt-4 text-xl md:text-2xl text-balance">
+              {officeAddress ? `Serving ${officeAddress} with` : 'Building'} <span className="text-white">public-ready real estate experiences</span>.
             </p>
           </div>
         </div>
@@ -128,103 +128,103 @@ export default function AboutPage() {
       {/* 2. Our Philosophy */}
       <section>
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 items-center">
-            <div className="md:col-span-2">
-                <AnimateOnScroll>
-                    <h2 className="text-5xl md:text-6xl font-headline">Our Mission</h2>
-                </AnimateOnScroll>
-            </div>
-            <div className="md:col-span-3">
-                <AnimateOnScroll delay={100}>
-                    <div className="space-y-6 text-base md:text-lg text-muted-foreground">
-                        <p>{aboutCompany}</p>
-                        {officeTimings || officeAddress ? (
-                          <p>
-                            {officeAddress ? `${displayName} operates from ${officeAddress}. ` : ''}
-                            {officeTimings ? `Office timings: ${officeTimings}.` : 'Our public website stays synced directly with Broker OS.'}
-                          </p>
-                        ) : null}
-                    </div>
-                </AnimateOnScroll>
-            </div>
+          <div className="md:col-span-2">
+            <AnimateOnScroll>
+              <h2 className="text-5xl md:text-6xl font-headline">Our Mission</h2>
+            </AnimateOnScroll>
+          </div>
+          <div className="md:col-span-3">
+            <AnimateOnScroll delay={100}>
+              <div className="space-y-6 text-base md:text-lg text-muted-foreground">
+                <p>{aboutCompany}</p>
+                {officeTimings || officeAddress ? (
+                  <p>
+                    {officeAddress ? `${displayName} operates from ${officeAddress}. ` : ''}
+                    {officeTimings ? `Office timings: ${officeTimings}.` : 'Our public website stays synced directly with Broker OS.'}
+                  </p>
+                ) : null}
+              </div>
+            </AnimateOnScroll>
+          </div>
         </div>
       </section>
-      
+
       {/* 3. Key Statistics */}
       <section>
         <div className="container mx-auto">
-             <AnimateOnScroll>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                {stats.map((stat, index) => (
-                  <Card key={index} className="bg-accent/10 dark:bg-transparent p-4 md:p-8 rounded-lg text-center">
-                    <h3 className="text-4xl sm:text-5xl md:text-7xl font-bold font-headline text-accent">
-                      <CountUp end={stat.value} duration={2} />
-                      {stat.suffix}
-                    </h3>
-                    <p className="text-accent mt-2 text-sm sm:text-base">{stat.label}</p>
-                  </Card>
-                ))}
-              </div>
-            </AnimateOnScroll>
+          <AnimateOnScroll>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+              {stats.map((stat, index) => (
+                <Card key={index} className="bg-accent/10 dark:bg-transparent p-4 md:p-8 rounded-lg text-center">
+                  <h3 className="text-4xl sm:text-5xl md:text-7xl font-bold font-headline text-accent">
+                    <CountUp end={stat.value} duration={2} />
+                    {stat.suffix}
+                  </h3>
+                  <p className="text-accent mt-2 text-sm sm:text-base">{stat.label}</p>
+                </Card>
+              ))}
+            </div>
+          </AnimateOnScroll>
         </div>
       </section>
 
       {/* 4. Founder's Feature */}
       <section>
         <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-            <AnimateOnScroll className="overflow-hidden rounded-lg">
-                {founderImage && (
-                    <Image 
-                        src={founderImage.imageUrl}
-                        alt={founderImage.description}
-                        width={800}
-                        height={1000}
-                        className="w-full h-auto object-cover aspect-[4/5] transition-transform duration-500 ease-in-out hover:scale-105"
-                        data-ai-hint={founderImage.imageHint}
-                    />
-                )}
+          <AnimateOnScroll className="overflow-hidden rounded-lg">
+            {founderImage && (
+              <Image
+                src={founderImage.imageUrl}
+                alt={founderImage.description}
+                width={800}
+                height={1000}
+                className="w-full h-auto object-cover aspect-[4/5] transition-transform duration-500 ease-in-out hover:scale-105"
+                data-ai-hint={founderImage.imageHint}
+              />
+            )}
+          </AnimateOnScroll>
+          <div className="space-y-6 md:space-y-8">
+            <AnimateOnScroll delay={100}>
+              <blockquote className="text-2xl md:text-4xl font-headline italic text-balance">
+                &ldquo;Every public page, listing, and contact point should feel as polished as the service behind it.&rdquo;
+              </blockquote>
             </AnimateOnScroll>
-            <div className="space-y-6 md:space-y-8">
-                <AnimateOnScroll delay={100}>
-                    <blockquote className="text-2xl md:text-4xl font-headline italic text-balance">
-                        &ldquo;Every public page, listing, and contact point should feel as polished as the service behind it.&rdquo;
-                    </blockquote>
-                </AnimateOnScroll>
-                <AnimateOnScroll delay={200}>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                        {siteConfig?.leadAgent?.bio?.trim()
-                          || `${displayName} combines agent expertise, live inventory, and organization-managed branding so clients always see current listings, current contacts, and a consistent agency identity.`}
-                    </p>
-                </AnimateOnScroll>
-                <AnimateOnScroll delay={300}>
-                    <p className="text-base md:text-lg font-semibold">{founderName}{founderTagline ? `, ${founderTagline}` : ''}</p>
-                </AnimateOnScroll>
-            </div>
+            <AnimateOnScroll delay={200}>
+              <p className="text-base md:text-lg text-muted-foreground">
+                {siteConfig?.leadAgent?.bio?.trim()
+                  || `${displayName} combines agent expertise, live inventory, and organization-managed branding so clients always see current listings, current contacts, and a consistent agency identity.`}
+              </p>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={300}>
+              <p className="text-base md:text-lg font-semibold">{founderName}{founderTagline ? `, ${founderTagline}` : ''}</p>
+            </AnimateOnScroll>
+          </div>
         </div>
       </section>
 
       {/* 5. Final Call to Action */}
       <section className="relative py-24 md:py-32">
-          {ctaImage && (
-            <Image 
-                src={ctaImage.imageUrl}
-                alt={ctaImage.description}
-                fill
-                className="object-cover"
-                data-ai-hint={ctaImage.imageHint}
-            />
-          )}
-          <div className="absolute inset-0 bg-black/50"></div>
-          <div className="container mx-auto relative z-10 text-center text-white">
-            <AnimateOnScroll>
-                <h2 className="text-4xl md:text-6xl font-headline mb-8 text-balance">Ready to start your journey?</h2>
-                <Button size="lg" asChild>
-                    <Link href={prefixAgencyPath('/properties', agencySlug)}>
-                        Explore Properties
-                        <span className="group-hover:translate-x-1 transition-transform duration-300 ml-2 hidden sm:inline">↗</span>
-                    </Link>
-                </Button>
-            </AnimateOnScroll>
-          </div>
+        {ctaImage && (
+          <Image
+            src={ctaImage.imageUrl}
+            alt={ctaImage.description}
+            fill
+            className="object-cover"
+            data-ai-hint={ctaImage.imageHint}
+          />
+        )}
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="container mx-auto relative z-10 text-center text-white">
+          <AnimateOnScroll>
+            <h2 className="text-4xl md:text-6xl font-headline mb-8 text-balance">Ready to start your journey?</h2>
+            <Button size="lg" asChild>
+              <Link href={prefixAgencyPath('/properties', agencySlug)}>
+                Explore Properties
+                <span className="group-hover:translate-x-1 transition-transform duration-300 ml-2 hidden sm:inline">↗</span>
+              </Link>
+            </Button>
+          </AnimateOnScroll>
+        </div>
       </section>
     </div>
   );

@@ -156,8 +156,7 @@ export function AgentsDirectoryClient({
                       links={{
                         instagram: agent.instagram,
                         linkedin: agent.linkedin,
-                        twitter: agent.twitter,
-                        whatsapp: agent.whatsapp || agent.phone,
+                        twitter: agent.twitter
                       }}
                     />
 

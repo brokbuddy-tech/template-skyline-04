@@ -185,7 +185,24 @@ export function OffPlanHeroGallery({
       {/* Mobile Horizontal Scroll */}
       <div className="md:hidden flex h-[300px] overflow-x-auto snap-x gap-2">
         {images.map((image, index) => image && (
-          <div key={index} className="w-[90vw] h-full flex-shrink-0 rounded-xl overflow-hidden relative snap-center">
+          <div
+            key={index}
+            role="button"
+            tabIndex={0}
+            aria-label={`Open gallery image ${index + 1} of ${allImages.length}`}
+            onClick={() => {
+              setActiveIndex(index);
+              setIsOpen(true);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                setActiveIndex(index);
+                setIsOpen(true);
+              }
+            }}
+            className="w-[90vw] h-full flex-shrink-0 rounded-xl overflow-hidden relative snap-center cursor-pointer"
+          >
             <ProgressiveImage
               source={image}
               alt={`${property.title} image ${index + 1}`}

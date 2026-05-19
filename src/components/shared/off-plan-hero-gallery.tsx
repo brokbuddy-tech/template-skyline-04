@@ -1,6 +1,7 @@
 'use client';
 
-import { Camera, MapPin, Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import type { MouseEvent } from 'react';
+import { MapPin, Play, ChevronLeft, ChevronRight, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Property } from '@/lib/types';
 import { ProgressiveImage } from './progressive-image';
@@ -48,6 +49,14 @@ export function OffPlanHeroGallery({
     setVisitedIndices(prev => new Set(prev).add(activeIndex));
   }, [activeIndex]);
 
+  const hasVirtualTour = Boolean(property.virtualTourUrl);
+
+  const handleVirtualTourClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (!property.virtualTourUrl) return;
+    window.open(property.virtualTourUrl, '_blank', 'noopener,noreferrer');
+  };
+
 
   return (
     <div className="w-full container mx-auto px-4 sm:px-8 py-6">
@@ -78,9 +87,16 @@ export function OffPlanHeroGallery({
             {galleryBadge}
           </div>
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
-            <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black">
-              <Camera size={16} /> <span className="ml-2">Virtual Tour</span>
-            </Button>
+            {hasVirtualTour ? (
+              <Button
+                type="button"
+                onClick={handleVirtualTourClick}
+                variant="outline-light"
+                className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black"
+              >
+                <Video size={16} /> <span className="ml-2">Virtual Tour</span>
+              </Button>
+            ) : null}
             <Button variant="outline-light" className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black">
               <Play size={16} /> <span className="ml-2">Watch Video</span>
             </Button>
@@ -177,6 +193,16 @@ export function OffPlanHeroGallery({
               sizes="90vw"
               imageClassName="object-cover"
             />
+            {index === 0 && hasVirtualTour ? (
+              <Button
+                type="button"
+                onClick={handleVirtualTourClick}
+                variant="outline-light"
+                className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white text-foreground dark:text-black"
+              >
+                <Video size={16} /> <span className="ml-2">Virtual Tour</span>
+              </Button>
+            ) : null}
           </div>
         ))}
       </div>

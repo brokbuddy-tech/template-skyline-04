@@ -362,6 +362,17 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     tag: listing.tag || listing.fields?.tag || undefined,
     latitude: getOptionalNumber(listing.latitude, listing.lat, listing.fields?.latitude, listing.fields?.lat),
     longitude: getOptionalNumber(listing.longitude, listing.lng, listing.fields?.longitude, listing.fields?.lng),
+    virtualTourUrl:
+      getStringValue(
+        listing.virtualTourUrl,
+        listing.videoTourUrl,
+        listing.fields?.virtualTourUrl,
+        listing.fields?.virtualTour,
+        listing.fields?.virtualTourLink,
+        listing.fields?.tourUrl,
+        listing.fields?.videoTourUrl,
+        listing.fields?.matterportUrl,
+      ) || null,
     agent: mapListingAgent(listing),
   };
 }

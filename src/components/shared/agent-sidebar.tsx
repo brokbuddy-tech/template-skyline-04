@@ -2,13 +2,14 @@
 
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { Phone, MessageSquare, Link as LinkIcon, Facebook, Twitter, Linkedin } from "lucide-react"
+import { Phone, MessageSquare, Link as LinkIcon, Facebook, Twitter, Linkedin, FileText } from "lucide-react"
 import Link from "next/link"
 import type { Property, PropertyAgent, SiteAgent } from "@/lib/types"
 import { resolveImage } from "@/lib/property-media"
 import { toSocialUrl } from "@/lib/api"
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from "@/lib/agency-routing"
 import { usePathname } from "next/navigation"
+import { PropertyBrochureButton } from "./property-brochure-button"
 
 function getAgentName(agent?: PropertyAgent | SiteAgent | null) {
   return agent?.name || 'Assigned Agent';
@@ -26,7 +27,7 @@ export function AgentSidebar({
   property,
 }: {
   agent?: PropertyAgent | SiteAgent | null;
-  property?: Pick<Property, 'id' | 'title'>;
+  property?: Pick<Property, 'id' | 'title' | 'location' | 'price' | 'sqft' | 'images' | 'description' | 'type'>;
 }) {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
@@ -80,6 +81,13 @@ export function AgentSidebar({
           </div>
 
           <div className="mt-4 flex flex-col gap-2 w-full">
+            {property ? (
+              <PropertyBrochureButton property={property} agent={agent}>
+                <Button variant="outline" size="sm" className="w-full border-[#1E88E5] text-[#1E88E5] hover:bg-[#1E88E5]/5 rounded-[10px] h-10 font-semibold transition-colors">
+                  <FileText className="mr-2 h-4 w-4" /> DOWNLOAD BROCHURE
+                </Button>
+              </PropertyBrochureButton>
+            ) : null}
             <Button size="sm" asChild className="w-full bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-[10px] h-10 font-semibold transition-colors shadow-sm">
               <a href={phone ? `tel:${phone}` : prefixAgencyPath('/contact', agencySlug)}>
                 <Phone className="mr-2 h-4 w-4" /> CALL AGENT

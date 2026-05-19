@@ -90,6 +90,7 @@ export function AgentsDirectoryClient({
             const whatsappHref = toSocialUrl('whatsapp', agent.whatsapp || agent.phone);
             const emailHref = agent.email ? `mailto:${agent.email}` : null;
             const profileHref = agent.slug ? prefixAgencyPath(`/agents/${agent.slug}`, agencySlug) : null;
+            const secondaryActionCount = [phoneHref, whatsappHref || emailHref].filter(Boolean).length;
 
             return (
               <Card key={agent.id || agent.slug || agent.name} className="overflow-hidden rounded-[28px] border border-border bg-background shadow-sm">
@@ -160,16 +161,20 @@ export function AgentsDirectoryClient({
                       }}
                     />
 
-                    <div className="flex flex-wrap gap-3">
+                    <div className="grid gap-3 sm:grid-cols-2">
                       {profileHref ? (
-                        <Button asChild className="rounded-full">
+                        <Button asChild className="w-full rounded-full sm:col-span-2">
                           <Link href={profileHref}>
                             View Profile
                           </Link>
                         </Button>
                       ) : null}
                       {phoneHref ? (
-                        <Button asChild variant="outline" className="rounded-full">
+                        <Button
+                          asChild
+                          variant="outline"
+                          className={`w-full rounded-full ${secondaryActionCount === 1 ? 'sm:col-span-2' : ''}`}
+                        >
                           <a href={phoneHref}>
                             <Phone className="mr-2 h-4 w-4" />
                             Call
@@ -177,14 +182,22 @@ export function AgentsDirectoryClient({
                         </Button>
                       ) : null}
                       {whatsappHref ? (
-                        <Button asChild variant="outline" className="rounded-full">
+                        <Button
+                          asChild
+                          variant="outline"
+                          className={`w-full rounded-full ${secondaryActionCount === 1 ? 'sm:col-span-2' : ''}`}
+                        >
                           <a href={whatsappHref} target="_blank" rel="noreferrer">
                             <MessageSquare className="mr-2 h-4 w-4" />
                             WhatsApp
                           </a>
                         </Button>
                       ) : emailHref ? (
-                        <Button asChild variant="outline" className="rounded-full">
+                        <Button
+                          asChild
+                          variant="outline"
+                          className={`w-full rounded-full ${secondaryActionCount === 1 ? 'sm:col-span-2' : ''}`}
+                        >
                           <a href={emailHref}>
                             <Mail className="mr-2 h-4 w-4" />
                             Email

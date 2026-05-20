@@ -154,6 +154,8 @@ export type SiteStats = {
 export type SiteProfile = {
   logo?: string | null;
   aboutCompany?: string;
+  mission?: string;
+  vision?: string;
   officeAddress?: string;
   officeTimings?: string;
   primaryColor?: string;

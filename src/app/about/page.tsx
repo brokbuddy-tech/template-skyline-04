@@ -32,6 +32,12 @@ export default function AboutPage() {
     siteConfig?.profile?.aboutCompany?.trim()
     || siteConfig?.branding?.bio?.trim()
     || `${displayName} helps buyers, sellers, renters, and investors make confident real estate decisions with clear advice and responsive support.`;
+  const mission =
+    siteConfig?.profile?.mission?.trim()
+    || `${displayName} is committed to making every property decision clearer, calmer, and better informed for the clients we serve.`;
+  const vision =
+    siteConfig?.profile?.vision?.trim()
+    || `We envision ${displayName} as a public-facing real estate brand people trust for current opportunities, responsive advice, and polished service.`;
   const officeAddress = siteConfig?.profile?.officeAddress?.trim() || siteConfig?.featuredAreas?.slice(0, 3).join(', ');
   const officeTimings = siteConfig?.profile?.officeTimings?.trim() || null;
   const founderName = siteConfig?.leadAgent?.name || `${displayName} Team`;
@@ -119,7 +125,7 @@ export default function AboutPage() {
               We are {displayName}.
             </h1>
             <p className="mt-4 text-xl md:text-2xl text-balance">
-              {officeAddress ? `Serving ${officeAddress} with` : 'Building'} <span className="text-white">public-ready real estate experiences</span>.
+              {aboutCompany}
             </p>
           </div>
         </div>
@@ -130,13 +136,22 @@ export default function AboutPage() {
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 items-center">
           <div className="md:col-span-2">
             <AnimateOnScroll>
-              <h2 className="text-5xl md:text-6xl font-headline">Our Mission</h2>
+              <h2 className="text-5xl md:text-6xl font-headline">Mission &amp; Vision</h2>
             </AnimateOnScroll>
           </div>
           <div className="md:col-span-3">
             <AnimateOnScroll delay={100}>
-              <div className="space-y-6 text-base md:text-lg text-muted-foreground">
-                <p>{aboutCompany}</p>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-lg border border-border/60 bg-card/60 p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Our Mission</p>
+                  <p className="mt-4 text-base md:text-lg text-muted-foreground">{mission}</p>
+                </div>
+                <div className="rounded-lg border border-border/60 bg-card/60 p-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">Our Vision</p>
+                  <p className="mt-4 text-base md:text-lg text-muted-foreground">{vision}</p>
+                </div>
+              </div>
+              <div className="mt-6 space-y-6 text-base md:text-lg text-muted-foreground">
                 {officeTimings || officeAddress ? (
                   <p>
                     {officeAddress ? `${displayName} operates from ${officeAddress}. ` : ''}

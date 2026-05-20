@@ -2,6 +2,7 @@
 'use client';
 
 import { AnimateOnScroll } from "@/components/animate-on-scroll";
+import { TestimonialsSection } from "@/components/sections/testimonials-section";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CountUp } from "@/components/shared/count-up";
@@ -9,17 +10,56 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import { getSiteConfig } from "@/lib/api";
-import type { SiteConfig } from "@/lib/types";
+import { getSiteConfig, getTestimonials } from "@/lib/api";
+import type { SiteConfig, Testimonial } from "@/lib/types";
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from "@/lib/agency-routing";
 import { usePathname } from "next/navigation";
 
+function normalizeTestimonials(input: unknown[]): Testimonial[] {
+  const normalized: Testimonial[] = [];
+
+  input.forEach((item, index) => {
+    const testimonial = item as {
+      id?: string;
+      quote?: string | null;
+      content?: string | null;
+      author?: string | null;
+      name?: string | null;
+      clientName?: string | null;
+      location?: string | null;
+      property?: string | null;
+      image?: string | null;
+      imageId?: string | null;
+      rating?: number | null;
+    };
+
+    const quote = testimonial.quote?.trim() || testimonial.content?.trim() || "";
+    if (!quote) return;
+
+    const author =
+      testimonial.author?.trim() ||
+      testimonial.name?.trim() ||
+      testimonial.clientName?.trim() ||
+      "Anonymous";
+
+    normalized.push({
+      id: testimonial.id || `${author}-${index}`,
+      quote,
+      author,
+      location: testimonial.location?.trim() || testimonial.property?.trim() || undefined,
+      image: testimonial.image?.trim() || testimonial.imageId?.trim() || null,
+      rating: typeof testimonial.rating === "number" ? testimonial.rating : 5,
+    });
+  });
+
+  return normalized;
+}
 
 export default function AboutPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
 
@@ -77,14 +117,18 @@ export default function AboutPage() {
   useEffect(() => {
     let active = true;
 
-    async function loadSiteConfig() {
-      const nextSiteConfig = await getSiteConfig(agencySlug);
+    async function loadPageData() {
+      const [nextSiteConfig, nextTestimonials] = await Promise.all([
+        getSiteConfig(agencySlug),
+        getTestimonials(agencySlug),
+      ]);
       if (active) {
         setSiteConfig(nextSiteConfig);
+        setTestimonials(normalizeTestimonials(nextTestimonials));
       }
     }
 
-    void loadSiteConfig();
+    void loadPageData();
 
     return () => {
       active = false;
@@ -217,7 +261,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5. Final Call to Action */}
+      {/* 5. Testimonials */}
+      <AnimateOnScroll>
+        <TestimonialsSection testimonials={testimonials} />
+      </AnimateOnScroll>
+
+      {/* 6. Final Call to Action */}
       <section className="relative py-24 md:py-32">
         {ctaImage && (
           <Image

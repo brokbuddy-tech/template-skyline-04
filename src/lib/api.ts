@@ -277,7 +277,8 @@ function mapListingAgent(listing: any): Property['agent'] {
     email: getStringValue(publicAgent?.email, legacyBroker?.brokerProfile?.publicEmail, legacyBroker?.email) || '',
     whatsapp: getStringValue(publicAgent?.whatsapp, legacyBroker?.brokerProfile?.whatsapp, legacyBroker?.whatsapp, legacyBroker?.brokerProfile?.publicPhone, legacyBroker?.phone) || '',
     company: getStringValue(publicAgent?.company, listing?.organizationName, listing?.organization?.name),
-    licenseNumber: getStringValue(publicAgent?.licenseNumber, legacyBroker?.licenseNumber) || undefined,
+    brn: getStringValue(publicAgent?.brn, publicAgent?.licenseNumber, legacyBroker?.brokerProfile?.brn, legacyBroker?.licenseNumber) || undefined,
+    licenseNumber: getStringValue(publicAgent?.brn, publicAgent?.licenseNumber, legacyBroker?.brokerProfile?.brn, legacyBroker?.licenseNumber) || undefined,
     slug: getStringValue(publicAgent?.slug, legacyBroker?.brokerProfile?.slug) || undefined,
   };
 }

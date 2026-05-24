@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { AgentProfileExperience } from '@/components/shared/agent-profile-experience';
 import { getAgentProfile, getProperties, getSiteConfigOrNull, getTestimonials, toSocialUrl } from '@/lib/api';
-import { testimonials as fallbackTestimonials } from '@/lib/data';
 import { resolveImage, type ResolvedImage } from '@/lib/property-media';
 import type { Property, Testimonial } from '@/lib/types';
 
@@ -63,20 +62,36 @@ function formatCompactPortfolio(value: number) {
 function normalizeTestimonials(source: any[]): Testimonial[] {
   return source
     .map((item) => ({
-      quote: typeof item?.quote === 'string' ? item.quote.trim() : '',
-      author: typeof item?.author === 'string' ? item.author.trim() : '',
+      quote:
+        typeof item?.message === 'string'
+          ? item.message.trim()
+          : typeof item?.quote === 'string'
+            ? item.quote.trim()
+            : '',
+      author:
+        typeof item?.clientName === 'string'
+          ? item.clientName.trim()
+          : typeof item?.author === 'string'
+            ? item.author.trim()
+            : typeof item?.name === 'string'
+              ? item.name.trim()
+              : '',
       rating: typeof item?.rating === 'number' ? item.rating : 5,
-      image: typeof item?.image === 'string' ? item.image : null,
+      image:
+        typeof item?.imageUrl === 'string'
+          ? item.imageUrl
+          : typeof item?.image === 'string'
+            ? item.image
+            : null,
       location: typeof item?.location === 'string' ? item.location : undefined,
+      badgeLabel: typeof item?.badgeLabel === 'string' ? item.badgeLabel : 'Client Testimonial',
     }))
     .filter((item) => item.quote && item.author);
 }
 
-function buildReviewCards(testimonials: Testimonial[]) {
-  const labels = ['Verified Buyer', 'Verified Seller', 'Verified Investor'];
-
+function buildReviewCards(testimonials: Array<Testimonial & { badgeLabel?: string | null }>) {
   return testimonials.slice(0, 3).map((testimonial, index) => ({
-    label: labels[index] || 'Verified Client',
+    label: testimonial.badgeLabel || 'Client Testimonial',
     quote: testimonial.quote,
     author: testimonial.author,
   }));
@@ -158,9 +173,7 @@ export async function AgentProfilePageContent({
   );
   const featuredListings = [...activeListings, ...organizationListingPool].slice(0, 4);
   const normalizedTestimonials = normalizeTestimonials(rawTestimonials);
-  const reviewCards = buildReviewCards(
-    normalizedTestimonials.length > 0 ? normalizedTestimonials : fallbackTestimonials,
-  );
+  const reviewCards = buildReviewCards(normalizedTestimonials);
   const specialtyCards = buildSpecialtyCards(siteConfig?.featuredAreas || [], featuredListings);
   const statCards = [
     {
@@ -183,6 +196,7 @@ export async function AgentProfilePageContent({
       agentName={agent.name}
       headline={headline}
       displayName={displayName}
+      brn={agent.brn || agent.licenseNumber || null}
       avatar={avatar}
       coverImage={coverImage}
       biography={biography}

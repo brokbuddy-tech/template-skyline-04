@@ -1,4 +1,4 @@
-import { HomePageContent } from '../page';
+import { HomePageContent } from '../home-page-content';
 
 export default async function AgencyHomePage({
   params,

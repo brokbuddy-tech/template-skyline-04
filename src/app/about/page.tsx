@@ -21,6 +21,7 @@ function normalizeTestimonials(input: unknown[]): Testimonial[] {
   input.forEach((item, index) => {
     const testimonial = item as {
       id?: string;
+      message?: string | null;
       quote?: string | null;
       content?: string | null;
       author?: string | null;
@@ -29,11 +30,17 @@ function normalizeTestimonials(input: unknown[]): Testimonial[] {
       location?: string | null;
       property?: string | null;
       image?: string | null;
+      imageUrl?: string | null;
       imageId?: string | null;
       rating?: number | null;
+      badgeLabel?: string | null;
     };
 
-    const quote = testimonial.quote?.trim() || testimonial.content?.trim() || "";
+    const quote =
+      testimonial.message?.trim() ||
+      testimonial.quote?.trim() ||
+      testimonial.content?.trim() ||
+      "";
     if (!quote) return;
 
     const author =
@@ -47,8 +54,13 @@ function normalizeTestimonials(input: unknown[]): Testimonial[] {
       quote,
       author,
       location: testimonial.location?.trim() || testimonial.property?.trim() || undefined,
-      image: testimonial.image?.trim() || testimonial.imageId?.trim() || null,
+      image:
+        testimonial.imageUrl?.trim() ||
+        testimonial.image?.trim() ||
+        testimonial.imageId?.trim() ||
+        null,
       rating: typeof testimonial.rating === "number" ? testimonial.rating : 5,
+      badgeLabel: testimonial.badgeLabel?.trim() || undefined,
     });
   });
 

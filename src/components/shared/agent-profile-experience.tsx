@@ -49,6 +49,7 @@ type AgentProfileExperienceProps = {
   agentName: string;
   headline: string;
   displayName: string;
+  brn?: string | null;
   avatar: ResolvedImage | null;
   coverImage: ResolvedImage | null;
   biography: string[];
@@ -179,6 +180,7 @@ export function AgentProfileExperience({
   agentName,
   headline,
   displayName,
+  brn,
   avatar,
   coverImage,
   biography,
@@ -350,6 +352,11 @@ export function AgentProfileExperience({
                 <p className="mt-3 text-[18px] font-medium text-[#4f648a] sm:text-[24px] lg:text-[28px]">
                   {headline} | {displayName}
                 </p>
+                {brn ? (
+                  <p className="mt-3 text-[13px] font-bold uppercase tracking-[0.22em] text-[#21479b] sm:text-[15px]">
+                    BRN {brn}
+                  </p>
+                ) : null}
 
                 <div className="mt-5 flex flex-wrap items-center gap-3 text-[#0f172a]">
                   <div className="flex items-center gap-1">

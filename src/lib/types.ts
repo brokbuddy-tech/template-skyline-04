@@ -25,6 +25,7 @@ export type PropertyAgent = {
   email?: string | null;
   whatsapp?: string | null;
   company?: string;
+  brn?: string | null;
   licenseNumber?: string | null;
   slug?: string | null;
   instagram?: string | null;
@@ -93,6 +94,7 @@ export type Testimonial = {
   location?: string;
   image?: string | null;
   rating: number;
+  badgeLabel?: string | null;
 };
 
 export type SiteAgent = {
@@ -104,6 +106,7 @@ export type SiteAgent = {
   whatsapp?: string | null;
   avatar?: string | null;
   avatarUrl?: string | null;
+  brn?: string | null;
   licenseNumber?: string | null;
   slug?: string | null;
   tagline?: string | null;

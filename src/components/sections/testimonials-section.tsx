@@ -2,7 +2,6 @@
 'use client';
 
 import Image from 'next/image';
-import { testimonials as fallbackTestimonials } from '@/lib/data';
 import { AnimateOnScroll } from '../animate-on-scroll';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -10,8 +9,33 @@ import { Card, CardContent } from '../ui/card';
 import type { Testimonial } from '@/lib/types';
 import { resolveImage } from '@/lib/property-media';
 
-const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
-    const image = resolveImage(testimonial.image || 'testimonial-1', 'testimonial-1');
+type PublicTestimonial = Testimonial & {
+    clientName?: string;
+    name?: string;
+    message?: string;
+    imageUrl?: string | null;
+    badgeLabel?: string | null;
+};
+
+function normalizeTestimonial(testimonial: PublicTestimonial): Testimonial & { badgeLabel?: string | null } | null {
+    const quote = testimonial.message?.trim() || testimonial.quote?.trim();
+    const author = testimonial.clientName?.trim() || testimonial.author?.trim() || testimonial.name?.trim();
+
+    if (!quote || !author) return null;
+
+    return {
+        id: testimonial.id,
+        quote,
+        author,
+        location: testimonial.location,
+        image: testimonial.imageUrl || testimonial.image || null,
+        rating: typeof testimonial.rating === 'number' ? testimonial.rating : 5,
+        badgeLabel: testimonial.badgeLabel,
+    };
+}
+
+const TestimonialCard = ({ testimonial }: { testimonial: Testimonial & { badgeLabel?: string | null } }) => {
+    const image = resolveImage(testimonial.image || null, 'testimonial-1');
 
     return (
         <Card className="w-full max-w-sm flex-shrink-0 bg-gray-50 dark:bg-muted/50 border-gray-200/80 dark:border-border/50">
@@ -31,6 +55,9 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
                     )}
                     <div>
                         <p className="font-bold font-body text-foreground">{testimonial.author}</p>
+                        {testimonial.badgeLabel ? (
+                            <p className="text-xs text-muted-foreground">{testimonial.badgeLabel}</p>
+                        ) : null}
                         <div className="flex items-center gap-0.5">
                             {[...Array(5)].map((_, i) => (
                                 <Star
@@ -50,8 +77,10 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 };
 
 
-export function TestimonialsSection({ testimonials = fallbackTestimonials }: { testimonials?: Testimonial[] }) {
-    const data = testimonials.length > 0 ? testimonials : fallbackTestimonials;
+export function TestimonialsSection({ testimonials = [] }: { testimonials?: PublicTestimonial[] }) {
+    const data = testimonials.map(normalizeTestimonial).filter((item): item is Testimonial & { badgeLabel?: string | null } => Boolean(item));
+    if (!data.length) return null;
+
     const duplicatedTestimonials = [...data, ...data];
 
   return (

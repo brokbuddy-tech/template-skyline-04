@@ -18,6 +18,7 @@ import { CurrencyContext } from '@/context/currency-context';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { searchPropertiesWithAI } from '@/lib/api';
 import { prefixAgencyPath, resolveAgencySlugFromPathname, stripAgencySlugFromPathname } from '@/lib/agency-routing';
+import { AmenityIcon } from '@/components/amenity-icon';
 
 const fallbackAmenities = [
   'Pool',
@@ -210,7 +211,8 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
                   onCheckedChange={() => handleAmenityChange(amenity)}
                   className="border-accent data-[state=checked]:bg-accent"
                 />
-                <Label htmlFor={amenity} className="font-normal">
+                <Label htmlFor={amenity} className="flex items-center gap-2 font-normal">
+                  <AmenityIcon name={amenity} className="h-4 w-4" />
                   {amenity}
                 </Label>
               </div>

@@ -11,7 +11,7 @@ import { MortgageCalculator } from '@/components/shared/mortgage-calculator';
 import { PropertyCard } from '@/components/shared/property-card';
 import { AnimateOnScroll } from '@/components/animate-on-scroll';
 import { CurrencyContext } from '@/context/currency-context';
-import { amenityIcons } from '@/lib/amenity-icons';
+import { AmenityIcon } from '@/components/amenity-icon';
 import { ReadMore } from '@/components/shared/read-more';
 import { AgentSidebar } from '@/components/shared/agent-sidebar';
 import dynamic from 'next/dynamic';
@@ -162,15 +162,12 @@ export function PropertyDetailPageClient({
                   <AnimateOnScroll delay={300}>
                     <h2 className="text-3xl font-headline mb-6">Amenities</h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {property.amenities.map(amenity => {
-                        const Icon = amenityIcons[amenity];
-                        return (
-                          <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2">
-                            {Icon && <Icon className="w-4 h-4" />}
-                            <span>{amenity}</span>
-                          </Badge>
-                        );
-                      })}
+                      {property.amenities.map(amenity => (
+                        <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2">
+                          <AmenityIcon name={amenity} className="h-4 w-4" />
+                          <span>{amenity}</span>
+                        </Badge>
+                      ))}
                     </div>
                   </AnimateOnScroll>
                   <Separator className="my-12" />

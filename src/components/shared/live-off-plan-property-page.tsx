@@ -15,7 +15,7 @@ import { Card } from '@/components/ui/card';
 import { CurrencyContext } from '@/context/currency-context';
 import { useOrgInquiry } from '@/hooks/use-org-inquiry';
 import { toSocialUrl } from '@/lib/api';
-import { amenityIcons } from '@/lib/amenity-icons';
+import { AmenityIcon } from '@/components/amenity-icon';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { DownloadBrochureModal } from './download-brochure-modal';
 import dynamic from 'next/dynamic';
@@ -457,19 +457,16 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
                   <div className="mb-12">
                     <h2 className="mb-6 text-xl font-bold text-foreground">Amenities</h2>
                     <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                      {property.amenities.map(amenity => {
-                        const Icon = amenityIcons[amenity];
-                        return (
-                          <Badge
-                            key={amenity}
-                            variant="outline"
-                            className="flex items-center justify-center gap-2 rounded-lg border bg-muted p-3 text-sm"
-                          >
-                            {Icon && <Icon className="h-4 w-4 text-accent" />}
-                            <span>{amenity}</span>
-                          </Badge>
-                        );
-                      })}
+                      {property.amenities.map(amenity => (
+                        <Badge
+                          key={amenity}
+                          variant="outline"
+                          className="flex items-center justify-center gap-2 rounded-lg border bg-muted p-3 text-sm"
+                        >
+                          <AmenityIcon name={amenity} className="h-4 w-4" />
+                          <span>{amenity}</span>
+                        </Badge>
+                      ))}
                     </div>
                   </div>
                 </>

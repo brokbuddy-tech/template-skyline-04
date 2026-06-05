@@ -39,7 +39,7 @@ import {
 import { PropertyDescriptionDisplay } from './property-description-display';
 import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
-import { amenityIcons } from '@/lib/amenity-icons';
+import { AmenityIcon } from '@/components/amenity-icon';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import dynamic from 'next/dynamic';
 
@@ -359,15 +359,12 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
               <div className="mb-12">
                 <h2 className="text-xl font-bold text-foreground mb-6">Amenities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {property.amenities.map(amenity => {
-                        const Icon = amenityIcons[amenity];
-                        return (
-                            <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2 border bg-muted">
-                                {Icon && <Icon className="w-4 h-4 text-accent" />}
-                                <span>{amenity}</span>
-                            </Badge>
-                        )
-                    })}
+                    {property.amenities.map(amenity => (
+                        <Badge key={amenity} variant="outline" className="text-center justify-center p-3 text-sm rounded-lg flex items-center gap-2 border bg-muted">
+                            <AmenityIcon name={amenity} className="h-4 w-4" />
+                            <span>{amenity}</span>
+                        </Badge>
+                    ))}
                 </div>
               </div>
 

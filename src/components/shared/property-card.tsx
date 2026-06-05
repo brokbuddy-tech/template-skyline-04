@@ -4,13 +4,14 @@
 import Link from 'next/link';
 import { useContext } from 'react';
 import type { Property } from '@/lib/types';
-import { ArrowUpRight, BedDouble, Bath, Square, CheckCircle, Star } from 'lucide-react';
+import { ArrowUpRight, BedDouble, Bath, Square, Star } from 'lucide-react';
 import { CurrencyContext } from '@/context/currency-context';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
 import { ProgressiveImage } from './progressive-image';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 import { usePathname } from 'next/navigation';
+import { AmenityIcon } from '@/components/amenity-icon';
 
 
 interface PropertyCardProps {
@@ -75,7 +76,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
             <ul className="space-y-1 text-sm">
                 {property.amenities.slice(0, 3).map(amenity => (
                     <li key={amenity} className="flex items-center gap-2">
-                        <CheckCircle size={16} className="text-accent"/>
+                        <AmenityIcon name={amenity} className="h-4 w-4 brightness-0 invert" />
                         <span>{amenity}</span>
                     </li>
                 ))}

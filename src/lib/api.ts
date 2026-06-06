@@ -706,21 +706,53 @@ export async function getPropertyById(id: string, agencySlug?: string | null): P
   return mapListingToProperty(data, agencySlug);
 }
 
+function normalizeSearchTransaction(value: unknown) {
+  const normalized = typeof value === 'string' ? value.toUpperCase() : '';
+  if (normalized === 'RENT') return 'RENT';
+  if (normalized === 'BUY' || normalized === 'SALE') return 'SALE';
+  return undefined;
+}
+
 export async function getSmartPropertyMatches(query: string | Record<string, any>): Promise<AiPropertySearchResult> {
   try {
     const queryInput = typeof query === 'string' ? { q: query } : query;
+    let aiFilters: Record<string, any> = {};
+
+    if (typeof window !== 'undefined' && (queryInput.q || queryInput.query)) {
+      const response = await fetch('/api/ai-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: queryInput.query || queryInput.q,
+          filters: queryInput,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        aiFilters = data.filters || {};
+      }
+    }
+
+    const mergedInput = { ...queryInput, ...aiFilters };
     const properties = await getProperties({
-      q: typeof queryInput.q === 'string' ? queryInput.q : '',
-      transactionType: queryInput.transactionType,
-      category: queryInput.category,
-      readiness: queryInput.readiness,
+      q: typeof mergedInput.q === 'string' ? mergedInput.q : '',
+      transactionType: normalizeSearchTransaction(mergedInput.transactionType || mergedInput.type),
+      category: mergedInput.category,
+      readiness: mergedInput.readiness,
+      bedrooms: mergedInput.bedrooms,
+      bathrooms: mergedInput.bathrooms,
+      minPrice: mergedInput.minPrice,
+      maxPrice: mergedInput.maxPrice,
+      minArea: mergedInput.minArea,
+      maxArea: mergedInput.maxArea,
       limit: queryInput.limit || 8,
     });
 
     return {
       propertyIds: properties.properties.map((property) => property.id).slice(0, Number(queryInput.limit || 8)),
-      source: 'fallback',
-      model: null,
+      source: Object.keys(aiFilters).length ? 'gemini' : 'fallback',
+      model: Object.keys(aiFilters).length ? 'gemini' : null,
     };
   } catch (error) {
     return { propertyIds: [], source: 'fallback', model: null };

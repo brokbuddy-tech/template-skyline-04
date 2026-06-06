@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Loader2, Search, SlidersHorizontal } from 'lucide-react';
+import { ChevronDown, Loader2, Search, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -174,6 +174,14 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
               >
                 {isSearching ? <Loader2 className="w-6 h-6 animate-spin" /> : <Search className="w-6 h-6" />}
               </Button>
+              <Button
+                className="h-14 rounded-full bg-gray-100 px-5 text-sm font-semibold text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700"
+                onClick={() => void handleSearch()}
+                disabled={isSearching || !query.trim()}
+              >
+                <Sparkles className="mr-2 h-4 w-4 text-accent" />
+                AI Search
+              </Button>
               <DialogTrigger asChild>
                 <Button
                   size="icon"
@@ -231,6 +239,16 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
                 disabled={isSearching}
               >
                   {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="w-9 h-9 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-accent ml-2 flex-shrink-0"
+                onClick={() => void handleSearch()}
+                disabled={isSearching || !query.trim()}
+                aria-label="AI Search"
+              >
+                <Sparkles className="w-4 h-4" />
               </Button>
               <DialogTrigger asChild>
                 <Button size="icon" variant="ghost" className="w-9 h-9 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-accent ml-2 flex-shrink-0">

@@ -1,13 +1,12 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowUpRight,
   Bath,
   BedDouble,
-  CheckCircle2,
   Home,
   KeyRound,
   MessageCircle,
@@ -17,21 +16,17 @@ import {
   UserRoundPlus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ReviewCarousel } from '@/components/review-carousel';
 import { CurrencyContext } from '@/context/currency-context';
 import { prefixAgencyPath } from '@/lib/agency-routing';
 import { cn } from '@/lib/utils';
 import { ProgressiveImage } from './progressive-image';
 import type { Property } from '@/lib/types';
+import type { ReviewCarouselItem } from '@/lib/reviews';
 import type { ResolvedImage } from '@/lib/property-media';
 
 type SectionId = 'biography' | 'listings' | 'reviews' | 'specialities';
 type ListingFilter = 'all' | 'sale' | 'rent';
-
-type ReviewCard = {
-  label: string;
-  quote: string;
-  author: string;
-};
 
 type SpecialtyCard = {
   eyebrow: string;
@@ -59,7 +54,7 @@ type AgentProfileExperienceProps = {
   email: string | null;
   officePhone: string | null;
   featuredListings: Property[];
-  reviewCards: ReviewCard[];
+  reviewCards: ReviewCarouselItem[];
   specialtyCards: SpecialtyCard[];
   statCards: StatCard[];
 };
@@ -70,6 +65,8 @@ const sectionItems: Array<{ id: SectionId; label: string }> = [
   { id: 'reviews', label: 'Reviews' },
   { id: 'specialities', label: 'Specialities' },
 ];
+
+const sectionItemsWithoutReviews = sectionItems.filter((item) => item.id !== 'reviews');
 
 const listingFilters: Array<{ id: ListingFilter; label: string }> = [
   { id: 'all', label: 'All' },
@@ -196,9 +193,13 @@ export function AgentProfileExperience({
 }: AgentProfileExperienceProps) {
   const [activeSection, setActiveSection] = useState<SectionId>('biography');
   const [listingFilter, setListingFilter] = useState<ListingFilter>('all');
+  const visibleSectionItems = useMemo(
+    () => (reviewCards.length > 0 ? sectionItems : sectionItemsWithoutReviews),
+    [reviewCards.length],
+  );
 
   useEffect(() => {
-    const sections = sectionItems
+    const sections = visibleSectionItems
       .map(({ id }) => document.getElementById(id))
       .filter((section): section is HTMLElement => Boolean(section));
 
@@ -236,7 +237,7 @@ export function AgentProfileExperience({
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
-  }, []);
+  }, [visibleSectionItems]);
 
   const scrollToSection = (sectionId: SectionId) => {
     const section = document.getElementById(sectionId);
@@ -403,7 +404,7 @@ export function AgentProfileExperience({
 
       <div className="sticky top-[80px] z-30 border-y border-slate-200 bg-white/95 backdrop-blur">
         <nav className="mx-auto grid max-w-[1880px] grid-cols-4 items-center gap-1 px-2 sm:flex sm:justify-center sm:gap-8 sm:px-4">
-          {sectionItems.map(item => (
+          {visibleSectionItems.map(item => (
             <button
               key={item.id}
               type="button"
@@ -545,45 +546,17 @@ export function AgentProfileExperience({
         </div>
       </section>
 
-      <section id="reviews" className="scroll-mt-40 bg-[#2348a0] px-4 py-24 text-white sm:px-5 lg:py-28">
-        <div className="mx-auto max-w-[1880px]">
-          <div className="text-center">
-            <h2 className="text-[44px] font-semibold tracking-[-0.04em] sm:text-[60px]">
-              What My Clients Say
-            </h2>
-            <p className="mx-auto mt-4 max-w-[980px] text-[20px] leading-[1.6] text-white/82 sm:text-[24px]">
-              Real experiences from clients who found their perfect space through my guidance.
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-10 xl:grid-cols-3">
-            {reviewCards.map(card => (
-              <article
-                key={`${card.label}-${card.author}`}
-                className="rounded-[32px] bg-white/12 p-8 shadow-[0_24px_55px_rgba(9,17,36,0.16)] backdrop-blur-[1px] sm:p-10"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 text-[#48ddff]">
-                    <CheckCircle2 className="h-6 w-6" />
-                    <p className="text-[15px] font-bold uppercase tracking-[0.18em]">
-                      {card.label}
-                    </p>
-                  </div>
-                  <p className="text-[70px] leading-none text-white/14">&rdquo;</p>
-                </div>
-
-                <p className="mt-8 text-[26px] leading-[1.55] text-white/94">
-                  &ldquo;{card.quote}&rdquo;
-                </p>
-
-                <p className="mt-10 text-[34px] font-semibold tracking-[-0.04em] text-white">
-                  {card.author}
-                </p>
-              </article>
-            ))}
-          </div>
+      {reviewCards.length > 0 ? (
+        <div id="reviews" className="scroll-mt-40">
+          <ReviewCarousel
+            title="What My Clients Say"
+            description="Verified feedback from clients who found their perfect space through my guidance."
+            items={reviewCards}
+            variant="blue"
+            className="px-0"
+          />
         </div>
-      </section>
+      ) : null}
 
       <section id="specialities" className="scroll-mt-40 bg-white">
         <div className="px-4 py-20 sm:px-5 lg:py-24">

@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
 import { AgentProfileExperience } from '@/components/shared/agent-profile-experience';
-import { getAgentProfile, getProperties, getSiteConfigOrNull, getTestimonials, toSocialUrl } from '@/lib/api';
+import { getAgentProfile, getProperties, getSiteConfigOrNull, toSocialUrl } from '@/lib/api';
 import { resolveImage, type ResolvedImage } from '@/lib/property-media';
-import type { Property, Testimonial } from '@/lib/types';
+import type { Property } from '@/lib/types';
+import { normalizeBrokerReviewCards } from '@/lib/reviews';
 
 function getSummary(
   agentBio?: string | null,
@@ -59,44 +60,6 @@ function formatCompactPortfolio(value: number) {
   return `AED ${Math.round(value).toLocaleString()}`;
 }
 
-function normalizeTestimonials(source: any[]): Testimonial[] {
-  return source
-    .map((item) => ({
-      quote:
-        typeof item?.message === 'string'
-          ? item.message.trim()
-          : typeof item?.quote === 'string'
-            ? item.quote.trim()
-            : '',
-      author:
-        typeof item?.clientName === 'string'
-          ? item.clientName.trim()
-          : typeof item?.author === 'string'
-            ? item.author.trim()
-            : typeof item?.name === 'string'
-              ? item.name.trim()
-              : '',
-      rating: typeof item?.rating === 'number' ? item.rating : 5,
-      image:
-        typeof item?.imageUrl === 'string'
-          ? item.imageUrl
-          : typeof item?.image === 'string'
-            ? item.image
-            : null,
-      location: typeof item?.location === 'string' ? item.location : undefined,
-      badgeLabel: typeof item?.badgeLabel === 'string' ? item.badgeLabel : 'Client Testimonial',
-    }))
-    .filter((item) => item.quote && item.author);
-}
-
-function buildReviewCards(testimonials: Array<Testimonial & { badgeLabel?: string | null }>) {
-  return testimonials.slice(0, 3).map((testimonial, index) => ({
-    label: testimonial.badgeLabel || 'Client Testimonial',
-    quote: testimonial.quote,
-    author: testimonial.author,
-  }));
-}
-
 function buildSpecialtyCards(
   featuredAreas: string[],
   listings: Property[],
@@ -135,10 +98,9 @@ export async function AgentProfilePageContent({
   agentSlug: string;
   agencySlug?: string | null;
 }) {
-  const [profileResponse, siteConfig, rawTestimonials, organizationListings] = await Promise.all([
+  const [profileResponse, siteConfig, organizationListings] = await Promise.all([
     getAgentProfile(agentSlug, agencySlug),
     getSiteConfigOrNull(agencySlug),
-    getTestimonials(agencySlug),
     getProperties({ limit: 8 }, agencySlug),
   ]);
 
@@ -172,8 +134,7 @@ export async function AgentProfilePageContent({
     (listing) => !activeListings.some((active) => active.id === listing.id),
   );
   const featuredListings = [...activeListings, ...organizationListingPool].slice(0, 4);
-  const normalizedTestimonials = normalizeTestimonials(rawTestimonials);
-  const reviewCards = buildReviewCards(normalizedTestimonials);
+  const reviewCards = normalizeBrokerReviewCards(agent.reviewSources);
   const specialtyCards = buildSpecialtyCards(siteConfig?.featuredAreas || [], featuredListings);
   const statCards = [
     {

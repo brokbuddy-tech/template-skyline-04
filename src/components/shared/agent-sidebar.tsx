@@ -83,7 +83,7 @@ export function AgentSidebar({
           <div className="mt-4 flex flex-col gap-2 w-full">
             {property ? (
               <PropertyBrochureButton property={property} agent={agent}>
-                <Button variant="outline" size="sm" className="w-full border-[#1E88E5] text-[#1E88E5] hover:bg-[#1E88E5]/5 rounded-[10px] h-10 font-semibold transition-colors">
+                <Button variant="outline" size="sm" className="w-full border-[#1E88E5] text-[#1E88E5] hover:bg-[#1E88E5]/5 hover:text-[#1E88E5] rounded-[10px] h-10 font-semibold transition-colors">
                   <FileText className="mr-2 h-4 w-4" /> DOWNLOAD BROCHURE
                 </Button>
               </PropertyBrochureButton>

@@ -577,7 +577,7 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
                       {isSubmitting ? 'Submitting...' : 'Register Interest'}
                     </Button>
                     <DialogTrigger asChild>
-                      <Button type="button" variant="outline" className="w-full">
+                      <Button type="button" variant="outline" className="w-full text-foreground hover:text-foreground">
                         <FileDown className="mr-2 h-4 w-4" />
                         Download Brochure
                       </Button>

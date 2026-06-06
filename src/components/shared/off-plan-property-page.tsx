@@ -438,7 +438,7 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                       Register Interest
                     </Button>
                     <DialogTrigger asChild>
-                      <Button variant="outline" className="w-full">
+                      <Button variant="outline" className="w-full text-foreground hover:text-foreground">
                         <FileDown className="w-4 h-4 mr-2" />
                         Download Brochure
                       </Button>

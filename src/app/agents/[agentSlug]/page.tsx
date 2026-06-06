@@ -160,6 +160,11 @@ export async function AgentProfilePageContent({
       brn={agent.brn || agent.licenseNumber || null}
       avatar={avatar}
       coverImage={coverImage}
+      profileSummary={summary}
+      yearsExperience={agent.yearsExperience || null}
+      languages={agent.languages || []}
+      specializations={agent.specializations || []}
+      liveStats={stats}
       biography={biography}
       reviewCountLabel={reviewCountLabel}
       whatsappHref={whatsappHref}

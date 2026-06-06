@@ -40,6 +40,12 @@ type StatCard = {
   label: string;
 };
 
+type LiveStats = {
+  activeListings: number;
+  soldListings: number;
+  rentedListings: number;
+};
+
 type AgentProfileExperienceProps = {
   agencySlug?: string | null;
   agentName: string;
@@ -48,6 +54,11 @@ type AgentProfileExperienceProps = {
   brn?: string | null;
   avatar: ResolvedImage | null;
   coverImage: ResolvedImage | null;
+  profileSummary: string;
+  yearsExperience?: number | null;
+  languages?: string[] | null;
+  specializations?: string[] | null;
+  liveStats: LiveStats;
   biography: string[];
   reviewCountLabel: string;
   whatsappHref: string | null;
@@ -181,6 +192,11 @@ export function AgentProfileExperience({
   brn,
   avatar,
   coverImage,
+  profileSummary,
+  yearsExperience,
+  languages,
+  specializations,
+  liveStats,
   biography,
   reviewCountLabel,
   whatsappHref,
@@ -404,63 +420,118 @@ export function AgentProfileExperience({
       </div>
 
       <section id="biography" className="scroll-mt-40 bg-[#f5f7fb] px-4 py-20 sm:px-5 lg:py-28">
-        <div className="mx-auto grid max-w-[1600px] gap-14 xl:grid-cols-[minmax(0,1.1fr)_700px] xl:items-start">
-          <div className="max-w-[1050px]">
-            <h2 className="text-[40px] font-semibold tracking-[-0.04em] text-[#0f1d3a] sm:text-[54px]">
-              Biography
-            </h2>
-            <div className="mt-8 space-y-8 text-[20px] leading-[1.72] text-[#4f648a] sm:text-[24px]">
-              {biography.map(paragraph => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-
-            <div className="mt-12">
-              <Button
-                asChild
-                className="h-16 rounded-full bg-[#25d366] px-10 text-[20px] font-semibold text-white hover:bg-[#20c15d]"
-              >
-                <a href={whatsappHref || phoneHref || prefixAgencyPath('/contact', agencySlug)} target={whatsappHref ? '_blank' : undefined} rel="noreferrer">
-                  <MessageCircle className="mr-3 h-5 w-5" />
-                  Discuss My Vision
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          <div className="rounded-[36px] bg-white p-7 shadow-[0_30px_75px_rgba(15,23,42,0.12)] sm:p-10">
-            <div className="flex items-center justify-between gap-6">
-              <div className="min-w-0 flex-1">
-                <p className="text-[14px] font-bold uppercase tracking-[0.18em] text-[#21479b]">
-                  Step 1 of 3
-                </p>
-                <div className="mt-4 h-3 rounded-full bg-[#e6e8ef]">
-                  <div className="h-full w-1/3 rounded-full bg-[#21479b]" />
+        <div className="mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
+          <aside className="space-y-10">
+            <div className="space-y-6 rounded-[30px] border border-[#d7deea] bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-8">
+              <h2 className="text-[14px] font-bold uppercase tracking-[0.28em] text-[#21479b]">Profile</h2>
+              <div className="space-y-5 text-[18px] leading-[1.65] text-[#4f648a]">
+                <p>{profileSummary}</p>
+                <div className="space-y-4">
+                  {languages && languages.length > 0 ? (
+                    <div>
+                      <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-[#8b99b0]">Languages</p>
+                      <p>{languages.join(', ')}</p>
+                    </div>
+                  ) : null}
+                  {specializations && specializations.length > 0 ? (
+                    <div>
+                      <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-[#8b99b0]">Specializations</p>
+                      <p>{specializations.join(', ')}</p>
+                    </div>
+                  ) : null}
+                  {yearsExperience ? (
+                    <div>
+                      <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-[#8b99b0]">Experience</p>
+                      <p>{yearsExperience}+ years</p>
+                    </div>
+                  ) : null}
+                  {brn ? (
+                    <div>
+                      <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-[#8b99b0]">BRN</p>
+                      <p>{brn}</p>
+                    </div>
+                  ) : null}
                 </div>
               </div>
-              <p className="text-[18px] font-medium text-[#4f648a]">Quick Inquiry</p>
             </div>
 
-            <h3 className="mt-12 text-[34px] font-semibold tracking-[-0.04em] text-[#0f1d3a]">
-              I am interested in...
-            </h3>
+            <div className="space-y-6 rounded-[30px] border border-[#d7deea] bg-white p-7 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:p-8">
+              <h2 className="text-[14px] font-bold uppercase tracking-[0.28em] text-[#21479b]">Live Stats</h2>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-[28px] font-semibold tracking-[-0.04em] text-[#0f1d3a]">{liveStats.activeListings}</p>
+                  <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#8b99b0]">Active</p>
+                </div>
+                <div>
+                  <p className="text-[28px] font-semibold tracking-[-0.04em] text-[#0f1d3a]">{liveStats.soldListings}</p>
+                  <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#8b99b0]">Sold</p>
+                </div>
+                <div>
+                  <p className="text-[28px] font-semibold tracking-[-0.04em] text-[#0f1d3a]">{liveStats.rentedListings}</p>
+                  <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#8b99b0]">Rented</p>
+                </div>
+              </div>
+            </div>
+          </aside>
 
-            <div className="mt-10 space-y-5">
-              {inquiryLinks.map(item => (
-                <Link
-                  key={item.title}
-                  href={item.href}
-                  className="flex items-center gap-5 rounded-[28px] border border-[#d7deea] bg-white p-6 transition-colors hover:border-[#21479b]/40 hover:bg-[#f9fbff]"
+          <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_520px] xl:items-start">
+            <div>
+              <h2 className="text-[40px] font-semibold tracking-[-0.04em] text-[#0f1d3a] sm:text-[54px]">
+                Biography
+              </h2>
+              <div className="mt-8 space-y-8 text-[20px] leading-[1.72] text-[#4f648a] sm:text-[24px]">
+                {biography.map(paragraph => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+
+              <div className="mt-12">
+                <Button
+                  asChild
+                  className="h-16 rounded-full bg-[#25d366] px-10 text-[20px] font-semibold text-white hover:bg-[#20c15d]"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-[18px] bg-[#eef2f8] text-[#21479b]">
-                    <item.icon className="h-8 w-8" />
+                  <a href={whatsappHref || phoneHref || prefixAgencyPath('/contact', agencySlug)} target={whatsappHref ? '_blank' : undefined} rel="noreferrer">
+                    <MessageCircle className="mr-3 h-5 w-5" />
+                    Discuss My Vision
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-[36px] bg-white p-7 shadow-[0_30px_75px_rgba(15,23,42,0.12)] sm:p-10">
+              <div className="flex items-center justify-between gap-6">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[14px] font-bold uppercase tracking-[0.18em] text-[#21479b]">
+                    Step 1 of 3
+                  </p>
+                  <div className="mt-4 h-3 rounded-full bg-[#e6e8ef]">
+                    <div className="h-full w-1/3 rounded-full bg-[#21479b]" />
                   </div>
-                  <div>
-                    <p className="text-[22px] font-semibold text-[#0f1d3a]">{item.title}</p>
-                    <p className="mt-1 text-[16px] text-[#4f648a]">{item.description}</p>
-                  </div>
-                </Link>
-              ))}
+                </div>
+                <p className="text-[18px] font-medium text-[#4f648a]">Quick Inquiry</p>
+              </div>
+
+              <h3 className="mt-12 text-[34px] font-semibold tracking-[-0.04em] text-[#0f1d3a]">
+                I am interested in...
+              </h3>
+
+              <div className="mt-10 space-y-5">
+                {inquiryLinks.map(item => (
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    className="flex items-center gap-5 rounded-[28px] border border-[#d7deea] bg-white p-6 transition-colors hover:border-[#21479b]/40 hover:bg-[#f9fbff]"
+                  >
+                    <div className="flex h-16 w-16 items-center justify-center rounded-[18px] bg-[#eef2f8] text-[#21479b]">
+                      <item.icon className="h-8 w-8" />
+                    </div>
+                    <div>
+                      <p className="text-[22px] font-semibold text-[#0f1d3a]">{item.title}</p>
+                      <p className="mt-1 text-[16px] text-[#4f648a]">{item.description}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>

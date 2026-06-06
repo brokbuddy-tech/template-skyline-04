@@ -57,11 +57,20 @@ export function PropertyCard({ property }: PropertyCardProps) {
           )}
 
 
-          {property.featured && (
-            <Badge className="absolute top-4 right-4 bg-accent text-accent-foreground rounded-full flex items-center gap-1 border-none">
-                <Star className="w-3 h-3" />
-                <span>Featured</span>
-            </Badge>
+          {(property.featured || property.recentlyListed) && (
+            <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2">
+              {property.featured && (
+                <Badge className="bg-accent text-accent-foreground rounded-full flex items-center gap-1 border-none">
+                    <Star className="w-3 h-3" />
+                    <span>Featured</span>
+                </Badge>
+              )}
+              {property.recentlyListed && (
+                <Badge className="bg-black/70 text-white rounded-full border border-white/15 backdrop-blur-sm">
+                  Recently Listed
+                </Badge>
+              )}
+            </div>
           )}
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out"></div>
           

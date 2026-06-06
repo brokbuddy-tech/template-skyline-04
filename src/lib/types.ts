@@ -67,6 +67,8 @@ export type Property = {
   photoCount?: number;
   tag?: string;
   featured?: boolean;
+  createdAt?: string;
+  recentlyListed?: boolean;
   developerLogo?: string;
   developerName?: string;
   category?: string;

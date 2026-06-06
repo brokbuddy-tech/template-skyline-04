@@ -283,6 +283,40 @@ function mapListingAgent(listing: any): Property['agent'] {
   };
 }
 
+const RECENTLY_LISTED_WINDOW_MS = 15 * 24 * 60 * 60 * 1000;
+
+function isTruthyListingFlag(value: unknown) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  if (typeof value === 'string') {
+    return ['true', '1', 'yes', 'y', 'on'].includes(value.trim().toLowerCase());
+  }
+  return Boolean(value);
+}
+
+function isFeaturedListing(listing: any) {
+  return [
+    listing.isFeatured,
+    listing.featured,
+    listing.fields?.isFeatured,
+    listing.fields?.featured,
+  ].some(isTruthyListingFlag);
+}
+
+function getCreatedAtIso(value: unknown) {
+  if (!value) return undefined;
+  const date = value instanceof Date ? value : new Date(String(value));
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
+
+function isRecentlyListed(createdAt?: string) {
+  if (!createdAt) return false;
+  const createdTime = Date.parse(createdAt);
+  if (!Number.isFinite(createdTime)) return false;
+  const ageMs = Date.now() - createdTime;
+  return ageMs >= 0 && ageMs <= RECENTLY_LISTED_WINDOW_MS;
+}
+
 /**
  * Maps raw API listing data to the Property type.
  * Updated to mimic Broker-OS image fetching and READY status handling.
@@ -336,6 +370,9 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     ...collectPublicListingLocationValues(listing),
   ]);
 
+  const createdAt = getCreatedAtIso(listing.createdAt);
+  const featured = isFeaturedListing(listing);
+
   return {
     id: listing.id,
     title: listing.title?.trim() || 'Untitled Property',
@@ -355,7 +392,9 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     description: normalizeListingDescription(listing.description),
     images: media.map(m => m.url),
     media,
-    featured: Boolean(listing.featured || listing.isFeatured),
+    featured,
+    createdAt,
+    recentlyListed: isRecentlyListed(createdAt),
     dldPermitLink: listing.dldPermitLink || listing.fields?.dldPermitLink || undefined,
     handoverDate: listing.handoverDate || listing.fields?.handoverDate || undefined,
     developerName: listing.developer?.name || listing.fields?.developerName || undefined,

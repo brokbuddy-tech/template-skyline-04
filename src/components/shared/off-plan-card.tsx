@@ -3,12 +3,13 @@
 
 import type { Property } from '@/lib/types';
 import Link from 'next/link';
-import { MapPin, Building2, Clock } from 'lucide-react';
+import { MapPin, Building2, Clock, Star } from 'lucide-react';
 import { EmaarLogo, NakheelLogo } from './developer-logos';
 import { Separator } from '../ui/separator';
 import { ProgressiveImage } from './progressive-image';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 import { usePathname } from 'next/navigation';
+import { Badge } from '../ui/badge';
 
 const developerLogos = {
     'Emaar': EmaarLogo,
@@ -40,10 +41,25 @@ export function OffPlanCard({ property }: { property: Property }) {
                 New
             </div>
           </div>
-          {property.tag && (
-             <div className="absolute top-3 right-3 bg-black/70 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                {property.tag}
-             </div>
+          {(property.tag || property.featured || property.recentlyListed) && (
+            <div className="absolute top-3 right-3 z-10 flex flex-col items-end gap-2">
+              {property.tag && (
+                <div className="bg-black/70 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  {property.tag}
+                </div>
+              )}
+              {property.featured && (
+                <Badge className="bg-accent text-accent-foreground rounded-full flex items-center gap-1 border-none">
+                  <Star className="w-3 h-3" />
+                  <span>Featured</span>
+                </Badge>
+              )}
+              {property.recentlyListed && (
+                <Badge className="bg-black/70 text-white rounded-full border border-white/15 backdrop-blur-sm">
+                  Recently Listed
+                </Badge>
+              )}
+            </div>
           )}
         </div>
         <div className="p-4">

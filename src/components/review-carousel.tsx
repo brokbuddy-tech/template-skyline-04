@@ -186,7 +186,7 @@ export function ReviewCarousel({
               ))}
             </div>
 
-            <p className={cn('mx-auto mt-7 max-w-3xl text-lg italic leading-8 md:text-2xl md:leading-10', styles.quote)}>
+            <p className={cn('mx-auto mt-7 line-clamp-2 max-w-3xl text-lg italic leading-8 md:text-2xl md:leading-10', styles.quote)}>
               "{active.quote}"
             </p>
 

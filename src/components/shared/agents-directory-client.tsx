@@ -3,15 +3,11 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Mail, MessageSquare, Phone, Search, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowRight, Mail, Phone, Search, Sparkles } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { SocialIcons } from '@/components/shared/social-icons';
 import { prefixAgencyPath } from '@/lib/agency-routing';
 import { resolveImage } from '@/lib/property-media';
-import { toSocialUrl } from '@/lib/api';
 import type { SiteAgent } from '@/lib/types';
 
 function matchAgent(agent: SiteAgent, query: string) {
@@ -83,129 +79,70 @@ export function AgentsDirectoryClient({
           </p>
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
           {filteredAgents.map((agent) => {
             const avatar = resolveImage(agent.avatar || 'founder-photo', 'founder-photo', `${agent.name} portrait`);
             const phoneHref = agent.phone ? `tel:${agent.phone}` : null;
-            const whatsappHref = toSocialUrl('whatsapp', agent.whatsapp || agent.phone);
             const emailHref = agent.email ? `mailto:${agent.email}` : null;
             const profileHref = agent.slug ? prefixAgencyPath(`/agents/${agent.slug}`, agencySlug) : null;
-            const secondaryActionCount = [phoneHref, whatsappHref || emailHref].filter(Boolean).length;
 
             return (
-              <Card key={agent.id || agent.slug || agent.name} className="overflow-hidden rounded-[28px] border border-border bg-background shadow-sm">
-                <div className="relative z-0 h-36 bg-[radial-gradient(circle_at_top_right,hsl(var(--accent)/0.18),transparent_42%),linear-gradient(135deg,hsl(var(--primary))_0%,hsl(var(--accent))_100%)]" />
-                <div className="relative z-10 px-6 pb-6">
-                  <div className="relative z-10 -mt-14 flex items-end gap-4">
-                    <div className="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[24px] border-4 border-background bg-muted shadow-md">
-                      {avatar ? (
-                        <Image
-                          src={avatar.src}
-                          alt={agent.name}
-                          width={96}
-                          height={96}
-                          className="h-full w-full object-cover object-top"
-                          data-ai-hint={avatar.hint}
-                          unoptimized={avatar.unoptimized}
-                        />
-                      ) : (
-                        <span className="text-2xl font-semibold text-muted-foreground">
-                          {agent.name.charAt(0)}
-                        </span>
-                      )}
-                    </div>
-                    <div className="pb-2">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-                        {agent.totalListings || 0} listings
-                      </p>
-                    </div>
-                  </div>
+              <Card key={agent.id || agent.slug || agent.name} className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+                <div className="relative aspect-[4/3] bg-muted">
+                  {avatar ? (
+                    <Image
+                      src={avatar.src}
+                      alt={agent.name}
+                      fill
+                      className="object-cover object-top"
+                      data-ai-hint={avatar.hint}
+                      unoptimized={avatar.unoptimized}
+                    />
+                  ) : (
+                    <span className="flex h-full w-full items-center justify-center text-5xl font-semibold text-muted-foreground">
+                      {agent.name.charAt(0)}
+                    </span>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent" />
+                </div>
 
-                  <div className="mt-5 space-y-4">
-                    <div>
-                      <h3 className="text-2xl font-headline font-semibold text-foreground">{agent.name}</h3>
-                      <p className="mt-1 text-sm font-medium text-accent">
-                        {agent.title || agent.tagline || 'Property Consultant'}
-                      </p>
-                    </div>
-
+                <div className="flex min-h-[276px] flex-1 flex-col space-y-4 p-6">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
+                      {agent.title || agent.tagline || 'Property Consultant'}
+                    </p>
+                    <h3 className="mt-2 text-2xl font-headline font-semibold text-foreground">{agent.name}</h3>
                     {agent.bio ? (
-                      <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">
+                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
                         {agent.bio}
                       </p>
                     ) : null}
-
-                    <div className="flex flex-wrap gap-2">
-                      {(agent.languages || []).slice(0, 3).map((language) => (
-                        <Badge key={`${agent.name}-${language}`} variant="outline" className="rounded-full">
-                          {language}
-                        </Badge>
-                      ))}
-                      {(agent.specializations || []).slice(0, 2).map((specialization) => (
-                        <Badge key={`${agent.name}-${specialization}`} className="rounded-full bg-accent/10 text-accent hover:bg-accent/10">
-                          {specialization}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    <div className="grid gap-2 text-sm text-muted-foreground">
-                      {agent.phone ? <p><span className="font-semibold text-foreground">Phone:</span> {agent.phone}</p> : null}
-                      {agent.email ? <p><span className="font-semibold text-foreground">Email:</span> {agent.email}</p> : null}
-                    </div>
-
-                    <SocialIcons
-                      links={{
-                        instagram: agent.instagram,
-                        linkedin: agent.linkedin,
-                        twitter: agent.twitter
-                      }}
-                    />
-
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {profileHref ? (
-                        <Button asChild className="w-full rounded-full sm:col-span-2">
-                          <Link href={profileHref}>
-                            View Profile
-                          </Link>
-                        </Button>
-                      ) : null}
-                      {phoneHref ? (
-                        <Button
-                          asChild
-                          variant="outline"
-                          className={`w-full rounded-full ${secondaryActionCount === 1 ? 'sm:col-span-2' : ''}`}
-                        >
-                          <a href={phoneHref}>
-                            <Phone className="mr-2 h-4 w-4" />
-                            Call
-                          </a>
-                        </Button>
-                      ) : null}
-                      {whatsappHref ? (
-                        <Button
-                          asChild
-                          variant="outline"
-                          className={`w-full rounded-full ${secondaryActionCount === 1 ? 'sm:col-span-2' : ''}`}
-                        >
-                          <a href={whatsappHref} target="_blank" rel="noreferrer">
-                            <MessageSquare className="mr-2 h-4 w-4" />
-                            WhatsApp
-                          </a>
-                        </Button>
-                      ) : emailHref ? (
-                        <Button
-                          asChild
-                          variant="outline"
-                          className={`w-full rounded-full ${secondaryActionCount === 1 ? 'sm:col-span-2' : ''}`}
-                        >
-                          <a href={emailHref}>
-                            <Mail className="mr-2 h-4 w-4" />
-                            Email
-                          </a>
-                        </Button>
-                      ) : null}
-                    </div>
                   </div>
+
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    {emailHref ? (
+                      <a href={emailHref} className="flex items-center gap-2 break-all hover:text-accent">
+                        <Mail className="h-4 w-4 text-accent" />
+                        {agent.email}
+                      </a>
+                    ) : null}
+                    {phoneHref ? (
+                      <a href={phoneHref} className="flex items-center gap-2 hover:text-accent">
+                        <Phone className="h-4 w-4 text-accent" />
+                        {agent.phone}
+                      </a>
+                    ) : null}
+                  </div>
+
+                  {profileHref ? (
+                    <Link
+                      href={profileHref}
+                      className="mt-auto inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-accent"
+                    >
+                      View Profile
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  ) : null}
                 </div>
               </Card>
             );

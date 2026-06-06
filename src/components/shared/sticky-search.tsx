@@ -21,6 +21,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { searchPropertiesWithAI } from '@/lib/api';
+import { cleanQueryForCategoryFilter } from '@/lib/search';
 
 const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
 const completionStatus = ['Any', 'Ready', 'Off-plan'];
@@ -30,10 +31,12 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const searchKey = searchParams.toString();
+  const initialSelectedType = searchParams.get('category') || searchParams.get('propertyType') || '';
   const [transactionType, setTransactionType] = useState(searchParams.get('type') || 'buy');
-  const [selectedType, setSelectedType] = useState(searchParams.get('category') || searchParams.get('propertyType') || '');
+  const [selectedType, setSelectedType] = useState(initialSelectedType);
   const [selectedStatus, setSelectedStatus] = useState(searchParams.get('readiness') || '');
-  const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [query, setQuery] = useState(cleanQueryForCategoryFilter(searchParams.get('q'), initialSelectedType) || '');
   const [isSearching, setIsSearching] = useState(false);
   const propertyTypes = useMemo(
     () => (categories.length > 0 ? categories : fallbackPropertyTypes),
@@ -48,19 +51,29 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const nextSelectedType = searchParams.get('category') || searchParams.get('propertyType') || '';
+    setTransactionType(searchParams.get('type') || 'buy');
+    setSelectedType(nextSelectedType);
+    setSelectedStatus(searchParams.get('readiness') || '');
+    setQuery(cleanQueryForCategoryFilter(searchParams.get('q'), nextSelectedType) || '');
+  }, [searchKey]);
+
   const pushSearch = async (nextTransactionType = transactionType) => {
     const params = new URLSearchParams(searchParams.toString());
 
     params.set('type', nextTransactionType);
+    const category = selectedType || undefined;
+    const cleanedQuery = cleanQueryForCategoryFilter(query.trim(), category);
 
-    if (query.trim()) {
-      params.set('q', query.trim());
+    if (cleanedQuery) {
+      params.set('q', cleanedQuery);
       setIsSearching(true);
       try {
         const result = await searchPropertiesWithAI({
-          query: query.trim(),
+          query: cleanedQuery,
           transactionType: nextTransactionType,
-          category: selectedType || undefined,
+          category,
           readiness: selectedStatus || undefined,
           limit: 18,
         });
@@ -80,7 +93,7 @@ export function StickySearch({ categories = [], amenities = [] }: { categories?:
       params.delete('ids');
     }
 
-    if (selectedType) params.set('category', selectedType);
+    if (category) params.set('category', category);
     else params.delete('category');
 
     if (selectedStatus && selectedStatus !== 'Any') params.set('readiness', selectedStatus);

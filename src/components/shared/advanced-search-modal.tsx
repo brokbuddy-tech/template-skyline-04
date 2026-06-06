@@ -19,6 +19,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { searchPropertiesWithAI } from '@/lib/api';
 import { prefixAgencyPath, resolveAgencySlugFromPathname, stripAgencySlugFromPathname } from '@/lib/agency-routing';
 import { AmenityIcon } from '@/components/amenity-icon';
+import { cleanQueryForCategoryFilter } from '@/lib/search';
 
 const fallbackAmenities = [
   'Pool',
@@ -39,7 +40,9 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
   const minPrice = 0;
   const maxPrice = 50000000;
   
-  const [aiQuery, setAiQuery] = useState(searchParams.get('q') || '');
+  const [aiQuery, setAiQuery] = useState(
+    cleanQueryForCategoryFilter(searchParams.get('q'), searchParams.get('category') || searchParams.get('propertyType')) || '',
+  );
   const [priceRange, setPriceRange] = useState([
     Number(searchParams.get('minPrice') || minPrice),
     Number(searchParams.get('maxPrice') || maxPrice),
@@ -92,14 +95,17 @@ export function AdvancedSearchModal({ amenities = fallbackAmenities }: { ameniti
       ? prefixAgencyPath(normalizedPathname, agencySlug)
       : prefixAgencyPath('/properties', agencySlug);
 
-    if (aiQuery.trim()) {
-      params.set('q', aiQuery.trim());
+    const category = searchParams.get('category') || searchParams.get('propertyType') || undefined;
+    const cleanedQuery = cleanQueryForCategoryFilter(aiQuery.trim(), category);
+
+    if (cleanedQuery) {
+      params.set('q', cleanedQuery);
       setIsAiSearching(true);
       try {
         const result = await searchPropertiesWithAI({
-          query: aiQuery.trim(),
+          query: cleanedQuery,
           transactionType: searchParams.get('type') || undefined,
-          category: searchParams.get('category') || undefined,
+          category,
           readiness: searchParams.get('readiness') || undefined,
           limit: 18,
         });

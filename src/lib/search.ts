@@ -200,6 +200,73 @@ function dedupeTokens(tokens: string[]) {
   return Array.from(new Set(tokens.filter(Boolean)));
 }
 
+function cleanCategoryToken(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function editDistance(left: string, right: string) {
+  const matrix = Array.from({ length: left.length + 1 }, (_, row) =>
+    Array.from({ length: right.length + 1 }, (_, col) => (row === 0 ? col : col === 0 ? row : 0)),
+  );
+
+  for (let row = 1; row <= left.length; row += 1) {
+    for (let col = 1; col <= right.length; col += 1) {
+      const cost = left[row - 1] === right[col - 1] ? 0 : 1;
+      matrix[row][col] = Math.min(
+        matrix[row - 1][col] + 1,
+        matrix[row][col - 1] + 1,
+        matrix[row - 1][col - 1] + cost,
+      );
+    }
+  }
+
+  return matrix[left.length][right.length];
+}
+
+function getPropertyTypePattern(value?: string) {
+  const normalized = cleanCategoryToken(value || '');
+  if (!normalized) return undefined;
+  return PROPERTY_TYPE_PATTERNS.find(({ canonical, aliases }) =>
+    cleanCategoryToken(canonical) === normalized ||
+    aliases.some((alias) => cleanCategoryToken(alias) === normalized),
+  );
+}
+
+export function cleanQueryForCategoryFilter(query?: string | null, category?: string | null) {
+  const trimmed = query?.trim();
+  if (!trimmed || !category) return trimmed;
+  const typePatterns = category.split(',').flatMap((value) => {
+    const typePattern = getPropertyTypePattern(value.trim());
+    return typePattern ? [typePattern] : [];
+  });
+  if (typePatterns.length === 0) return trimmed;
+
+  const tokens = trimmed.split(/\s+/).map(cleanCategoryToken).filter(Boolean);
+  if (tokens.length === 0 || tokens.length > 2) return trimmed;
+
+  const aliases = typePatterns.flatMap((typePattern) => typePattern.aliases);
+  const isOnlyCategoryText = tokens.every((token) =>
+    aliases.some((alias) => {
+      const normalizedAlias = cleanCategoryToken(alias);
+      const tolerance = normalizedAlias.length >= 8 ? 2 : 1;
+      return token === normalizedAlias || editDistance(token, normalizedAlias) <= tolerance;
+    }),
+  );
+
+  return isOnlyCategoryText ? undefined : trimmed;
+}
+
+function matchesCategoryFilter(index: PropertySearchIndex, categoryFilter?: string) {
+  const categories = (categoryFilter || '').split(',').map((category) => category.trim()).filter(Boolean);
+  if (categories.length === 0) return true;
+
+  return categories.some((category) => {
+    const typePattern = getPropertyTypePattern(category);
+    if (typePattern) return typePattern.pattern.test(index.typeText);
+    return index.typeText.includes(normalizeSearchText(category));
+  });
+}
+
 function parseHumanNumber(value?: string) {
   if (!value) return undefined;
 
@@ -531,7 +598,7 @@ export function getFiltersFromSearchParams(searchParams: SearchParamRecord): Pro
 }
 
 export function filterProperties(properties: Property[], filters: PropertyFilterState): Property[] {
-  const query = normalizeSearchText(filters.q?.trim());
+  const query = normalizeSearchText(cleanQueryForCategoryFilter(filters.q?.trim(), filters.category));
   const selectedAmenities = (filters.amenities || []).map(item => item.toLowerCase());
   const hasAiScopedIds = Boolean(filters.ids?.length);
 
@@ -542,9 +609,8 @@ export function filterProperties(properties: Property[], filters: PropertyFilter
     if (filters.type === 'rent' && property.transactionType !== 'Rent') return false;
 
     if (filters.category) {
-      const category = filters.category.toLowerCase();
-      const propertyCategory = `${property.category || ''} ${property.type || ''}`.toLowerCase();
-      if (!propertyCategory.includes(category)) return false;
+      const index = buildPropertySearchIndex(property);
+      if (!matchesCategoryFilter(index, filters.category)) return false;
     }
 
     if (filters.readiness) {

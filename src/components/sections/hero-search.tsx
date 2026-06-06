@@ -16,6 +16,7 @@ import { AdvancedSearchModal } from '../shared/advanced-search-modal';
 import { usePathname, useRouter } from 'next/navigation';
 import { searchPropertiesWithAI } from '@/lib/api';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
+import { cleanQueryForCategoryFilter } from '@/lib/search';
 
 const searchTabs = ['Buy', 'Rent', 'Sell', 'Manage'];
 const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
@@ -47,18 +48,20 @@ export function HeroSearch({ categories = [] }: { categories?: string[] }) {
     const params = new URLSearchParams();
     params.set('type', activeTab === 'Rent' ? 'rent' : 'buy');
 
-    if (selectedType) {
-      params.set('category', selectedType);
+    const category = selectedType || undefined;
+    if (category) {
+      params.set('category', category);
     }
 
-    if (query.trim()) {
-      params.set('q', query.trim());
+    const cleanedQuery = cleanQueryForCategoryFilter(query.trim(), category);
+    if (cleanedQuery) {
+      params.set('q', cleanedQuery);
       setIsSearching(true);
       try {
         const result = await searchPropertiesWithAI({
-          query: query.trim(),
+          query: cleanedQuery,
           transactionType: activeTab === 'Rent' ? 'rent' : 'buy',
-          category: selectedType || undefined,
+          category,
           limit: 12,
         });
 

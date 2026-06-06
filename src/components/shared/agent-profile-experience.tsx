@@ -9,10 +9,11 @@ import {
   BedDouble,
   Home,
   KeyRound,
+  Mail,
   MessageCircle,
+  Phone,
   Save,
   Square,
-  Star,
   UserRoundPlus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -261,15 +262,6 @@ export function AgentProfileExperience({
     if (listingFilter === 'rent') return property.transactionType === 'Rent';
     return true;
   });
-  const listingGridClass =
-    filteredListings.length >= 4
-      ? 'xl:grid-cols-4'
-      : filteredListings.length === 3
-        ? 'xl:grid-cols-3'
-        : filteredListings.length === 2
-          ? 'xl:grid-cols-2'
-          : 'xl:grid-cols-1';
-
   const inquiryLinks = [
     {
       title: 'Buying',
@@ -293,8 +285,8 @@ export function AgentProfileExperience({
 
   return (
     <div className="bg-white text-[#08152f]">
-      <section className="!p-0 border-b border-slate-200 bg-white">
-        <div className="relative h-[340px] overflow-hidden bg-[#a3a3a3] sm:h-[350px] lg:h-[330px]">
+      <section className="relative overflow-hidden border-b border-slate-200 bg-[#08152f] px-4 py-16 text-white sm:px-5 lg:py-20">
+        <div className="absolute inset-0 bg-[#a3a3a3]">
           {coverImage ? (
             <Image
               src={coverImage.src}
@@ -306,75 +298,66 @@ export function AgentProfileExperience({
               priority
             />
           ) : null}
-          <div className="absolute inset-0 bg-[#9b9b9b]/84" />
+          <div className="absolute inset-0 bg-[#08152f]/80" />
         </div>
 
-        <div className="bg-white px-4 sm:px-5">
-          <div className="mx-auto max-w-[1880px] pb-10 pt-8 md:pb-12">
-            <div className="md:hidden">
-              <div className="-mt-24 mb-5 inline-flex rounded-full bg-white p-3 shadow-[0_24px_55px_rgba(15,23,42,0.18)]">
-                <div className="relative h-28 w-28 overflow-hidden rounded-full bg-white">
-                  {avatar ? (
-                    <Image
-                      src={avatar.src}
-                      alt={avatar.alt}
-                      fill
-                      className="object-cover object-top"
-                      data-ai-hint={avatar.hint}
-                      unoptimized={avatar.unoptimized}
-                    />
-                  ) : null}
-                </div>
-              </div>
+        <div className="relative z-10 mx-auto grid max-w-[1600px] grid-cols-1 items-end gap-12 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <div className="relative aspect-square w-full max-w-[280px] overflow-hidden border border-white/15 bg-white/10 shadow-[0_28px_70px_rgba(0,0,0,0.28)]">
+            {avatar ? (
+              <Image
+                src={avatar.src}
+                alt={avatar.alt}
+                fill
+                className="object-cover object-top"
+                data-ai-hint={avatar.hint}
+                unoptimized={avatar.unoptimized}
+              />
+            ) : null}
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <p className="text-[13px] font-bold uppercase tracking-[0.32em] text-[#4fd8ff]">{displayName}</p>
+              <h1 className="mt-4 text-[40px] font-semibold tracking-[-0.04em] text-white sm:text-[54px] lg:text-[66px]">
+                {agentName}
+              </h1>
+              <p className="mt-3 text-[18px] font-medium text-white/70 sm:text-[24px]">
+                {headline}
+              </p>
             </div>
 
-            <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-              <div className="hidden md:block">
-                <div className="absolute -top-[168px] left-0 inline-flex rounded-full bg-white p-4 shadow-[0_28px_70px_rgba(15,23,42,0.18)]">
-                  <div className="relative h-[248px] w-[248px] overflow-hidden rounded-full bg-white">
-                    {avatar ? (
-                      <Image
-                        src={avatar.src}
-                        alt={avatar.alt}
-                        fill
-                        className="object-cover object-top"
-                        data-ai-hint={avatar.hint}
-                        unoptimized={avatar.unoptimized}
-                      />
-                    ) : null}
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-wrap gap-6 text-[16px] font-medium text-white/80">
+              {brn ? (
+                <span className="flex items-center gap-2">
+                  <span className="text-[#4fd8ff]">BRN</span>
+                  {brn}
+                </span>
+              ) : null}
+              {email ? (
+                <a href={`mailto:${email}`} className="flex items-center gap-2 hover:text-[#4fd8ff]">
+                  <Mail className="h-5 w-5 text-[#4fd8ff]" />
+                  {email}
+                </a>
+              ) : null}
+              {phoneHref ? (
+                <a href={phoneHref} className="flex items-center gap-2 hover:text-[#4fd8ff]">
+                  <Phone className="h-5 w-5 text-[#4fd8ff]" />
+                  {phoneHref.replace(/^tel:/, '')}
+                </a>
+              ) : null}
+              {whatsappHref ? (
+                <a href={whatsappHref} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-[#4fd8ff]">
+                  <MessageCircle className="h-5 w-5 text-[#4fd8ff]" />
+                  WhatsApp
+                </a>
+              ) : null}
+            </div>
 
-              <div className="min-w-0 md:pl-[298px]">
-                <h1 className="text-[36px] font-semibold tracking-[-0.04em] text-[#111827] sm:text-[52px] lg:text-[62px]">
-                  Hi, I am {agentName}
-                </h1>
-                <p className="mt-3 text-[18px] font-medium text-[#4f648a] sm:text-[24px] lg:text-[28px]">
-                  {headline} | {displayName}
-                </p>
-                {brn ? (
-                  <p className="mt-3 text-[13px] font-bold uppercase tracking-[0.22em] text-[#21479b] sm:text-[15px]">
-                    BRN {brn}
-                  </p>
-                ) : null}
+            <p className="text-[15px] font-semibold text-white/65">
+              5.0 client rating <span className="font-normal">({reviewCountLabel})</span>
+            </p>
 
-                <div className="mt-5 flex flex-wrap items-center gap-3 text-[#0f172a]">
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <Star
-                        key={index}
-                        className="h-6 w-6 fill-[#4fd8ff] text-[#4fd8ff]"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-[16px] font-semibold sm:text-[18px]">
-                    5.0 <span className="font-medium">({reviewCountLabel})</span>
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex w-full flex-col gap-4 sm:flex-row lg:w-auto lg:justify-end">
+            <div className="flex flex-col gap-4 sm:flex-row">
                 <Button
                   asChild
                   className="h-14 rounded-full bg-[#25d366] px-8 text-[18px] font-semibold text-white hover:bg-[#20c15d] sm:h-16 sm:px-10"
@@ -395,15 +378,13 @@ export function AgentProfileExperience({
                     Save Contact
                   </a>
                 </Button>
-              </div>
             </div>
           </div>
         </div>
-
       </section>
 
       <div className="sticky top-[80px] z-30 border-y border-slate-200 bg-white/95 backdrop-blur">
-        <nav className="mx-auto grid max-w-[1880px] grid-cols-4 items-center gap-1 px-2 sm:flex sm:justify-center sm:gap-8 sm:px-4">
+        <nav className="mx-auto grid max-w-[1600px] grid-cols-4 items-center gap-1 px-2 sm:flex sm:justify-center sm:gap-8 sm:px-4">
           {visibleSectionItems.map(item => (
             <button
               key={item.id}
@@ -423,7 +404,7 @@ export function AgentProfileExperience({
       </div>
 
       <section id="biography" className="scroll-mt-40 bg-[#f5f7fb] px-4 py-20 sm:px-5 lg:py-28">
-        <div className="mx-auto grid max-w-[1880px] gap-14 xl:grid-cols-[minmax(0,1.1fr)_700px] xl:items-start">
+        <div className="mx-auto grid max-w-[1600px] gap-14 xl:grid-cols-[minmax(0,1.1fr)_700px] xl:items-start">
           <div className="max-w-[1050px]">
             <h2 className="text-[40px] font-semibold tracking-[-0.04em] text-[#0f1d3a] sm:text-[54px]">
               Biography
@@ -486,7 +467,7 @@ export function AgentProfileExperience({
       </section>
 
       <section id="listings" className="scroll-mt-40 bg-[#f5f7fb] px-4 pb-24 sm:px-5 lg:pb-28">
-        <div className="mx-auto max-w-[1880px]">
+        <div className="mx-auto max-w-[1600px]">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-[820px]">
               <h2 className="text-[40px] font-semibold tracking-[-0.04em] text-[#0f1d3a] sm:text-[54px]">
@@ -516,7 +497,7 @@ export function AgentProfileExperience({
             </div>
           </div>
 
-          <div className={cn('mt-12 grid gap-10 md:grid-cols-2', listingGridClass)}>
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
             {filteredListings.map(property => (
               <PropertyShowcaseCard
                 key={property.id}
@@ -560,7 +541,7 @@ export function AgentProfileExperience({
 
       <section id="specialities" className="scroll-mt-40 bg-white">
         <div className="px-4 py-20 sm:px-5 lg:py-24">
-          <div className="mx-auto max-w-[1880px]">
+          <div className="mx-auto max-w-[1600px]">
             <div className="flex flex-col gap-10 xl:flex-row xl:items-start xl:justify-between">
               <div className="max-w-[850px]">
                 <h2 className="text-[40px] font-semibold tracking-[-0.04em] text-[#0f1d3a] sm:text-[54px]">

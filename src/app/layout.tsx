@@ -34,6 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
     || siteConfig.branding?.bio
     || siteConfig.branding?.tagline
     || `Explore the public website for ${displayName}.`;
+  const logoIconUrl = siteConfig.profile?.logo?.trim() || undefined;
 
   return {
     title: {
@@ -41,6 +42,13 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${displayName}`,
     },
     description,
+    icons: logoIconUrl
+      ? {
+          icon: [{ url: logoIconUrl }],
+          shortcut: [{ url: logoIconUrl }],
+          apple: [{ url: logoIconUrl }],
+        }
+      : undefined,
     openGraph: {
       title: displayName,
       description,

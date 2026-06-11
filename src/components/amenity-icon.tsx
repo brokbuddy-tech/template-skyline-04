@@ -1,7 +1,6 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { DEFAULT_AMENITY_ICON_PATH, getAmenityIconPath } from "@/lib/amenity-icons";
+import type { IconType } from "react-icons";
+import * as FaIcons from "react-icons/fa6";
+import { DEFAULT_AMENITY_ICON_COMPONENT, getAmenityIconComponentName } from "@/lib/amenity-icons";
 
 interface AmenityIconProps {
   name: string;
@@ -9,26 +8,20 @@ interface AmenityIconProps {
   alt?: string;
 }
 
-export function AmenityIcon({ name, className = "h-4 w-4", alt = "" }: AmenityIconProps) {
-  const iconPath = getAmenityIconPath(name);
-  const [src, setSrc] = useState(iconPath);
+const FALLBACK_ICON = FaIcons[DEFAULT_AMENITY_ICON_COMPONENT as keyof typeof FaIcons] as IconType;
 
-  useEffect(() => {
-    setSrc(iconPath);
-  }, [iconPath]);
+export function AmenityIcon({ name, className = "h-4 w-4", alt = "" }: AmenityIconProps) {
+  const iconName = getAmenityIconComponentName(name);
+  const Icon = (FaIcons[iconName as keyof typeof FaIcons] as IconType | undefined) ?? FALLBACK_ICON;
 
   return (
-    <img
-      src={src}
-      alt={alt}
+    <span
+      role={alt ? "img" : undefined}
+      aria-label={alt || undefined}
       aria-hidden={alt ? undefined : true}
-      className={`shrink-0 object-contain ${className}`}
-      loading="lazy"
-      onError={() => {
-        if (src !== DEFAULT_AMENITY_ICON_PATH) {
-          setSrc(DEFAULT_AMENITY_ICON_PATH);
-        }
-      }}
-    />
+      className={`inline-flex shrink-0 items-center justify-center ${className}`}
+    >
+      <Icon className="h-full w-full" />
+    </span>
   );
 }

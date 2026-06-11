@@ -96,6 +96,8 @@ export default function ContactPage() {
         listingId: selectedProperty?.id,
         propertyType: selectedProperty?.type,
         budget: selectedProperty?.price,
+        templateName: 'Skyline',
+        formContext: 'contact-page',
       },
       {
         successTitle: 'Message sent',
@@ -191,6 +193,7 @@ export default function ContactPage() {
                     id="message"
                     name="message"
                     required
+                    minLength={10}
                     placeholder="Tell us how we can help..."
                     rows={6}
                     className="border-foreground/20 focus-visible:ring-accent"

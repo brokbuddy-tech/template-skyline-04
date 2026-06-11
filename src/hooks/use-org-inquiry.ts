@@ -11,7 +11,10 @@ export type OrgInquiryPayload = {
   message: string;
   listingId?: string;
   propertyType?: string;
+  propertyInterest?: string;
   budget?: number;
+  templateName?: string;
+  formContext?: string;
 };
 
 type SubmitInquiryOptions = {

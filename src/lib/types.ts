@@ -61,7 +61,9 @@ export type Property = {
   referenceId?: string;
   trakheesi?: string;
   reraPermit?: string;
+  dldPermitNo?: string;
   dldPermitLink?: string | null;
+  floorPlans?: any[];
   status?: PropertyStatus;
   transactionType: PropertyTransactionType;
   photoCount?: number;

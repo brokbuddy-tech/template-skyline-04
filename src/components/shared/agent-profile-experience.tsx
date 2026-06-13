@@ -157,15 +157,30 @@ function PropertyShowcaseCard({
             {property.title}
           </h3>
 
-          <div className="mt-6 grid grid-cols-3 gap-4 border-t border-slate-200 pt-6 text-[#21479b]">
-            <div className="flex items-center gap-2 text-[16px] font-medium">
-              <BedDouble className="h-5 w-5" />
-              <span>{property.bedrooms}</span>
-            </div>
-            <div className="flex items-center gap-2 text-[16px] font-medium">
-              <Bath className="h-5 w-5" />
-              <span>{property.bathrooms}</span>
-            </div>
+          <div className={`mt-6 grid gap-4 border-t border-slate-200 pt-6 text-[#21479b] ${
+            property.bedrooms > 0 && property.bathrooms > 0
+              ? 'grid-cols-3'
+              : property.bedrooms > 0 || property.bathrooms > 0
+                ? 'grid-cols-2'
+                : 'grid-cols-1'
+          }`}>
+            {property.bedrooms > 0 ? (
+              <div className="flex items-center gap-2 text-[16px] font-medium">
+                <BedDouble className="h-5 w-5" />
+                <span>{property.bedrooms}</span>
+              </div>
+            ) : property.type === 'Studio' || property.category === 'Studio' ? (
+              <div className="flex items-center gap-2 text-[16px] font-medium">
+                <BedDouble className="h-5 w-5" />
+                <span>Studio</span>
+              </div>
+            ) : null}
+            {property.bathrooms > 0 && (
+              <div className="flex items-center gap-2 text-[16px] font-medium">
+                <Bath className="h-5 w-5" />
+                <span>{property.bathrooms}</span>
+              </div>
+            )}
             <div className="flex items-center justify-end gap-2 text-[16px] font-medium">
               <Square className="h-5 w-5" />
               <span>{formatSqft(property.sqft)}</span>

@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/tooltip';
 import { OffPlanHeroGallery } from './off-plan-hero-gallery';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -55,16 +55,7 @@ interface OffPlanPropertyPageProps {
 }
 
 export function OffPlanPropertyPage({ property }: { property: Property }) {
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
   const masterplanImage = PlaceHolderImages.find((img) => img.id === 'masterplan');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const currentUrl = window.location.href;
-      setQrCodeUrl(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`);
-    }
-  }, []);
-  
   const timelineSteps = [
     {
       label: 'Project Announcement',
@@ -308,27 +299,31 @@ export function OffPlanPropertyPage({ property }: { property: Property }) {
                 </div>
               </div>
               
-              {/* Regulatory Information */}
+              {(property.trakheesi || property.dldPermitNo || property.reraPermit || property.agent?.brn || property.dldPermitLink) && (
               <div className="mb-12">
                 <div className="p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-start gap-6">
                   <div>
                     <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-accent"/> Regulatory Information</h3>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5"/> <strong>Reference ID:</strong> {property.referenceId || 'N/A'}</li>
-                      <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5"/> <strong>Trakheesi:</strong> {property.trakheesi || 'N/A'}</li>
-                      <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5"/> <strong>RERA Permit:</strong> {property.reraPermit || 'N/A'}</li>
+                      {(property.trakheesi || property.dldPermitNo) && (
+                        <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5"/> <strong>Permit Number:</strong> {property.trakheesi || property.dldPermitNo}</li>
+                      )}
+                      {property.reraPermit && (
+                        <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5"/> <strong>RERA Project Number:</strong> {property.reraPermit}</li>
+                      )}
+                      {property.agent?.brn && (
+                        <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5"/> <strong>BRN Number:</strong> {property.agent.brn}</li>
+                      )}
                     </ul>
                   </div>
-                  <div className="text-center w-full sm:w-auto">
-                      <p className="text-sm font-bold mb-2">DLD Permit</p>
-                      {qrCodeUrl ? (
-                          <Image src={qrCodeUrl} alt="DLD Permit QR Code" width={100} height={100} />
-                      ) : (
-                          <div className="w-[100px] h-[100px] bg-muted animate-pulse"></div>
-                      )}
-                  </div>
+                  {property.dldPermitLink && (
+                    <div className="text-center w-full flex flex-col items-center sm:w-auto shrink-0 p-2 border bg-muted/20 rounded-md">
+                      <Image src={property.dldPermitLink} alt="Trakheesi Permit QR Code" width={100} height={100} className="object-contain" />
+                    </div>
+                  )}
                 </div>
               </div>
+              )}
 
               <Separator className="my-12"/>
 

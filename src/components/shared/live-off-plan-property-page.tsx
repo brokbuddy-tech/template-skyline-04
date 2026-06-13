@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useEffect, useState, type FormEvent } from 'react';
+import { useContext, useState, type FormEvent } from 'react';
 import Image from 'next/image';
 import { Banknote, Check, ChevronRight, Clock, FileDown, HandHelping, LandPlot, MapPin, MessageSquare, ShieldCheck } from 'lucide-react';
 import type { Property } from '@/lib/types';
@@ -208,7 +208,6 @@ function getPaymentSummary(cards: PaymentCard[]) {
 }
 
 export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [isBrochureOpen, setIsBrochureOpen] = useState(false);
   const [buyerType, setBuyerType] = useState('end-user');
   const { formatPrice } = useContext(CurrencyContext);
@@ -238,15 +237,6 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
     { label: 'Reference', value: property.referenceId || 'On request' },
     { label: 'Developer', value: developerName },
   ];
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setQrCodeUrl(
-      `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-        window.location.href
-      )}`
-    );
-  }, []);
 
   async function handleRegisterInterest(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -387,6 +377,7 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
                 </div>
               </div>
 
+              {(property.trakheesi || property.dldPermitNo || property.reraPermit || property.agent?.brn || property.dldPermitLink) && (
               <div className="mb-12">
                 <div className="flex flex-col items-start justify-between gap-6 rounded-lg border p-4 sm:flex-row">
                   <div>
@@ -395,35 +386,40 @@ export function LiveOffPlanPropertyPage({ property }: { property: Property }) {
                       Regulatory Information
                     </h3>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex gap-2">
-                        <HandHelping className="mt-0.5 h-4 w-4" />
-                        <strong>Reference ID:</strong> {property.referenceId || 'N/A'}
-                      </li>
-                      <li className="flex gap-2">
-                        <Banknote className="mt-0.5 h-4 w-4" />
-                        <strong>Trakheesi:</strong> {property.trakheesi || 'N/A'}
-                      </li>
-                      <li className="flex gap-2">
-                        <LandPlot className="mt-0.5 h-4 w-4" />
-                        <strong>RERA Permit:</strong> {property.reraPermit || 'N/A'}
-                      </li>
+                      {(property.trakheesi || property.dldPermitNo) && (
+                        <li className="flex gap-2">
+                          <HandHelping className="mt-0.5 h-4 w-4" />
+                          <strong>Permit Number:</strong> {property.trakheesi || property.dldPermitNo}
+                        </li>
+                      )}
+                      {property.reraPermit && (
+                        <li className="flex gap-2">
+                          <LandPlot className="mt-0.5 h-4 w-4" />
+                          <strong>RERA Project Number:</strong> {property.reraPermit}
+                        </li>
+                      )}
+                      {property.agent?.brn && (
+                        <li className="flex gap-2">
+                          <Banknote className="mt-0.5 h-4 w-4" />
+                          <strong>BRN Number:</strong> {property.agent.brn}
+                        </li>
+                      )}
                     </ul>
                   </div>
-                  <div className="w-full text-center sm:w-auto">
-                    <p className="mb-2 text-sm font-bold">DLD Permit</p>
-                    {qrCodeUrl ? (
+                  {property.dldPermitLink && (
+                    <div className="w-full shrink-0 p-2 text-center sm:w-auto">
                       <Image
-                        src={qrCodeUrl}
-                        alt="DLD Permit QR Code"
+                        src={property.dldPermitLink}
+                        alt="Trakheesi Permit QR Code"
                         width={100}
                         height={100}
+                        className="object-contain"
                       />
-                    ) : (
-                      <div className="h-[100px] w-[100px] animate-pulse bg-muted" />
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
+              )}
 
               <Separator className="my-12" />
 

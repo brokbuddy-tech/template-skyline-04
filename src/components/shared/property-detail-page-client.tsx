@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BedDouble, Bath, Square, MapPin, Building, LandPlot, HandHelping, Banknote, ShieldCheck, Clock } from 'lucide-react';
@@ -26,6 +26,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { UpfrontCostModal } from '@/components/shared/upfront-cost-modal';
 import { Card } from '@/components/ui/card';
 import { FaqAccordion } from '@/components/shared/faq-accordion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { Property, PropertyAgent } from '@/lib/types';
 import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 import { usePathname } from 'next/navigation';
@@ -86,15 +87,9 @@ export function PropertyDetailPageClient({
   recommendedProperties: Property[];
   fallbackAgent?: PropertyAgent;
 }) {
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
   const { formatPrice } = useContext(CurrencyContext);
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setQrCodeUrl(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href)}`);
-  }, []);
 
   if (property.status === 'Off-plan') {
     return <LiveOffPlanPropertyPage property={property} />;
@@ -104,6 +99,16 @@ export function PropertyDetailPageClient({
   const isForRent = property.transactionType === 'Rent';
   const faqData = isForRent ? rentFaqs : saleFaqs;
   const displayAgent = property.agent || fallbackAgent;
+  const availableFloorPlans = (property.floorPlans ?? []).filter(
+    (fp) => typeof fp?.url === 'string' && fp.url.trim().length > 0
+  );
+  const hasRegulatoryInfo = Boolean(
+    property.trakheesi ||
+    property.dldPermitNo ||
+    property.reraPermit ||
+    displayAgent?.brn ||
+    property.dldPermitLink
+  );
 
   return (
     <div className="bg-background">
@@ -140,10 +145,23 @@ export function PropertyDetailPageClient({
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-md border-y py-4 mb-8">
                   <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-muted-foreground" /> <span>{property.location}</span></div>
                   <Separator orientation="vertical" className="h-5 hidden sm:block" />
-                  <div className="flex items-center gap-2"><BedDouble className="w-5 h-5 text-muted-foreground" /> <span>{property.bedrooms || 'Studio'} Beds</span></div>
-                  <Separator orientation="vertical" className="h-5" />
-                  <div className="flex items-center gap-2"><Bath className="w-5 h-5 text-muted-foreground" /> <span>{property.bathrooms} Baths</span></div>
-                  <Separator orientation="vertical" className="h-5 hidden sm:block" />
+                  {property.bedrooms > 0 ? (
+                    <>
+                      <div className="flex items-center gap-2"><BedDouble className="w-5 h-5 text-muted-foreground" /> <span>{property.bedrooms} Beds</span></div>
+                      <Separator orientation="vertical" className="h-5" />
+                    </>
+                  ) : property.type === 'Studio' || property.category === 'Studio' ? (
+                    <>
+                      <div className="flex items-center gap-2"><BedDouble className="w-5 h-5 text-muted-foreground" /> <span>Studio</span></div>
+                      <Separator orientation="vertical" className="h-5" />
+                    </>
+                  ) : null}
+                  {property.bathrooms > 0 && (
+                    <>
+                      <div className="flex items-center gap-2"><Bath className="w-5 h-5 text-muted-foreground" /> <span>{property.bathrooms} Baths</span></div>
+                      <Separator orientation="vertical" className="h-5 hidden sm:block" />
+                    </>
+                  )}
                   <div className="flex items-center gap-2"><Square className="w-5 h-5 text-muted-foreground" /> <span>{property.sqft.toLocaleString()} sqft</span></div>
                   <Separator orientation="vertical" className="h-5" />
                   <div className="flex items-center gap-2"><PropertyTypeIcon className="w-5 h-5 text-muted-foreground" /> <span>{property.type}</span></div>
@@ -154,6 +172,38 @@ export function PropertyDetailPageClient({
                 <h2 className="text-3xl font-headline mb-4">Description</h2>
                 <ReadMore text={property.description} />
               </AnimateOnScroll>
+
+              {availableFloorPlans.length > 0 && (
+                <>
+                  <Separator className="my-12" />
+                  <AnimateOnScroll delay={250}>
+                    <h2 className="text-3xl font-headline mb-4">Floor Plans</h2>
+                    <Tabs defaultValue={availableFloorPlans[0]?.type || '0'} className="w-full">
+                      <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6 overflow-x-auto flex-nowrap">
+                        {availableFloorPlans.map((fp, i) => (
+                          <TabsTrigger
+                            key={i}
+                            value={fp.type || `${i}`}
+                            className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-accent data-[state=active]:shadow-none rounded-none px-4 py-3 text-sm font-semibold whitespace-nowrap"
+                          >
+                            {fp.type || fp.title || `Plan ${i + 1}`}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      {availableFloorPlans.map((fp, i) => (
+                        <TabsContent key={i} value={fp.type || `${i}`} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                          <div className="relative aspect-[16/9] w-full border rounded-lg overflow-hidden bg-muted/20">
+                            <Image src={fp.url} alt={fp.title || fp.type || 'Floor Plan'} fill className="object-contain" />
+                          </div>
+                          {fp.title && fp.title !== fp.type && (
+                            <p className="mt-3 text-sm text-muted-foreground">{fp.title}</p>
+                          )}
+                        </TabsContent>
+                      ))}
+                    </Tabs>
+                  </AnimateOnScroll>
+                </>
+              )}
 
               <Separator className="my-12" />
 
@@ -174,32 +224,40 @@ export function PropertyDetailPageClient({
                 </>
               )}
 
-              <AnimateOnScroll delay={400}>
-                <div className="p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-start gap-6">
-                  <div>
-                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-accent" /> Regulatory Information</h3>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5" /> <strong>Reference ID:</strong> {property.referenceId || 'N/A'}</li>
-                      <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5" /> <strong>Trakheesi:</strong> {property.trakheesi || 'N/A'}</li>
-                      <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5" /> <strong>RERA Permit:</strong> {property.reraPermit || 'N/A'}</li>
-                    </ul>
-                  </div>
-                  <div className="text-center w-full flex flex-col items-center sm:w-auto sm:items-end">
-                    <p className="text-sm font-bold mb-2">DLD Permit</p>
-                    {qrCodeUrl ? (
-                      <Image src={qrCodeUrl} alt="DLD Permit QR Code" width={100} height={100} />
-                    ) : (
-                      <div className="w-[100px] h-[100px] bg-muted animate-pulse" />
-                    )}
-                  </div>
-                </div>
-              </AnimateOnScroll>
-
               {!isForRent && (
                 <>
                   <Separator className="my-12" />
                   <AnimateOnScroll>
                     <MortgageCalculator propertyPrice={property.price} />
+                  </AnimateOnScroll>
+                </>
+              )}
+
+              {hasRegulatoryInfo && (
+                <>
+                  <Separator className="my-12" />
+                  <AnimateOnScroll delay={400}>
+                    <div className="p-4 border rounded-lg flex flex-col sm:flex-row justify-between items-start gap-6">
+                      <div>
+                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-accent" /> Regulatory Information</h3>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                          {(property.trakheesi || property.dldPermitNo) && (
+                            <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5" /> <strong>Permit Number:</strong> {property.trakheesi || property.dldPermitNo}</li>
+                          )}
+                          {property.reraPermit && (
+                            <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5" /> <strong>RERA Project Number:</strong> {property.reraPermit}</li>
+                          )}
+                          {displayAgent?.brn && (
+                            <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5" /> <strong>BRN Number:</strong> {displayAgent.brn}</li>
+                          )}
+                        </ul>
+                      </div>
+                      {property.dldPermitLink && (
+                        <div className="text-center w-full flex flex-col items-center sm:w-auto sm:items-end shrink-0 p-2 border bg-muted/20 rounded-md">
+                          <Image src={property.dldPermitLink} alt="Trakheesi Permit QR Code" width={100} height={100} className="object-contain" />
+                        </div>
+                      )}
+                    </div>
                   </AnimateOnScroll>
                 </>
               )}

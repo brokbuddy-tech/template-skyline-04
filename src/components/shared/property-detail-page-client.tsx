@@ -245,7 +245,7 @@ export function PropertyDetailPageClient({
                             <li className="flex gap-2"><HandHelping className="w-4 h-4 mt-0.5" /> <strong>Permit Number:</strong> {property.trakheesi || property.dldPermitNo}</li>
                           )}
                           {property.reraPermit && (
-                            <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5" /> <strong>RERA Project Number:</strong> {property.reraPermit}</li>
+                            <li className="flex gap-2"><LandPlot className="w-4 h-4 mt-0.5" /> <strong>RERA Licence:</strong> {property.reraPermit}</li>
                           )}
                           {displayAgent?.brn && (
                             <li className="flex gap-2"><Banknote className="w-4 h-4 mt-0.5" /> <strong>BRN Number:</strong> {displayAgent.brn}</li>
@@ -253,8 +253,20 @@ export function PropertyDetailPageClient({
                         </ul>
                       </div>
                       {property.dldPermitLink && (
-                        <div className="text-center w-full flex flex-col items-center sm:w-auto sm:items-end shrink-0 p-2 border bg-muted/20 rounded-md">
-                          <Image src={property.dldPermitLink} alt="Trakheesi Permit QR Code" width={100} height={100} className="object-contain" />
+                        <div className="flex flex-col items-center shrink-0 p-2 border bg-muted/20 rounded-md">
+                          <div className="bg-white p-1 rounded">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(property.dldPermitLink)}`}
+                              alt="Trakheesi Permit QR Code"
+                              width={100}
+                              height={100}
+                              className="object-contain"
+                            />
+                          </div>
+                          <a href={property.dldPermitLink} target="_blank" rel="noopener noreferrer" className="mt-2 text-xs text-accent hover:underline">
+                            Verify Permit →
+                          </a>
                         </div>
                       )}
                     </div>

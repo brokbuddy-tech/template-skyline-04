@@ -23,7 +23,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { searchPropertiesWithAI } from '@/lib/api';
 import { cleanQueryForCategoryFilter } from '@/lib/search';
 
-const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
+const fallbackPropertyTypes = ['Apartment', 'Studio', 'Penthouse', 'Duplex', 'Duplex Apartment', 'Hotel Apartment', 'Flat', 'Villa', 'Townhouse', 'Mansion', 'Bungalow', 'Villa Compound', 'Compound', 'House', 'Residential Floor', 'Full Floor', 'Half Floor', 'Floor', 'Bulk Rent unit', 'Building', 'Residential Building', 'Whole building', 'Land', 'Residential Land'];
 const completionStatus = ['Any', 'Ready', 'Off-plan'];
 
 export function StickySearch({ categories = [], amenities = [] }: { categories?: string[]; amenities?: string[] }) {

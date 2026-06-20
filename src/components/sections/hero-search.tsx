@@ -19,7 +19,7 @@ import { prefixAgencyPath, resolveAgencySlugFromPathname } from '@/lib/agency-ro
 import { cleanQueryForCategoryFilter } from '@/lib/search';
 
 const searchTabs = ['Buy', 'Rent', 'Sell', 'Manage'];
-const fallbackPropertyTypes = ['Apartment', 'Townhouse', 'Penthouse', 'Villa', 'Office'];
+const fallbackPropertyTypes = ['Apartment', 'Studio', 'Penthouse', 'Duplex', 'Duplex Apartment', 'Hotel Apartment', 'Flat', 'Villa', 'Townhouse', 'Mansion', 'Bungalow', 'Villa Compound', 'Compound', 'House', 'Residential Floor', 'Full Floor', 'Half Floor', 'Floor', 'Bulk Rent unit', 'Building', 'Residential Building', 'Whole building', 'Land', 'Residential Land'];
 
 export function HeroSearch({ categories = [] }: { categories?: string[] }) {
   const [activeTab, setActiveTab] = useState('Buy');

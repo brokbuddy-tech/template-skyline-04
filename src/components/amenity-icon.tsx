@@ -12,7 +12,21 @@ const FALLBACK_ICON = FaIcons[DEFAULT_AMENITY_ICON_COMPONENT as keyof typeof FaI
 
 export function AmenityIcon({ name, className = "h-4 w-4", alt = "" }: AmenityIconProps) {
   const iconName = getAmenityIconComponentName(name);
+  const isSvgIcon = iconName.endsWith(".svg");
   const Icon = (FaIcons[iconName as keyof typeof FaIcons] as IconType | undefined) ?? FALLBACK_ICON;
+
+  if (isSvgIcon) {
+    return (
+      <span className={`inline-flex shrink-0 items-center justify-center ${className}`}>
+        <img
+          src={iconName}
+          alt={alt}
+          aria-hidden={alt ? undefined : true}
+          className="h-full w-full object-contain"
+        />
+      </span>
+    );
+  }
 
   return (
     <span

@@ -2,6 +2,7 @@
 import { notFound } from 'next/navigation';
 import { PropertyDetailPageClient } from '@/components/shared/property-detail-page-client';
 import { getProperties, getPropertyById, getSiteConfig } from '@/lib/api';
+import { ListingViewTracker } from '@/components/listing-view-tracker';
 
 export async function PropertyDetailPageContent({
   id,
@@ -53,11 +54,14 @@ export async function PropertyDetailPageContent({
     : undefined;
 
   return (
-    <PropertyDetailPageClient
-      property={resolvedProperty}
-      recommendedProperties={recommendedProperties}
-      fallbackAgent={fallbackAgent}
-    />
+    <>
+      <ListingViewTracker canonicalListingId={resolvedProperty.id} agencySlug={agencySlug} />
+      <PropertyDetailPageClient
+        property={resolvedProperty}
+        recommendedProperties={recommendedProperties}
+        fallbackAgent={fallbackAgent}
+      />
+    </>
   );
 }
 

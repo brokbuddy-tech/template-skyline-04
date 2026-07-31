@@ -1,4 +1,4 @@
-import { OffPlanPageContent } from '../../off-plan/page';
+import { OffPlanPageContent } from '@/components/shared/off-plan-page-content';
 
 export default async function AgencyOffPlanPage({
   params,

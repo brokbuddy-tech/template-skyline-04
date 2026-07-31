@@ -1,4 +1,4 @@
-import { DevelopersPageContent } from '../../developers/page';
+import { DevelopersPageContent } from '@/components/shared/developers-page-content';
 
 export default async function AgencyDevelopersPage({
   params,

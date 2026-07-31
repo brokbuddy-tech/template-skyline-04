@@ -1,4 +1,4 @@
-import { MapPageContent } from '../../map/page';
+import { MapPageContent } from '@/components/shared/map-page-content';
 
 export default async function AgencyMapPage({
   params,
